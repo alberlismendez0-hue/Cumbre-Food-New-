@@ -1,16 +1,23 @@
-# React + Vite
+# Cumbre Food - Web App de Pedidos & Delivery
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Aplicación web moderna y responsive para la gestión y realización de pedidos de comida rápida artesanal de **Cumbre Food**, ubicada en Mérida, Venezuela. Permite a los clientes explorar el menú, personalizar sus pedidos y enviarlos directamente formateados a WhatsApp.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+##  Tecnologías Utilizadas
 
-## React Compiler
+* **React 19** (Librería principal de interfaz de usuario)
+* **Vite** (Entorno de desarrollo rápido y empaquetador)
+* **React-Bootstrap / Bootstrap 5** (Diseño responsive y componentes de interfaz)
+* **CSS3 Moderno** (Efectos visuales, microinteracciones y tipografía)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+##  Instalación y Configuración Local
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Sigue estos pasos para clonar y ejecutar el proyecto en tu entorno local:
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/alberlismendez0-hue/Cumbre-Food-New-.git](https://github.com/alberlismendez0-hue/Cumbre-Food-New-.git)
+   cd Cumbre-Food-New-
