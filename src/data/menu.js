@@ -6,8 +6,7 @@ export const categories = [
   { id: 'hamburguesas_chuleta', name: '🥩 Burgers Chuleta', rawName: 'Burgers Chuleta', icon: '🥩' },
   { id: 'platos', name: '🥘 Platos', rawName: 'Platos', icon: '🥘' },
   { id: 'combos', name: '🔥 Combos', rawName: 'Combos', icon: '🔥' },
-  { id: 'bebidas', name: '🥤 Bebidas', rawName: 'Bebidas', icon: '🥤' },
-  { id: 'adicionales', name: '➕ Adicionales', rawName: 'Adicionales', icon: '➕' }
+ 
 ];
 
 export const paymentMethods = [
@@ -151,6 +150,15 @@ export const PLATO_SALADS = [
   '🥗 Ensalada Coleslaw'
 ];
 
+export const ENTRADAS_SAUCE_OPTIONS = [
+  'Kétchup',
+  'Mayonesa',
+  'BBQ',
+  'Mostaza',
+  'Salsa Tártara',
+  'Salsa de Maíz'
+];
+
 export const menuItems = [
   // --- ENTRADAS ---
   {
@@ -159,7 +167,14 @@ export const menuItems = [
     category: 'entradas',
     price: 5.0,
     description: 'Acompañados con 2 salsas a escoger.',
-    image: '/chips.jpg'
+    image: '/chips.jpg',
+    customization: {
+      sauces: {
+        required: true,
+        max: 2,
+        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara', 'Salsa de Maíz']
+      }
+    }
   },
   {
     id: 'ent_tequenos',
@@ -167,7 +182,14 @@ export const menuItems = [
     category: 'entradas',
     price: 6.0,
     description: 'Crujientes tequeños acompañados de salsa tártara de la casa.',
-    image: '/tequenos_nevados.jpg'
+    image: '/tequenos_nevados.jpg',
+    customization: {
+      sauces: {
+        required: true,
+        max: 2,
+        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara', 'Salsa de Maíz']
+      }
+    }
   },
   {
     id: 'ent_papas_francesas',
@@ -175,7 +197,14 @@ export const menuItems = [
     category: 'entradas',
     price: 6.0,
     description: 'Papas fritas con 2 salsas a escoger.',
-    image: '/papas_sierra.jpg'
+    image: '/papas_sierra.jpg',
+    customization: {
+      sauces: {
+        required: true,
+        max: 2,
+        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara', 'Salsa de Maíz']
+      }
+    }
   },
   {
     id: 'ent_tenders',
@@ -183,7 +212,14 @@ export const menuItems = [
     category: 'entradas',
     price: 7.0,
     description: 'Crujientes tenders de pollo con papas francesas y salsa a escoger.',
-    image: '/tenders_pollo.jpg'
+    image: '/tenders_pollo.jpg',
+    customization: {
+      sauces: {
+        required: true,
+        max: 2,
+        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara', 'Salsa de Maíz']
+      }
+    }
   },
   {
     id: 'ent_ensalada_cesar',
@@ -191,7 +227,13 @@ export const menuItems = [
     category: 'entradas',
     price: 9.0,
     description: 'Clásica ensalada césar con pollo crispy o a la plancha.',
-    image: '/ensalada_cesar.jpg'
+    image: '/ensalada_cesar.jpg',
+    customization: {
+      proteinCooking: {
+        required: true,
+        options: ['Pollo Crispy', 'Pollo a la Plancha']
+      }
+    }
   },
   {
     id: 'ent_papas_culata',
@@ -199,7 +241,14 @@ export const menuItems = [
     category: 'entradas',
     price: 9.0,
     description: 'Papas francesas bañadas en fondue de queso mozzarella, tocineta y maíz.',
-    image: '/papas_culata.jpg'
+    image: '/papas_culata.jpg',
+    customization: {
+      extraProteins: [
+        { id: 'extra_pollo', name: 'Extra Pollo', price: 2.0 },
+        { id: 'extra_lomito', name: 'Extra Carne / Lomito', price: 2.5 },
+        { id: 'extra_crispy', name: 'Extra Tiras Crispy', price: 2.5 }
+      ]
+    }
   },
   {
     id: 'ent_papas_mifafi',
@@ -207,7 +256,18 @@ export const menuItems = [
     category: 'entradas',
     price: 11.0,
     description: 'Papas francesas con proteína a escoger (chuleta, lomito o pollo a la plancha), tocineta, maíz, salsas clásicas y queso de año.',
-    image: '/papas_mifafi.jpg'
+    image: '/papas_mifafi.jpg',
+    customization: {
+      baseProtein: {
+        required: true,
+        options: ['Chuleta Ahumada', 'Lomito', 'Pollo a la Plancha']
+      },
+      extraProteins: [
+        { id: 'extra_pollo', name: 'Extra Pollo', price: 2.0 },
+        { id: 'extra_lomito', name: 'Extra Carne / Lomito', price: 2.5 },
+        { id: 'extra_crispy', name: 'Extra Tiras Crispy', price: 2.5 }
+      ]
+    }
   },
 
   // --- HAMBURGUESAS CON CARNE ---
@@ -428,55 +488,5 @@ export const menuItems = [
     image: '/combo_sierra_nevada.jpg'
   },
 
-  // --- BEBIDAS ---
-  {
-    id: 'beb_personal',
-    name: 'Refresco Personal',
-    category: 'bebidas',
-    price: 1.0,
-    description: 'Refresco presentación individual.',
-    image: '/refresco_personal.jpg'
-  },
-  {
-    id: 'beb_1ltr',
-    name: 'Refresco 1 Litro',
-    category: 'bebidas',
-    price: 2.5,
-    description: 'Refresco botella de 1 Litro.',
-    image: '/refresco_1l.jpg'
-  },
-  {
-    id: 'beb_1_5ltr',
-    name: 'Refresco 1.5 Litros',
-    category: 'bebidas',
-    price: 3.0,
-    description: 'Refresco botella de 1.5 Litros.',
-    image: '/refresco_1_5l.jpg'
-  },
-  {
-    id: 'beb_2ltr',
-    name: 'Refresco 2 Litros',
-    category: 'bebidas',
-    price: 3.5,
-    description: 'Refresco botella de 2 Litros.',
-    image: '/refresco_2l.jpg'
-  },
 
-  // --- ADICIONALES ---
-  { id: 'ad_queso_kraft', name: 'Adicional: Queso Kraft', category: 'adicionales', price: 1.0, description: 'Porción extra de Queso Kraft', image: '/adicional.jpg' },
-  { id: 'ad_queso_asado', name: 'Adicional: Queso Asado', category: 'adicionales', price: 1.0, description: 'Porción extra de Queso Llanero Asado', image: '/adicional.jpg' },
-  { id: 'ad_cebolla_caram', name: 'Adicional: Cebolla Caramelizada', category: 'adicionales', price: 1.0, description: 'Porción extra de Cebolla Caramelizada', image: '/adicional.jpg' },
-  { id: 'ad_huevo', name: 'Adicional: Huevo Frito', category: 'adicionales', price: 1.0, description: '1 Huevo frito adicional', image: '/adicional.jpg' },
-  { id: 'ad_aguacate', name: 'Adicional: Aguacate', category: 'adicionales', price: 1.0, description: 'Porción extra de Aguacate', image: '/adicional.jpg' },
-  { id: 'ad_maiz', name: 'Adicional: Maíz', category: 'adicionales', price: 1.0, description: 'Porción extra de Maíz dulce', image: '/adicional.jpg' },
-  { id: 'ad_fondue_mozz', name: 'Adicional: Fondue Mozzarella', category: 'adicionales', price: 1.0, description: 'Porción extra de Fondue de Mozzarella', image: '/adicional.jpg' },
-  { id: 'ad_cebolla_vino', name: 'Adicional: Cebolla en Vino de Mora', category: 'adicionales', price: 1.5, description: 'Cebolla caramelizada en vino de mora', image: '/adicional.jpg' },
-  { id: 'ad_tocineta', name: 'Adicional: Tocineta', category: 'adicionales', price: 1.5, description: 'Porción extra de Tocineta crujiente', image: '/adicional.jpg' },
-  { id: 'ad_champinones', name: 'Adicional: Champiñones', category: 'adicionales', price: 1.5, description: 'Porción extra de Champiñones salteados', image: '/adicional.jpg' },
-  { id: 'ad_chorizo', name: 'Adicional: Chorizo Ahumado', category: 'adicionales', price: 1.5, description: 'Porción extra de Chorizo de cerdo ahumado', image: '/adicional.jpg' },
-  { id: 'ad_carne_150', name: 'Adicional: Carne 150g', category: 'adicionales', price: 2.0, description: 'Carne de res 150g extra', image: '/adicional.jpg' },
-  { id: 'ad_pollo_plancha', name: 'Adicional: Pollo Plancha 150g', category: 'adicionales', price: 2.0, description: 'Pechuga de pollo a la plancha extra', image: '/adicional.jpg' },
-  { id: 'ad_lomito_150', name: 'Adicional: Lomito 150g', category: 'adicionales', price: 2.5, description: 'Lomito marinado extra', image: '/adicional.jpg' },
-  { id: 'ad_chuleta', name: 'Adicional: Chuleta Ahumada', category: 'adicionales', price: 2.5, description: 'Chuleta ahumada extra', image: '/adicional.jpg' },
-  { id: 'ad_pollo_crispy', name: 'Adicional: Pollo Crispy', category: 'adicionales', price: 2.5, description: 'Pechuga de pollo crispy extra', image: '/adicional.jpg' }
 ];

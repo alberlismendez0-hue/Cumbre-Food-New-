@@ -9,8 +9,32 @@ import {
   COMBO_1Y1_MEAT_OPTIONS,
   COMBO_1Y1_CHICKEN_OPTIONS,
   PLATO_SIDES,
-  PLATO_SALADS
+  PLATO_SALADS,
+  ENTRADAS_SAUCE_OPTIONS
 } from '../data/menu';
+
+// Helper de iconos para salsas
+const getSauceIcon = (sauceName) => {
+  switch (sauceName.toLowerCase()) {
+    case 'kétchup':
+    case 'ketchup':
+      return '🍅';
+    case 'mayonesa':
+      return '🥣';
+    case 'bbq':
+      return '🍖';
+    case 'mostaza':
+      return '🟡';
+    case 'salsa tártara':
+    case 'tártara':
+      return '🧄';
+    case 'salsa de maíz':
+    case 'maíz':
+      return '🌽';
+    default:
+      return '🥫';
+  }
+};
 
 export default function ProductCustomizerModal({
   show,
@@ -33,6 +57,59 @@ export default function ProductCustomizerModal({
     (product.id === 'pl_pollo' || product.id === 'pl_pollo_crema');
   const isCombo = product.category === 'combos';
   const isBebida = product.category === 'bebidas';
+  const isEntrada = product.category === 'entradas';
+
+  // Detección de esquemas de personalización de Entradas
+  const sauceConfig =
+    product.customization?.sauces ||
+    (isEntrada &&
+    (product.id === 'ent_chips' ||
+      product.id === 'serv_chips' ||
+      product.id === 'ent_tequenos' ||
+      product.id === 'tequenos_nevados' ||
+      product.id === 'ent_papas_francesas' ||
+      product.id === 'papas_sierra' ||
+      product.id === 'ent_tenders' ||
+      product.id === 'tenders_pollo')
+      ? {
+          required: true,
+          max: 2,
+          options: ENTRADAS_SAUCE_OPTIONS
+        }
+      : null);
+
+  const proteinCookingConfig =
+    product.customization?.proteinCooking ||
+    (isEntrada &&
+    (product.id === 'ent_ensalada_cesar' || product.id === 'ensalada_cesar')
+      ? {
+          required: true,
+          options: ['Pollo Crispy', 'Pollo a la Plancha']
+        }
+      : null);
+
+  const baseProteinConfig =
+    product.customization?.baseProtein ||
+    (isEntrada &&
+    (product.id === 'ent_papas_mifafi' || product.id === 'papas_mifafi')
+      ? {
+          required: true,
+          options: ['Chuleta Ahumada', 'Lomito', 'Pollo a la Plancha']
+        }
+      : null);
+
+  const extraProteinsConfig =
+    product.customization?.extraProteins ||
+    (isEntrada &&
+    (product.id === 'ent_papas_mifafi' ||
+      product.id === 'papas_mifafi' ||
+      product.id === 'ent_papas_culata')
+      ? [
+          { id: 'extra_pollo', name: 'Extra Pollo', price: 2.0, icon: '🍗' },
+          { id: 'extra_lomito', name: 'Extra Carne / Lomito', price: 2.5, icon: '🥩' },
+          { id: 'extra_crispy', name: 'Extra Tiras Crispy', price: 2.5, icon: '🍗' }
+        ]
+      : null);
 
   // --- ESTADOS DE CONFIGURACIÓN ---
   const [quantity, setQuantity] = useState(1);
@@ -56,6 +133,12 @@ export default function ProductCustomizerModal({
   const [platoSide, setPlatoSide] = useState(PLATO_SIDES[0]);
   const [platoSalad, setPlatoSalad] = useState(PLATO_SALADS[0]);
   const [platoChickenCooking, setPlatoChickenCooking] = useState('crispy');
+
+  // Entradas Especiales
+  const [selectedSauces, setSelectedSauces] = useState([]);
+  const [saladProteinCooking, setSaladProteinCooking] = useState('Pollo Crispy');
+  const [mifafiBaseProtein, setMifafiBaseProtein] = useState('Lomito');
+  const [selectedExtraProteins, setSelectedExtraProteins] = useState([]);
 
   // Bebidas directas
   const [directDrinkFlavor, setDirectDrinkFlavor] = useState('Coca Cola');
@@ -81,17 +164,57 @@ export default function ProductCustomizerModal({
       setPlatoSide(PLATO_SIDES[0]);
       setPlatoSalad(PLATO_SALADS[0]);
       setPlatoChickenCooking('crispy');
+
+      // Inicialización de Entradas
+      if (sauceConfig && sauceConfig.options) {
+        setSelectedSauces(sauceConfig.options.slice(0, Math.min(2, sauceConfig.max || 2)));
+      } else {
+        setSelectedSauces([]);
+      }
+
+      if (proteinCookingConfig && proteinCookingConfig.options) {
+        setSaladProteinCooking(proteinCookingConfig.options[0] || 'Pollo Crispy');
+      }
+
+      if (baseProteinConfig && baseProteinConfig.options) {
+        setMifafiBaseProtein(baseProteinConfig.options[0] || 'Chuleta Ahumada');
+      }
+
+      setSelectedExtraProteins([]);
       setDirectDrinkFlavor('Coca Cola');
       setItemNotes('');
     }
   }, [show, product]);
 
-  // Manejador de selección/deselección de adicionales
+  // Manejador de selección de salsas con límite máximo
+  const maxSaucesAllowed = sauceConfig?.max || 2;
+  const toggleSauce = (sauce) => {
+    setSelectedSauces((prev) => {
+      if (prev.includes(sauce)) {
+        return prev.filter((s) => s !== sauce);
+      }
+      if (prev.length < maxSaucesAllowed) {
+        return [...prev, sauce];
+      }
+      return prev;
+    });
+  };
+
+  // Manejador de selección/deselección de adicionales generales
   const toggleAddon = (addonId) => {
     setSelectedAddons((prev) =>
       prev.includes(addonId)
         ? prev.filter((id) => id !== addonId)
         : [...prev, addonId]
+    );
+  };
+
+  // Manejador de proteínas extras para Entradas (Papas Mifafí / Culata)
+  const toggleExtraProtein = (proteinId) => {
+    setSelectedExtraProteins((prev) =>
+      prev.includes(proteinId)
+        ? prev.filter((id) => id !== proteinId)
+        : [...prev, proteinId]
     );
   };
 
@@ -103,12 +226,20 @@ export default function ProductCustomizerModal({
     }, 0);
   }, [selectedAddons]);
 
+  const extraProteinsTotal = useMemo(() => {
+    if (!extraProteinsConfig || !Array.isArray(extraProteinsConfig)) return 0;
+    return selectedExtraProteins.reduce((sum, proteinId) => {
+      const p = extraProteinsConfig.find((item) => item.id === proteinId || item.name === proteinId);
+      return sum + (p ? p.price : 0);
+    }, 0);
+  }, [selectedExtraProteins, extraProteinsConfig]);
+
   const crossSellDrinkObj = useMemo(() => {
     return CROSS_SELL_DRINKS.find((d) => d.id === crossSellDrink) || CROSS_SELL_DRINKS[0];
   }, [crossSellDrink]);
 
   const crossSellPrice = crossSellDrinkObj.price;
-  const unitPrice = product.price + addonsTotal + crossSellPrice;
+  const unitPrice = product.price + addonsTotal + extraProteinsTotal + crossSellPrice;
   const totalPrice = unitPrice * quantity;
 
   // Generar descripción estructurada de las opciones seleccionadas
@@ -206,13 +337,28 @@ export default function ProductCustomizerModal({
       }
     }
 
-    // Bebidas directas
-    if (isBebida) {
-      details.push({ label: 'Sabor', value: directDrinkFlavor });
-    }
+    // Entradas
+    if (isEntrada) {
+      if (sauceConfig && selectedSauces.length > 0) {
+        details.push({ label: 'Salsas', value: selectedSauces.join(', ') });
+      }
 
-    // Entradas / Otros
-    if (product.category === 'entradas' || product.category === 'adicionales') {
+      if (proteinCookingConfig) {
+        details.push({ label: 'Preparación', value: saladProteinCooking });
+      }
+
+      if (baseProteinConfig) {
+        details.push({ label: 'Proteína Base', value: mifafiBaseProtein });
+      }
+
+      if (extraProteinsConfig && selectedExtraProteins.length > 0) {
+        const extraNames = selectedExtraProteins.map((pId) => {
+          const found = extraProteinsConfig.find((x) => x.id === pId || x.name === pId);
+          return found ? `+${found.name} ($${found.price.toFixed(2)})` : pId;
+        });
+        details.push({ label: 'Proteínas Extra', value: extraNames.join(', ') });
+      }
+
       if (selectedAddons.length > 0) {
         const addonNames = selectedAddons
           .map((id) => {
@@ -220,8 +366,24 @@ export default function ProductCustomizerModal({
             return a ? `+${a.name}` : '';
           })
           .filter(Boolean);
-        details.push({ label: 'Extras', value: addonNames.join(', ') });
+        details.push({ label: 'Adicionales', value: addonNames.join(', ') });
       }
+
+      if (crossSellDrink !== 'none') {
+        details.push({
+          label: 'Bebida',
+          value: `${crossSellDrinkObj.name} (${drinkFlavor})`
+        });
+      }
+    }
+
+    // Bebidas directas
+    if (isBebida) {
+      details.push({ label: 'Sabor', value: directDrinkFlavor });
+    }
+
+    // Adicionales directos
+    if (product.category === 'adicionales') {
       if (crossSellDrink !== 'none') {
         details.push({
           label: 'Bebida',
@@ -240,7 +402,7 @@ export default function ProductCustomizerModal({
   // Confirmar y agregar al carrito
   const handleConfirm = () => {
     const details = buildCustomizationDetails();
-    
+
     // Crear una clave única que distinga esta combinación específica
     const signature = JSON.stringify({
       id: product.id,
@@ -252,7 +414,7 @@ export default function ProductCustomizerModal({
       ...product,
       cartItemId: `${product.id}-${btoa(encodeURIComponent(signature)).slice(0, 16)}`,
       quantity,
-      price: unitPrice, // Precio unitario con extras
+      price: unitPrice, // Precio unitario con extras y proteínas adicionales
       basePrice: product.price,
       customizationDetails: details,
       customizationSummary: details.map((d) => `${d.label}: ${d.value}`).join(' | '),
@@ -260,6 +422,10 @@ export default function ProductCustomizerModal({
         burgerSide,
         chickenCooking,
         selectedAddons,
+        selectedSauces,
+        saladProteinCooking,
+        mifafiBaseProtein,
+        selectedExtraProteins,
         crossSellDrink,
         drinkFlavor,
         comboDrinkFlavor,
@@ -332,7 +498,174 @@ export default function ProductCustomizerModal({
             CUERPO DE OPCIONES Y MODIFICADORES
             ========================================================================= */}
         <div className="cf-modal-content-scroll">
-          {/* 1. SELECCIÓN DE ACOMPAÑANTE (HAMBURGUESAS) */}
+          {/* 1. SELECCIÓN DE SALSAS PARA ENTRADAS (Chips, Tequeños, Francesas, Tenders) */}
+          {sauceConfig && (
+            <div className="cf-option-group">
+              <div className="cf-option-group-header">
+                <div>
+                  <h4 className="cf-option-title">🥫 Elige tus Salsas</h4>
+                  <p className="cf-option-subtitle">
+                    Selecciona exactamente {maxSaucesAllowed} salsas incluidas sin costo
+                  </p>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                  <span className={`cf-badge-sauce-count ${selectedSauces.length === maxSaucesAllowed ? 'complete' : ''}`}>
+                    {selectedSauces.length}/{maxSaucesAllowed} seleccionadas
+                  </span>
+                  <span className="cf-badge-required">Obligatorio</span>
+                </div>
+              </div>
+
+              <div className="row g-2">
+                {sauceConfig.options.map((sauce) => {
+                  const isChecked = selectedSauces.includes(sauce);
+                  const isDisabled = !isChecked && selectedSauces.length >= maxSaucesAllowed;
+                  const icon = getSauceIcon(sauce);
+
+                  return (
+                    <div key={sauce} className="col-12 col-sm-6">
+                      <div
+                        className={`cf-addon-card cf-sauce-chip ${isChecked ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`}
+                        onClick={() => !isDisabled && toggleSauce(sauce)}
+                        role="button"
+                        tabIndex={isDisabled ? -1 : 0}
+                        aria-disabled={isDisabled}
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className={`cf-checkbox-square ${isChecked ? 'checked' : ''}`}>
+                            {isChecked ? '✓' : ''}
+                          </span>
+                          <span className="cf-addon-icon">{icon}</span>
+                          <span className="cf-addon-name">{sauce}</span>
+                        </div>
+                        <span className="cf-choice-free">Gratis</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 2. TIPO DE COCCIÓN DE PROTEÍNA PARA ENSALADA CÉSAR */}
+          {proteinCookingConfig && (
+            <div className="cf-option-group">
+              <div className="cf-option-group-header">
+                <div>
+                  <h4 className="cf-option-title">🍗 Preparación del Pollo</h4>
+                  <p className="cf-option-subtitle">Elige cómo deseas la pechuga de tu ensalada</p>
+                </div>
+                <span className="cf-badge-required">Obligatorio</span>
+              </div>
+              <div className="row g-2">
+                {proteinCookingConfig.options.map((type) => {
+                  const isSelected = saladProteinCooking === type;
+                  const isCrispy = type.toLowerCase().includes('crispy');
+                  return (
+                    <div key={type} className="col-12 col-sm-6">
+                      <div
+                        className={`cf-choice-card ${isSelected ? 'selected' : ''}`}
+                        onClick={() => setSaladProteinCooking(type)}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <div className="d-flex align-items-center gap-3">
+                          <span className="cf-radio-circle">
+                            {isSelected && <span className="cf-radio-dot" />}
+                          </span>
+                          <div>
+                            <div className="cf-choice-name">
+                              {isCrispy ? '🍗 ' : '🥩 '}
+                              {type}
+                            </div>
+                            <div className="cf-choice-desc">
+                              {isCrispy ? 'Empanizado crujiente artesanal' : 'Pechuga jugosa a la parrilla'}
+                            </div>
+                          </div>
+                        </div>
+                        <span className="cf-choice-free">Incluido</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 3. PROTEÍNA BASE INCLUIDA (PAPAS MIFAFÍ) */}
+          {baseProteinConfig && (
+            <div className="cf-option-group">
+              <div className="cf-option-group-header">
+                <div>
+                  <h4 className="cf-option-title">🥩 Proteína Principal Incluida</h4>
+                  <p className="cf-option-subtitle">Proteína base para tus papas</p>
+                </div>
+                <span className="cf-badge-required">Obligatorio</span>
+              </div>
+              <div className="row g-2">
+                {baseProteinConfig.options.map((prot) => {
+                  const isSelected = mifafiBaseProtein === prot;
+                  return (
+                    <div key={prot} className="col-12 col-sm-4">
+                      <div
+                        className={`cf-choice-card ${isSelected ? 'selected' : ''}`}
+                        onClick={() => setMifafiBaseProtein(prot)}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">
+                            {isSelected && <span className="cf-radio-dot" />}
+                          </span>
+                          <span className="cf-choice-name">{prot}</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 4. PROTEÍNAS EXTRAS CON COSTO ADICIONAL (PAPAS MIFAFÍ / CULATA) */}
+          {extraProteinsConfig && (
+            <div className="cf-option-group">
+              <div className="cf-option-group-header">
+                <div>
+                  <h4 className="cf-option-title">🥩 ¿Deseas Añadir Proteínas Extras?</h4>
+                  <p className="cf-option-subtitle">Incrementa tu porción de sabor</p>
+                </div>
+                <span className="cf-badge-optional">Opcional</span>
+              </div>
+
+              <div className="row g-2">
+                {extraProteinsConfig.map((item) => {
+                  const isChecked = selectedExtraProteins.includes(item.id);
+                  return (
+                    <div key={item.id} className="col-12 col-sm-4">
+                      <div
+                        className={`cf-addon-card ${isChecked ? 'selected' : ''}`}
+                        onClick={() => toggleExtraProtein(item.id)}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className={`cf-checkbox-square ${isChecked ? 'checked' : ''}`}>
+                            {isChecked ? '✓' : ''}
+                          </span>
+                          <span className="cf-addon-icon">{item.icon || '🥩'}</span>
+                          <span className="cf-addon-name">{item.name}</span>
+                        </div>
+                        <span className="cf-addon-price">+${item.price.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 5. SELECCIÓN DE ACOMPAÑANTE (HAMBURGUESAS) */}
           {isBurger && (
             <div className="cf-option-group">
               <div className="cf-option-group-header">
@@ -371,7 +704,7 @@ export default function ProductCustomizerModal({
             </div>
           )}
 
-          {/* 2. TIPO DE COCCIÓN / PREPARACIÓN (SOLO HAMBURGUESAS DE POLLO) */}
+          {/* 6. TIPO DE COCCIÓN / PREPARACIÓN (SOLO HAMBURGUESAS DE POLLO) */}
           {isChickenBurger && (
             <div className="cf-option-group">
               <div className="cf-option-group-header">
@@ -410,7 +743,7 @@ export default function ProductCustomizerModal({
             </div>
           )}
 
-          {/* 3. COMBOS: FLUJO ESPECÍFICO POR COMBO */}
+          {/* 7. COMBOS: FLUJO ESPECÍFICO POR COMBO */}
           {isCombo && (
             <>
               {/* COMBO LOMITO */}
@@ -651,7 +984,7 @@ export default function ProductCustomizerModal({
             </>
           )}
 
-          {/* 4. PLATOS: ACOMPAÑANTE, ENSALADA & TIPO DE POLLO */}
+          {/* 8. PLATOS: ACOMPAÑANTE, ENSALADA & TIPO DE POLLO */}
           {isPlato && (
             <>
               <div className="cf-option-group">
@@ -738,7 +1071,7 @@ export default function ProductCustomizerModal({
             </>
           )}
 
-          {/* 5. BEBIDAS DIRECTAS: SELECCIÓN DE SABOR */}
+          {/* 9. BEBIDAS DIRECTAS: SELECCIÓN DE SABOR */}
           {isBebida && (
             <div className="cf-option-group">
               <div className="cf-option-group-header">
@@ -763,8 +1096,8 @@ export default function ProductCustomizerModal({
             </div>
           )}
 
-          {/* 6. ADICIONALES / EXTRAS (OPCIONALES CON COSTO) */}
-          {(isBurger || isCombo || isPlato || product.category === 'entradas') && (
+          {/* 10. ADICIONALES / EXTRAS (OPCIONALES CON COSTO) */}
+          {(isBurger || isCombo || isPlato || isEntrada) && (
             <div className="cf-option-group">
               <div className="cf-option-group-header">
                 <div>
@@ -801,7 +1134,7 @@ export default function ProductCustomizerModal({
             </div>
           )}
 
-          {/* 7. VENTA CRUZADA DE BEBIDAS (CROSS-SELLING) */}
+          {/* 11. VENTA CRUZADA DE BEBIDAS (CROSS-SELLING) */}
           {!isBebida && product.id !== 'cb_lomito' && product.id !== 'cb_chicken' && product.id !== 'cb_1_y_1' && product.id !== 'cb_sierra_nevada' && (
             <div className="cf-option-group">
               <div className="cf-option-group-header">
@@ -855,7 +1188,7 @@ export default function ProductCustomizerModal({
             </div>
           )}
 
-          {/* 8. NOTAS O INSTRUCCIONES ESPECIALES PARA COCINA */}
+          {/* 12. NOTAS O INSTRUCCIONES ESPECIALES PARA COCINA */}
           <div className="cf-option-group">
             <div className="cf-option-group-header">
               <div>
