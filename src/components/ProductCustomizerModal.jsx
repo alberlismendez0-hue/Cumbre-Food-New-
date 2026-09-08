@@ -43,34 +43,32 @@ export default function ProductCustomizerModal({
   onAddToCart,
   getFallbackImage
 }) {
-  if (!product) return null;
-
-  // Determinar el tipo de producto para renderizado condicional
+  // Determinar el tipo de producto para renderizado condicional con safe optional chaining
   const isBurger =
-    product.category === 'hamburguesas_carne' ||
-    product.category === 'hamburguesas_pollo' ||
-    product.category === 'hamburguesas_chuleta';
-  const isChickenBurger = product.category === 'hamburguesas_pollo';
-  const isPlato = product.category === 'platos';
+    product?.category === 'hamburguesas_carne' ||
+    product?.category === 'hamburguesas_pollo' ||
+    product?.category === 'hamburguesas_chuleta';
+  const isChickenBurger = product?.category === 'hamburguesas_pollo';
+  const isPlato = product?.category === 'platos';
   const isPlatoPollo =
     isPlato &&
-    (product.id === 'pl_pollo' || product.id === 'pl_pollo_crema');
-  const isCombo = product.category === 'combos';
-  const isBebida = product.category === 'bebidas';
-  const isEntrada = product.category === 'entradas';
+    (product?.id === 'pl_pollo' || product?.id === 'pl_pollo_crema');
+  const isCombo = product?.category === 'combos';
+  const isBebida = product?.category === 'bebidas';
+  const isEntrada = product?.category === 'entradas';
 
   // Detección de esquemas de personalización de Entradas
   const sauceConfig =
-    product.customization?.sauces ||
+    product?.customization?.sauces ||
     (isEntrada &&
-    (product.id === 'ent_chips' ||
-      product.id === 'serv_chips' ||
-      product.id === 'ent_tequenos' ||
-      product.id === 'tequenos_nevados' ||
-      product.id === 'ent_papas_francesas' ||
-      product.id === 'papas_sierra' ||
-      product.id === 'ent_tenders' ||
-      product.id === 'tenders_pollo')
+    (product?.id === 'ent_chips' ||
+      product?.id === 'serv_chips' ||
+      product?.id === 'ent_tequenos' ||
+      product?.id === 'tequenos_nevados' ||
+      product?.id === 'ent_papas_francesas' ||
+      product?.id === 'papas_sierra' ||
+      product?.id === 'ent_tenders' ||
+      product?.id === 'tenders_pollo')
       ? {
           required: true,
           max: 2,
@@ -79,9 +77,9 @@ export default function ProductCustomizerModal({
       : null);
 
   const proteinCookingConfig =
-    product.customization?.proteinCooking ||
+    product?.customization?.proteinCooking ||
     (isEntrada &&
-    (product.id === 'ent_ensalada_cesar' || product.id === 'ensalada_cesar')
+    (product?.id === 'ent_ensalada_cesar' || product?.id === 'ensalada_cesar')
       ? {
           required: true,
           options: ['Pollo Crispy', 'Pollo a la Plancha']
@@ -89,9 +87,9 @@ export default function ProductCustomizerModal({
       : null);
 
   const baseProteinConfig =
-    product.customization?.baseProtein ||
+    product?.customization?.baseProtein ||
     (isEntrada &&
-    (product.id === 'ent_papas_mifafi' || product.id === 'papas_mifafi')
+    (product?.id === 'ent_papas_mifafi' || product?.id === 'papas_mifafi')
       ? {
           required: true,
           options: ['Chuleta Ahumada', 'Lomito', 'Pollo a la Plancha']
@@ -99,11 +97,11 @@ export default function ProductCustomizerModal({
       : null);
 
   const extraProteinsConfig =
-    product.customization?.extraProteins ||
+    product?.customization?.extraProteins ||
     (isEntrada &&
-    (product.id === 'ent_papas_mifafi' ||
-      product.id === 'papas_mifafi' ||
-      product.id === 'ent_papas_culata')
+    (product?.id === 'ent_papas_mifafi' ||
+      product?.id === 'papas_mifafi' ||
+      product?.id === 'ent_papas_culata')
       ? [
           { id: 'extra_pollo', name: 'Extra Pollo', price: 2.0, icon: '🍗' },
           { id: 'extra_lomito', name: 'Extra Carne / Lomito', price: 2.5, icon: '🥩' },
@@ -239,7 +237,7 @@ export default function ProductCustomizerModal({
   }, [crossSellDrink]);
 
   const crossSellPrice = crossSellDrinkObj.price;
-  const unitPrice = product.price + addonsTotal + extraProteinsTotal + crossSellPrice;
+  const unitPrice = (product?.price || 0) + addonsTotal + extraProteinsTotal + crossSellPrice;
   const totalPrice = unitPrice * quantity;
 
   // Generar descripción estructurada de las opciones seleccionadas
@@ -445,6 +443,8 @@ export default function ProductCustomizerModal({
     onAddToCart(customizedItem);
     onHide();
   };
+
+  if (!product) return null;
 
   return (
     <Modal
