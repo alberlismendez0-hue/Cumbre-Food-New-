@@ -1902,4 +1902,115 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.92rem;
     padding: 0.75rem 1.1rem;
   }
+
+  /* 1. Modales adaptables a pantallas pequeñas */
+  .modal-dialog {
+    margin: 0.5rem auto !important;
+    max-width: 95% !important;
+  }
+
+  .cf-modal-customizer .modal-content,
+  .cf-checkout-modal .modal-content {
+    border-radius: 20px !important;
+  }
+
+  /* 2. Ajuste del pie fijo del Modal Customizer (evita el botón deformado) */
+  .cf-modal-customizer .border-top {
+    padding: 0.65rem 0.75rem !important;
+  }
+
+  /* Stepper compacto (- 1 +) */
+  .cf-modal-customizer .rounded-pill.px-2 {
+    padding: 0.2rem 0.4rem !important;
+  }
+
+  .cf-modal-customizer .rounded-pill button {
+    padding: 0.1rem 0.4rem !important;
+    font-size: 1rem !important;
+  }
+
+  /* Botón CTA principal de agregar */
+  .cf-modal-customizer .btn.flex-grow-1 {
+    padding: 0.65rem 0.85rem !important;
+    font-size: 0.82rem !important;
+    border-radius: 9999px !important;
+    min-height: 46px !important;
+    max-height: 48px !important;
+    white-space: nowrap !important;
+  }
+
+  .cf-modal-customizer .btn.flex-grow-1 .badge {
+    font-size: 0.78rem !important;
+    padding: 0.25rem 0.45rem !important;
+  }
+
+  /* 3. Opciones y Tarjetas en el Customizer */
+  .cf-choice-card,
+  .cf-addon-card,
+  .cf-drink-card {
+    padding: 0.6rem 0.75rem !important;
+    font-size: 0.82rem !important;
+  }
+
+  .cf-choice-desc {
+    font-size: 0.7rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .cf-chip-btn {
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* 4. Resumen y Checkout en Móvil */
+  .cf-checkout-modal-body {
+    padding: 0.75rem !important;
+  }
+
+  .cf-checkout-order-summary,
+  .cf-summary-box {
+    padding: 0.65rem !important;
+    border-radius: 12px !important;
+  }
+
+  .total-amount {
+    font-size: 1.35rem !important;
+  }
+
+  .cf-summary-row span,
+  .cf-summary-row div {
+    font-size: 0.82rem !important;
+  }
+
+  /* 5. Catálogo de Productos en Móvil */
+  .product-card {
+    border-radius: 16px !important;
+    margin-bottom: 0.25rem;
+  }
+
+  .product-card-img-wrap {
+    height: 175px !important;
+  }
+
+  .product-card-body {
+    padding: 0.85rem !important;
+  }
+
+  .product-card-title {
+    font-size: 1.05rem !important;
+    margin-bottom: 0.3rem !important;
+  }
+
+  .product-card-desc {
+    font-size: 0.78rem !important;
+    -webkit-line-clamp: 2 !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  .btn-cf-add {
+    padding: 0.55rem 0.8rem !important;
+    font-size: 0.82rem !important;
+  }
 }
+
+
