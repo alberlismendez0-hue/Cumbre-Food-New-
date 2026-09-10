@@ -6,7 +6,7 @@ export const categories = [
   { id: 'hamburguesas_chuleta', name: '🥩 Burgers Chuleta', rawName: 'Burgers Chuleta', icon: '🥩' },
   { id: 'platos', name: '🥘 Platos', rawName: 'Platos', icon: '🥘' },
   { id: 'combos', name: '🔥 Combos', rawName: 'Combos', icon: '🔥' },
- 
+  { id: 'adicionales', name: '➕ Adicionales', rawName: 'Adicionales', icon: '➕' }
 ];
 
 export const paymentMethods = [
@@ -79,7 +79,7 @@ export const deliveryZones = [
 
 export const BURGER_SIDES = [
   { id: 'chips', name: '🥔 Papas Chips', description: 'Crujientes y artesanales' },
-  { id: 'francesas', name: '🍟 Papas Francesas', description: 'Doradas y al punto de sal' }
+  { id: 'francesas', name: '🍟 Papas Francesas', description: 'Doradas y al punto de sal', price: 1.0 }
 ];
 
 export const CHICKEN_COOKING_TYPES = [
@@ -488,5 +488,55 @@ export const menuItems = [
     image: '/combo_sierra_nevada.jpg'
   },
 
+  // --- BEBIDAS ---
+  {
+    id: 'beb_personal',
+    name: 'Refresco Personal',
+    category: 'bebidas',
+    price: 1.0,
+    description: 'Refresco presentación individual.',
+    image: '/refresco_personal.jpg'
+  },
+  {
+    id: 'beb_1ltr',
+    name: 'Refresco 1 Litro',
+    category: 'bebidas',
+    price: 2.5,
+    description: 'Refresco botella de 1 Litro.',
+    image: '/refresco_1l.jpg'
+  },
+  {
+    id: 'beb_1_5ltr',
+    name: 'Refresco 1.5 Litros',
+    category: 'bebidas',
+    price: 3.0,
+    description: 'Refresco botella de 1.5 Litros.',
+    image: '/refresco_1_5l.jpg'
+  },
+  {
+    id: 'beb_2ltr',
+    name: 'Refresco 2 Litros',
+    category: 'bebidas',
+    price: 3.5,
+    description: 'Refresco botella de 2 Litros.',
+    image: '/refresco_2l.jpg'
+  },
 
+  // --- ADICIONALES ---
+  { id: 'ad_queso_kraft', name: 'Adicional: Queso Kraft', category: 'adicionales', price: 1.0, description: 'Porción extra de Queso Kraft', image: '/adicional.jpg' },
+  { id: 'ad_queso_asado', name: 'Adicional: Queso Asado', category: 'adicionales', price: 1.0, description: 'Porción extra de Queso Llanero Asado', image: '/adicional.jpg' },
+  { id: 'ad_cebolla_caram', name: 'Adicional: Cebolla Caramelizada', category: 'adicionales', price: 1.0, description: 'Porción extra de Cebolla Caramelizada', image: '/adicional.jpg' },
+  { id: 'ad_huevo', name: 'Adicional: Huevo Frito', category: 'adicionales', price: 1.0, description: '1 Huevo frito adicional', image: '/adicional.jpg' },
+  { id: 'ad_aguacate', name: 'Adicional: Aguacate', category: 'adicionales', price: 1.0, description: 'Porción extra de Aguacate', image: '/adicional.jpg' },
+  { id: 'ad_maiz', name: 'Adicional: Maíz', category: 'adicionales', price: 1.0, description: 'Porción extra de Maíz dulce', image: '/adicional.jpg' },
+  { id: 'ad_fondue_mozz', name: 'Adicional: Fondue Mozzarella', category: 'adicionales', price: 1.0, description: 'Porción extra de Fondue de Mozzarella', image: '/adicional.jpg' },
+  { id: 'ad_cebolla_vino', name: 'Adicional: Cebolla en Vino de Mora', category: 'adicionales', price: 1.5, description: 'Cebolla caramelizada en vino de mora', image: '/adicional.jpg' },
+  { id: 'ad_tocineta', name: 'Adicional: Tocineta', category: 'adicionales', price: 1.5, description: 'Porción extra de Tocineta crujiente', image: '/adicional.jpg' },
+  { id: 'ad_champinones', name: 'Adicional: Champiñones', category: 'adicionales', price: 1.5, description: 'Porción extra de Champiñones salteados', image: '/adicional.jpg' },
+  { id: 'ad_chorizo', name: 'Adicional: Chorizo Ahumado', category: 'adicionales', price: 1.5, description: 'Porción extra de Chorizo de cerdo ahumado', image: '/adicional.jpg' },
+  { id: 'ad_carne_150', name: 'Adicional: Carne 150g', category: 'adicionales', price: 2.0, description: 'Carne de res 150g extra', image: '/adicional.jpg' },
+  { id: 'ad_pollo_plancha', name: 'Adicional: Pollo Plancha 150g', category: 'adicionales', price: 2.0, description: 'Pechuga de pollo a la plancha extra', image: '/adicional.jpg' },
+  { id: 'ad_lomito_150', name: 'Adicional: Lomito 150g', category: 'adicionales', price: 2.5, description: 'Lomito marinado extra', image: '/adicional.jpg' },
+  { id: 'ad_chuleta', name: 'Adicional: Chuleta Ahumada', category: 'adicionales', price: 2.5, description: 'Chuleta ahumada extra', image: '/adicional.jpg' },
+  { id: 'ad_pollo_crispy', name: 'Adicional: Pollo Crispy', category: 'adicionales', price: 2.5, description: 'Pechuga de pollo crispy extra', image: '/adicional.jpg' }
 ];
