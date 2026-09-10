@@ -50,14 +50,22 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
       caption += `📝 *Notas de Cocina:* ${orderData.notes.trim()}\n`;
     }
 
-    // Botón para que el encargado le escriba al cliente por WhatsApp con un solo clic
-    const cleanPhone = orderData.customerPhone.replace(/\D/g, '').replace(/^0/, '58');
+    // Formateo del número de teléfono
+    const cleanDigits = (orderData.customerPhone || '').replace(/\D/g, '');
+    const cleanPhone = cleanDigits.startsWith('0') 
+      ? '58' + cleanDigits.substring(1) 
+      : (cleanDigits.startsWith('58') ? cleanDigits : '58' + cleanDigits);
+
+    // Mensaje para el cliente sin caracteres raros
+    const clientName = orderData.customerName ? ` ${orderData.customerName}` : '';
+    const rawMessage = `¡Hola${clientName}! 👋 Gracias por tu compra cumbrelover, su pedido está siendo procesado en cocina... 👨‍🍳🔥 le avisaremos cuando salga.`;
+
     const replyMarkup = {
       inline_keyboard: [
         [
           {
             text: '💬 Escribir al Cliente por WhatsApp',
-            url: `https://wa.me/${cleanPhone}?text=¡Hola%20${encodeURIComponent(orderData.customerName)}!%20Confirmamos%20tu%20pago%20para%20el%20pedido%20%23${orderData.orderId}%20en%20Cumbre%20Food.%20¡Ya%20está%20en%20cocina!`
+            url: `https://wa.me/${cleanPhone}?text=${encodeURIComponent(rawMessage)}`
           }
         ]
       ]
