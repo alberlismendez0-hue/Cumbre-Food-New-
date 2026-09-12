@@ -6,7 +6,7 @@ export const categories = [
   { id: 'hamburguesas_chuleta', name: '🥩 Burgers Chuleta', rawName: 'Burgers Chuleta', icon: '🥩' },
   { id: 'platos', name: '🥘 Platos', rawName: 'Platos', icon: '🥘' },
   { id: 'combos', name: '🔥 Combos', rawName: 'Combos', icon: '🔥' },
-  { id: 'adicionales', name: '➕ Adicionales', rawName: 'Adicionales', icon: '➕' }
+  
 ];
 
 export const paymentMethods = [
