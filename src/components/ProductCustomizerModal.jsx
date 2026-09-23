@@ -153,8 +153,14 @@ export default function ProductCustomizerModal({
 
     if (isCombo) {
       if (product.id === 'cb_lomito') list.push('combo_lomito_drink');
-      if (product.id === 'cb_chicken') list.push('combo_chicken_prep');
-      if (product.id === 'cb_1_y_1') list.push('combo_1y1_selection');
+      if (product.id === 'cb_chicken') {
+        list.push('combo_chicken_prep');
+        list.push('combo_chicken_drink');
+      }
+      if (product.id === 'cb_1_y_1') {
+        list.push('combo_1y1_selection');
+        list.push('combo_1y1_drink');
+      }
       if (product.id === 'cb_sierra_nevada') list.push('combo_sierra_drink');
     }
 
@@ -166,7 +172,7 @@ export default function ProductCustomizerModal({
 
     if (isBebida) list.push('direct_drink');
 
-    if (isBurger || isCombo || isPlato || isEntrada) {
+    if (isBurger || isPlato || isEntrada) {
       list.push('addons');
     }
 
@@ -318,8 +324,8 @@ export default function ProductCustomizerModal({
       if (product.id === 'cb_chicken') {
         const c1 = CHICKEN_COOKING_TYPES.find((c) => c.id === chicken1Cooking)?.name;
         const c2 = CHICKEN_COOKING_TYPES.find((c) => c.id === chicken2Cooking)?.name;
-        details.push({ label: 'Burger 1', value: c1 });
-        details.push({ label: 'Burger 2', value: c2 });
+        details.push({ label: 'Burger 1', value: `Chama (${c1})` });
+        details.push({ label: 'Burger 2', value: `Chama (${c2})` });
         details.push({ label: 'Refresco 1L', value: comboDrinkFlavor });
       }
       if (product.id === 'cb_1_y_1') {
@@ -679,12 +685,185 @@ export default function ProductCustomizerModal({
             </div>
           )}
 
-          {/* PASO: COMBOS */}
+          {/* PASOS DE COMBOS */}
           {currentStep === 'combo_lomito_drink' && (
             <div>
               <div className="mb-3">
                 <h4 className="fw-bold text-warning mb-1">🥤 Sabor del Refresco 1L</h4>
                 <p className="text-secondary small">Incluido en el combo</p>
+              </div>
+              <div className="d-flex flex-wrap gap-2">
+                {DRINK_FLAVORS.map((flavor) => (
+                  <button
+                    key={flavor}
+                    type="button"
+                    className={`cf-chip-btn ${comboDrinkFlavor === flavor ? 'active' : ''}`}
+                    onClick={() => {
+                      setComboDrinkFlavor(flavor);
+                      setTimeout(nextStep, 200);
+                    }}
+                  >
+                    {flavor}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* PASO 1: SELECCIÓN COMBO 1 Y 1 */}
+          {currentStep === 'combo_1y1_selection' && (
+            <div>
+              <div className="mb-3">
+                <h4 className="fw-bold text-warning mb-1">🍔 Elige tus Hamburguesas</h4>
+                <p className="text-secondary small">Selecciona 1 burger de carne y 1 burger de pollo</p>
+              </div>
+
+              {/* 1. Burger de Carne */}
+              <div className="mb-3">
+                <label className="fw-bold text-light small mb-2 d-block">1. Burger de Carne:</label>
+                <div className="row g-2">
+                  {COMBO_1Y1_MEAT_OPTIONS.map((meat) => (
+                    <div key={meat} className="col-12 col-sm-6">
+                      <div
+                        className={`cf-choice-card ${combo1y1Meat === meat ? 'selected' : ''}`}
+                        onClick={() => setCombo1y1Meat(meat)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">{combo1y1Meat === meat && <span className="cf-radio-dot" />}</span>
+                          <span className="cf-choice-name">{meat}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 2. Burger de Pollo */}
+              <div className="mb-3">
+                <label className="fw-bold text-light small mb-2 d-block">2. Burger de Pollo:</label>
+                <div className="row g-2">
+                  {COMBO_1Y1_CHICKEN_OPTIONS.map((chk) => (
+                    <div key={chk} className="col-12 col-sm-6">
+                      <div
+                        className={`cf-choice-card ${combo1y1Chicken === chk ? 'selected' : ''}`}
+                        onClick={() => setCombo1y1Chicken(chk)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">{combo1y1Chicken === chk && <span className="cf-radio-dot" />}</span>
+                          <span className="cf-choice-name">{chk}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 3. Cocción del Pollo */}
+              <div>
+                <label className="fw-bold text-light small mb-2 d-block">3. Cocción del Pollo:</label>
+                <div className="row g-2">
+                  {CHICKEN_COOKING_TYPES.map((type) => (
+                    <div key={type.id} className="col-6">
+                      <div
+                        className={`cf-choice-card ${combo1y1ChickenCooking === type.id ? 'selected' : ''}`}
+                        onClick={() => setCombo1y1ChickenCooking(type.id)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">{combo1y1ChickenCooking === type.id && <span className="cf-radio-dot" />}</span>
+                          <span className="cf-choice-name">{type.name}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* PASO 2: REFRESCO COMBO 1 Y 1 */}
+          {currentStep === 'combo_1y1_drink' && (
+            <div>
+              <div className="mb-3">
+                <h4 className="fw-bold text-warning mb-1">🥤 Sabor del Refresco 1 Ltr</h4>
+                <p className="text-secondary small">Selecciona una opción para avanzar</p>
+              </div>
+              <div className="d-flex flex-wrap gap-2">
+                {DRINK_FLAVORS.map((flavor) => (
+                  <button
+                    key={flavor}
+                    type="button"
+                    className={`cf-chip-btn ${comboDrinkFlavor === flavor ? 'active' : ''}`}
+                    onClick={() => {
+                      setComboDrinkFlavor(flavor);
+                      setTimeout(nextStep, 200);
+                    }}
+                  >
+                    {flavor}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* PASO 1: PREPARACIÓN COMBO CHICKEN */}
+          {currentStep === 'combo_chicken_prep' && (
+            <div>
+              <div className="mb-3">
+                <h4 className="fw-bold text-warning mb-1">🍗 Cocción de tus 2 Burgers de Pollo</h4>
+                <p className="text-secondary small">Elige cómo deseas la preparación de cada hamburguesa Chama</p>
+              </div>
+
+              <div className="mb-3">
+                <label className="fw-bold text-light small mb-2 d-block">Primera Burger de Pollo:</label>
+                <div className="row g-2">
+                  {CHICKEN_COOKING_TYPES.map((type) => (
+                    <div key={type.id} className="col-6">
+                      <div
+                        className={`cf-choice-card ${chicken1Cooking === type.id ? 'selected' : ''}`}
+                        onClick={() => setChicken1Cooking(type.id)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">{chicken1Cooking === type.id && <span className="cf-radio-dot" />}</span>
+                          <span className="cf-choice-name">{type.name}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="fw-bold text-light small mb-2 d-block">Segunda Burger de Pollo:</label>
+                <div className="row g-2">
+                  {CHICKEN_COOKING_TYPES.map((type) => (
+                    <div key={type.id} className="col-6">
+                      <div
+                        className={`cf-choice-card ${chicken2Cooking === type.id ? 'selected' : ''}`}
+                        onClick={() => setChicken2Cooking(type.id)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">{chicken2Cooking === type.id && <span className="cf-radio-dot" />}</span>
+                          <span className="cf-choice-name">{type.name}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* PASO 2: REFRESCO COMBO CHICKEN */}
+          {currentStep === 'combo_chicken_drink' && (
+            <div>
+              <div className="mb-3">
+                <h4 className="fw-bold text-warning mb-1">🥤 Sabor del Refresco 1 Ltr</h4>
+                <p className="text-secondary small">Selecciona una opción para avanzar</p>
               </div>
               <div className="d-flex flex-wrap gap-2">
                 {DRINK_FLAVORS.map((flavor) => (
