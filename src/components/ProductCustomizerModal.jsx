@@ -1124,7 +1124,7 @@ export default function ProductCustomizerModal({
                 }}
                 onClick={handleConfirm}
               >
-                <span>🚀 Agregar a la Mochila</span>
+                <span> Agregar a la Mochila</span>
                 <span className="badge bg-black bg-opacity-25 text-white px-2 py-1 fs-6">
                   ${totalPrice.toFixed(2)}
                 </span>

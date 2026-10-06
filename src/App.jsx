@@ -14,6 +14,7 @@ import ProductCustomizerModal from './components/ProductCustomizerModal';
 import './App.css';
 import { sendOrderToTelegram } from './services/telegram';
 
+const [termsAccepted, setTermsAccepted] = useState(false);
 // Lista de métodos de pago completa
 const PAYMENT_METHODS = [
   'Pago Móvil',
@@ -426,6 +427,10 @@ function App() {
     const isDigitalInternational = ['Zelle', 'Zinli', 'Binance Pay (USDT)'].includes(paymentMethod);
     if (isDigitalInternational && grandTotal < 15) {
       alert(`El monto mínimo para cancelar con ${paymentMethod} es de $15.00.`);
+      return;
+    }
+    if (!termsAccepted) {
+      alert('Debes aceptar los Términos y Condiciones y la Política de Privacidad para enviar tu pedido.');
       return;
     }
 
@@ -1702,6 +1707,20 @@ function App() {
                     >
                       <span>←</span> Volver a Paso 1
                     </button>
+
+                  <div className="form-check my-3 text-start w-100">
+                    <input
+                      className="form-check-input bg-dark border-secondary"
+                      type="checkbox"
+                      id="termsCheckbox"
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                      required
+                    />
+                    <label className="form-check-label text-secondary small" htmlFor="termsCheckbox" style={{ fontSize: '0.8rem', cursor: 'pointer' }}>
+                      He leído y acepto los <span className="text-warning text-decoration-underline">Términos y Condiciones</span> y la <span className="text-warning text-decoration-underline">Política de Privacidad</span>.
+                    </label>
+                  </div>
 
                     <button
                       type="submit"
