@@ -13,6 +13,7 @@ import { menuItems, categories, deliveryZones } from './data/menu';
 import ProductCustomizerModal from './components/ProductCustomizerModal';
 import './App.css';
 import { sendOrderToTelegram } from './services/telegram';
+import LegalModal from './components/LegalModal';
 
 
 // Lista de métodos de pago completa
@@ -109,6 +110,7 @@ function App() {
   const [checkoutStep, setCheckoutStep] = useState(1);
   const [copiedText, setCopiedText] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
 
   const [bcvRate, setBcvRate] = useState(() => {
     const cached = localStorage.getItem('cumbre_bcv_rate');
@@ -1853,25 +1855,65 @@ function App() {
         </div>
       </Modal>
 
-      {/* FOOTER */}
-      <footer className="cf-footer">
-        <Container>
-          <div className="cf-footer-logo d-flex align-items-center justify-content-center gap-2">
-            <img 
-              src="/logocumbrefood.jpg" 
-              alt="Cumbre Food" 
-              style={{ height: '32px', width: 'auto', objectFit: 'contain' }} 
-            />
-            <span>CUMBRE FOOD</span>
+      {/* FOOTER PROFESIONAL CUMBRE FOOD */}
+      <footer
+        className="w-100 text-white text-center py-5 mt-auto"
+        style={{
+          backgroundColor: '#0c0a09',
+          borderTop: '1px solid rgba(217, 119, 6, 0.25)'
+        }}
+      >
+        <div className="container px-3">
+          
+          {/* Logo y descripción */}
+          <div className="mb-4">
+            <h3 className="fw-black text-warning m-0 tracking-wide">🏔️ CUMBRE FOOD</h3>
+            <p className="text-secondary small mt-1 mb-0">
+              Sabor en lo más alto. Hamburguesas a la parrilla, platos y entradas artesanales en Mérida, Venezuela.
+            </p>
           </div>
-          <p className="cf-footer-text">
-            Sabor en lo más alto. Hamburguesas a la parrilla, platos y entradas artesanales en Mérida, Venezuela.
+
+          {/* Métodos de Pago Aceptados */}
+          <div className="mb-4">
+            <span className="small text-uppercase fw-bold text-secondary d-block mb-2" style={{ letterSpacing: '1px', fontSize: '0.75rem' }}>
+              MÉTODOS DE PAGO ACEPTADOS
+            </span>
+            <div className="d-flex flex-wrap justify-content-center gap-3 text-light small">
+              <span className="badge bg-dark border border-secondary px-3 py-2">💵 Efectivo USD</span>
+              <span className="badge bg-dark border border-secondary px-3 py-2">📱 Pago Móvil (Bs. BCV)</span>
+              <span className="badge bg-dark border border-secondary px-3 py-2">🟣 Zelle (Mínimo $15)</span>
+            </div>
+          </div>
+
+          <div className="border-top border-secondary border-opacity-25 my-4" style={{ maxWidth: '600px', margin: '0 auto' }}></div>
+
+          {/* Enlaces Legales */}
+          <div className="mb-3">
+            <button
+              type="button"
+              className="btn btn-link text-warning text-decoration-underline p-0 small fw-bold"
+              onClick={() => setShowLegalModal(true)}
+              style={{ fontSize: '0.85rem' }}
+            >
+              Política de Privacidad, Términos y Cookies
+            </button>
+          </div>
+
+          {/* Derechos Reservados y Ubicación */}
+          <p className="text-secondary small mb-1" style={{ fontSize: '0.78rem' }}>
+            📍 Feria C.C. Plaza Mayor • 🛵 Delivery Activo en Toda Mérida
           </p>
-          <div className="mt-3 small text-cf-dim">
-            📍 Feria C.C. Plaza Mayor • 🛵 Delivery Activo en Toda la Ciudad • © {new Date().getFullYear()} Cumbre Food
-          </div>
-        </Container>
+          <p className="text-secondary small mb-0" style={{ fontSize: '0.75rem' }}>
+            © {new Date().getFullYear()} <strong>Cumbre Food</strong>. Todos los derechos reservados.
+          </p>
+        </div>
       </footer>
+
+      {/* MODAL DE POLÍTICA Y TÉRMINOS */}
+      <LegalModal
+        show={showLegalModal}
+        onHide={() => setShowLegalModal(false)}
+      />
     </div>
   );
 }
