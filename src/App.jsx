@@ -14,7 +14,7 @@ import ProductCustomizerModal from './components/ProductCustomizerModal';
 import './App.css';
 import { sendOrderToTelegram } from './services/telegram';
 
-const [termsAccepted, setTermsAccepted] = useState(false);
+
 // Lista de métodos de pago completa
 const PAYMENT_METHODS = [
   'Pago Móvil',
@@ -108,6 +108,7 @@ const checkIsOpen = () => {
 function App() {
   const [checkoutStep, setCheckoutStep] = useState(1);
   const [copiedText, setCopiedText] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const [bcvRate, setBcvRate] = useState(() => {
     const cached = localStorage.getItem('cumbre_bcv_rate');
