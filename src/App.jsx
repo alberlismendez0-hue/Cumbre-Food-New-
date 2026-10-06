@@ -1947,6 +1947,31 @@ function App() {
             </div>
           </div>
 
+          {/* MÉTODOS DE PAGO (Texto limpio en 2 columnas como la referencia) */}
+          <div className="mb-4">
+            <span
+              className="d-block text-secondary small fw-bold text-uppercase mb-3"
+              style={{ letterSpacing: '2px', fontSize: '0.75rem' }}
+            >
+              MÉTODOS DE PAGO
+            </span>
+
+            <div
+              className="row justify-content-center text-white small"
+              style={{ maxWidth: '420px', margin: '0 auto', fontSize: '0.88rem' }}
+            >
+              <div className="col-6 mb-2">Efectivo USD</div>
+              <div className="col-6 mb-2">Pago Móvil (Bs. BCV)</div>
+              <div className="col-6 mb-2">Zelle</div>
+              <div className="col-6 mb-2">Binance Pay</div>
+            </div>
+          </div>
+
+          <div
+            className="border-top border-secondary border-opacity-25 my-4"
+            style={{ maxWidth: '420px', margin: '0 auto' }}
+          ></div>
+
           <div
             className="border-top border-secondary border-opacity-25 my-4"
             style={{ maxWidth: '500px', margin: '0 auto' }}
