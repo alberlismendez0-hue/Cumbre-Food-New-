@@ -1998,6 +1998,11 @@ function App() {
           </p>
         </div>
       </footer>
+      {/* MODAL DE POLÍTICA Y TÉRMINOS */}
+      <LegalModal
+        show={showLegalModal}
+        onHide={() => setShowLegalModal(false)}
+      />
     </div>
   );
 }
