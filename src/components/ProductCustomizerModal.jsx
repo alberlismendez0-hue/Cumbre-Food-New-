@@ -952,20 +952,19 @@ export default function ProductCustomizerModal({
                 <span className="badge bg-secondary bg-opacity-25 text-warning border border-warning border-opacity-25">Opcional</span>
               </div>
 
-              <div className="row g-2 mb-3">
-                {CROSS_SELL_DRINKS.filter((d) => d.id !== 'none').map((drink) => (
-                  <div key={drink.id} className="col-6 col-sm-3">
-                    <div
-                      className={`cf-drink-card ${currentDrinkType === drink.id ? 'selected' : ''}`}
-                      onClick={() => setCurrentDrinkType(drink.id)}
-                      role="button"
-                    >
-                      <div className="cf-drink-icon">{drink.icon}</div>
-                      <div className="cf-drink-name">{drink.name}</div>
-                      <div className="cf-drink-price">+${drink.price.toFixed(2)}</div>
-                    </div>
-                  </div>
-                ))}
+              <div 
+                className="cf-drink-icon mb-1" 
+                style={{ height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                {drink.icon?.startsWith('/') ? (
+                  <img 
+                    src={drink.icon} 
+                    alt={drink.name} 
+                    style={{ width: '24px', height: '24px', objectFit: 'contain' }} 
+                  />
+                ) : (
+                  <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>{drink.icon}</span>
+                )}
               </div>
 
               <div className="p-3 rounded-3 mb-3" style={{ backgroundColor: '#1b1613', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
