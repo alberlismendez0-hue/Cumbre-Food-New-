@@ -941,7 +941,7 @@ export default function ProductCustomizerModal({
             </div>
           )}
 
-          {/* PASO: VENTA CRUZADA DE BEBIDAS */}
+         {/* PASO: VENTA CRUZADA DE BEBIDAS */}
           {currentStep === 'drinks' && (
             <div>
               <div className="d-flex justify-content-between align-items-center mb-3">
@@ -952,21 +952,52 @@ export default function ProductCustomizerModal({
                 <span className="badge bg-secondary bg-opacity-25 text-warning border border-warning border-opacity-25">Opcional</span>
               </div>
 
-              <div 
-                className="cf-drink-icon mb-1" 
-                style={{ height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >
-                {drink.icon?.startsWith('/') ? (
-                  <img 
-                    src={drink.icon} 
-                    alt={drink.name} 
-                    style={{ width: '24px', height: '24px', objectFit: 'contain' }} 
-                  />
-                ) : (
-                  <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>{drink.icon}</span>
-                )}
+              {/* GRILLA DE TARJETAS DE BEBIDAS */}
+              <div className="d-grid gap-2 mb-3" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+                {CROSS_SELL_DRINKS.filter(d => d.id !== 'none').map((drink) => {
+                  const isSelected = currentDrinkType === drink.id;
+                  return (
+                    <div
+                      key={drink.id}
+                      onClick={() => setCurrentDrinkType(drink.id)}
+                      role="button"
+                      className="p-2 rounded-3 text-center d-flex flex-column align-items-center justify-content-center"
+                      style={{
+                        backgroundColor: isSelected ? 'rgba(217, 119, 6, 0.15)' : '#1b1613',
+                        border: isSelected ? '2px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.1)',
+                        cursor: 'pointer',
+                        minHeight: '85px',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {/* ÍCONO O IMAGEN */}
+                      <div className="mb-1 d-flex align-items-center justify-content-center" style={{ height: '28px' }}>
+                        {drink.icon && (drink.icon.startsWith('/') || drink.icon.endsWith('.png') || drink.icon.endsWith('.svg')) ? (
+                          <img
+                            src={drink.icon}
+                            alt={drink.name}
+                            style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                          />
+                        ) : (
+                          <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>{drink.icon}</span>
+                        )}
+                      </div>
+
+                      {/* NOMBRE */}
+                      <div className="text-white fw-bold" style={{ fontSize: '0.75rem', lineHeight: 1.1 }}>
+                        {drink.name}
+                      </div>
+
+                      {/* PRECIO */}
+                      <div className="text-warning fw-bold mt-1" style={{ fontSize: '0.75rem' }}>
+                        +${drink.price.toFixed(2)}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
+              {/* SELECTOR DE SABOR Y BOTÓN AGREGAR */}
               <div className="p-3 rounded-3 mb-3" style={{ backgroundColor: '#1b1613', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
                 <label className="small text-secondary mb-2 d-block">Sabor:</label>
                 <div className="d-flex flex-wrap gap-2 mb-3">
@@ -991,6 +1022,7 @@ export default function ProductCustomizerModal({
                 </button>
               </div>
 
+              {/* LISTA DE BEBIDAS AGREGADAS */}
               {selectedDrinksList.length > 0 && (
                 <div className="d-flex flex-column gap-2 mb-2">
                   {selectedDrinksList.map((item) => (
