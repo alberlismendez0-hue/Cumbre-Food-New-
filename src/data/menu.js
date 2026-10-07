@@ -109,9 +109,9 @@ export const BURGER_ADDONS = [
 export const CROSS_SELL_DRINKS = [
   { id: 'none', name: 'Ninguna', price: 0.0, icon: '🚫' },
   { id: 'personal', name: 'Refresco Personal', price: 1.0, icon: '🥤' },
-  { id: '1l', name: 'Refresco 1L', price: 2.5, icon: '🍾' },
-  { id: '1.5l', name: 'Refresco 1.5L', price: 3.0, icon: '🍾' },
-  { id: '2l', name: 'Refresco 2L', price: 3.5, icon: '🍾' }
+  { id: '1l', name: 'Refresco 1L', price: 2.5, image: '/soda.png' },
+  { id: '1.5l', name: 'Refresco 1.5L', price: 3.0,image: '/soda.png' },
+  { id: '2l', name: 'Refresco 2L', price: 3.5, image: '/soda.png' }
 ];
 
 export const DRINK_FLAVORS = [
