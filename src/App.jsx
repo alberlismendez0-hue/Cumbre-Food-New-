@@ -1988,7 +1988,7 @@ function App() {
               Política de Privacidad
             </button>
           </div>
-
+      
           {/* Ubicación y Copyright */}
           <p className="text-secondary small mb-1" style={{ fontSize: '0.78rem' }}>
             📍 Feria C.C. Plaza Mayor • 🛵 Delivery Activo en Toda Mérida
