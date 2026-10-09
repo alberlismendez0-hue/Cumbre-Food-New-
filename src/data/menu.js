@@ -78,7 +78,7 @@ export const deliveryZones = [
 // --- MODIFICADORES Y OPCIONES DE PERSONALIZACIÓN ---
 
 export const BURGER_SIDES = [
-  { id: 'chips', name: '🥔 Papas Chips', description: 'Crujientes y artesanales' },
+  { id: 'chips', name: ' Papas Chips',icon:'/chips.png',  description: 'Crujientes y artesanales' },
   { id: 'francesas', name: '🍟 Papas Francesas', description: 'Doradas y al punto de sal', price: 1.0 }
 ];
 
@@ -108,7 +108,7 @@ export const BURGER_ADDONS = [
 
 export const CROSS_SELL_DRINKS = [
   { id: 'none', name: 'Ninguna', price: 0.0, icon: '🚫' },
-  { id: 'personal', name: 'Refresco Personal', price: 1.0, icon: '🥤' },
+  { id: 'personal', name: 'Refresco Personal/Bombita', price: 1.0, icon: '/bombita.png' },
   { id: '1l', name: 'Refresco 1L', price: 2.5, icon: '/soda.png' },
   { id: '1.5l', name: 'Refresco 1.5L', price: 3.0, icon: '/soda.png' },
   { id: '2l', name: 'Refresco 2L', price: 3.5, icon: '/soda.png' }
