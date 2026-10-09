@@ -31,7 +31,7 @@ export default function LegalModal({ show, onHide, activeTab = 'privacy' }) {
 
         <div className="text-center mb-4">
           <h3 className="fw-bold text-warning mb-1">📜 Marco Legal y Privacidad</h3>
-          <p className="text-secondary small">Cumbre Food • Mérida, Venezuela</p>
+          <p className="text-secondary small"> Cumbre • Mérida, Venezuela</p>
         </div>
 
         {/* Sección: Términos y Condiciones */}
@@ -41,7 +41,7 @@ export default function LegalModal({ show, onHide, activeTab = 'privacy' }) {
           </h5>
           <div className="text-light small lh-lg" style={{ color: '#d1d5db' }}>
             <p>
-              <strong>1.1. Objeto:</strong> Cumbre Food ofrece una plataforma web interactiva para la exploración de nuestro menú, personalización de pedidos y generación directa de comandas hacia cocina.
+              <strong>1.1. Objeto:</strong> Cumbre ofrece una plataforma web interactiva para la exploración de nuestro menú, personalización de pedidos y generación directa de comandas hacia cocina.
             </p>
             <p>
               <strong>1.2. Precios y Tasas:</strong> Todos los precios base están denominados en Dólares Americanos (USD) y convertidos de manera referencial a Bolívares (Bs.) de acuerdo con la tasa oficial establecida por el Banco Central de Venezuela (BCV).

@@ -13,7 +13,7 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
     formData.append('chat_id', TELEGRAM_CHAT_ID);
 
     // Estructurar el texto de la comanda
-    let caption = `🏔️ *NUEVO PEDIDO - CUMBRE FOOD*\n`;
+    let caption = `⛰️ *NUEVO PEDIDO - CUMBRE *\n`; 
     caption += `🆔 *ORDEN:* \`#${orderData.orderId}\`\n`;
     caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
     caption += `👤 *Cliente:* ${orderData.customerName}\n`;

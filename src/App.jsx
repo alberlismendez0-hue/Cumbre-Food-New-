@@ -48,22 +48,22 @@ const PAYMENT_INFO = {
     banco: 'Banesco (0134)',
     telefono: '0416-8769923',
     cedula: 'V-24555888',
-    titular: 'Cumbre Food C.A.'
+    titular: 'Cumbre C.A.'
   },
   zelle: {
     email: 'pagos@cumbrefood.com',
-    titular: 'Cumbre Food LLC',
+    titular: 'Cumbre LLC',
     min: 15
   },
   zinli: {
     email: 'pagoszinli@cumbrefood.com',
-    titular: 'Cumbre Food',
+    titular: 'Cumbre',
     min: 15
   },
   binance: {
     payId: '84920194',
     email: 'binance@cumbrefood.com',
-    titular: 'CumbreFoodPay',
+    titular: 'CumbrePay',
     min: 15
   }
 };
@@ -1866,7 +1866,7 @@ function App() {
         <div className="container px-3">
           {/* Logo y lema */}
           <div className="mb-4">
-            <h3 className="fw-black text-warning m-0 tracking-wide">🏔️ CUMBRE FOOD</h3>
+            <h3 className="fw-black text-warning m-0 tracking-wide"> CUMBRE </h3>
             <p className="text-secondary small mt-1 mb-0">
               Sabor en lo más alto. Hamburguesas a la parrilla, platos y entradas artesanales en Mérida, Venezuela.
             </p>
@@ -1994,7 +1994,7 @@ function App() {
             📍 Feria C.C. Plaza Mayor • 🛵 Delivery Activo en Toda Mérida
           </p>
           <p className="text-secondary small mb-0" style={{ fontSize: '0.75rem' }}>
-            © {new Date().getFullYear()} <strong>Cumbre Food</strong>. Todos los derechos reservados.
+            © {new Date().getFullYear()} <strong>Cumbre</strong>. Todos los derechos reservados.
           </p>
         </div>
       </footer>
