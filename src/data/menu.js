@@ -78,13 +78,13 @@ export const deliveryZones = [
 // --- MODIFICADORES Y OPCIONES DE PERSONALIZACIÓN ---
 
 export const BURGER_SIDES = [
-  { id: 'chips',icon:'/chips.png', name: ' Papas Chips',  description: 'Crujientes y artesanales' },
-  { id: 'francesas', name: '🍟 Papas Francesas', description: 'Doradas y al punto de sal', price: 1.0 }
+  { id: 'chips', icon:'/chips.png', name: ' Papas Chips',  description: 'Crujientes y artesanales' },
+  { id: 'francesas', icon:'🍟' , name: ' Papas Francesas', description: 'Doradas y al punto de sal', price: 1.0 }
 ];
 
 export const CHICKEN_COOKING_TYPES = [
-  { id: 'crispy', name: '🍗 Pollo Crispy', description: 'Empanizado extra crujiente' },
-  { id: 'plancha', name: '🥩 Pollo a la Plancha', description: 'Jugosa pechuga a la parrilla' }
+  { id: 'crispy', icon: '🍗' , name: ' Pollo Crispy', description: 'Empanizado extra crujiente' },
+  { id: 'plancha', icon:'🥩' , name: ' Pollo a la Plancha', description: 'Jugosa pechuga a la parrilla' }
 ];
 
 export const BURGER_ADDONS = [

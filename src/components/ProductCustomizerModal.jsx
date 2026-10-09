@@ -516,6 +516,22 @@ export default function ProductCustomizerModal({
                       >
                         <div className="d-flex align-items-center gap-3">
                           <span className="cf-radio-circle">{isSelected && <span className="cf-radio-dot" />}</span>
+                          
+                          {/* ÍCONO / IMAGEN */}
+                          {side.icon && (
+                            <div className="d-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
+                              {side.icon.startsWith('/') || side.icon.endsWith('.png') || side.icon.endsWith('.svg') ? (
+                                <img
+                                  src={side.icon}
+                                  alt={side.name}
+                                  style={{ width: '22px', height: '22px', objectFit: 'contain' }}
+                                />
+                              ) : (
+                                <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>{side.icon}</span>
+                              )}
+                            </div>
+                          )}
+
                           <div>
                             <div className="cf-choice-name">{side.name}</div>
                             <div className="cf-choice-desc">{side.description}</div>
