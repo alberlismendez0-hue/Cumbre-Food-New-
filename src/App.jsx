@@ -14,6 +14,7 @@ import ProductCustomizerModal from './components/ProductCustomizerModal';
 import './App.css';
 import { sendOrderToTelegram } from './services/telegram';
 import LegalModal from './components/LegalModal';
+import ExpandableText from './components/ExpandableText';
 
 
 // Lista de métodos de pago completa
@@ -692,7 +693,8 @@ function App() {
                         >
                           {item.name}
                         </h3>
-                        <p className="product-card-desc">{item.description}</p>
+                        {/* Después */}
+                        <ExpandableText text={item.description} maxChars={80} />
 
                         <div className="mt-auto pt-2">
                           <button
