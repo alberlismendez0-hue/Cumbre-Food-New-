@@ -577,7 +577,8 @@ function App() {
             Hamburguesas y Platos de <span className="cf-brand-highlight">Altura</span>
           </h1>
           <p className="cf-hero-subtitle">
-            Inspiradas en los picos más altos de la Sierra Nevada. Ingredientes frescos, pan artesanal de papa y la mejor parrilla andina.
+            Inspiradas en los picos más altos de la Sierra Nevada.<br />
+            ¡Haz cumbre con nosotros!
           </p>
 
           <div className="cf-hero-search-wrapper">
