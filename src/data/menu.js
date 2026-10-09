@@ -78,7 +78,7 @@ export const deliveryZones = [
 // --- MODIFICADORES Y OPCIONES DE PERSONALIZACIÓN ---
 
 export const BURGER_SIDES = [
-  { id: 'chips', name: ' Papas Chips',icon:'/chips.png',  description: 'Crujientes y artesanales' },
+  { id: 'chips',icon:'/chips.png', name: ' Papas Chips',  description: 'Crujientes y artesanales' },
   { id: 'francesas', name: '🍟 Papas Francesas', description: 'Doradas y al punto de sal', price: 1.0 }
 ];
 
