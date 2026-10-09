@@ -520,7 +520,19 @@ function App() {
                 alt="Logo Cumbre Food" 
                 style={{ height: '38px', width: 'auto', objectFit: 'contain' }} 
               />
-              <span>CUMBRE <span className="cf-brand-highlight">FOOD</span></span>
+              <span
+                className="fw-black"
+                style={{
+                  background: 'linear-gradient(135deg, #ffffff 25%, #f59e0b 80%, #d97706 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '1.5px',
+                  fontSize: '1.4rem',
+                  fontWeight: '900'
+                }}
+              >
+                CUMBRE
+              </span>
             </a>
             <div 
               className="d-none d-md-inline-flex cf-nav-badge" 
