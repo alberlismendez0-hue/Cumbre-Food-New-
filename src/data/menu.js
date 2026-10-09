@@ -166,7 +166,7 @@ export const menuItems = [
     name: 'Servicio de Chips',
     category: 'entradas',
     price: 5.0,
-    description: 'Acompañados con 2 salsas a escoger.',
+    description: '500gr de Chips de Papas. Acompañados con 2 salsas a escoger.',
     image: '/chips.jpg',
     customization: {
       sauces: {
@@ -181,7 +181,7 @@ export const menuItems = [
     name: 'Tequeños',
     category: 'entradas',
     price: 6.0,
-    description: 'Crujientes tequeños acompañados de salsa tártara de la casa.',
+    description: '5und.Crujientes tequeños acompañados de salsa tártara de la casa.',
     image: '/tequenos_nevados.jpg',
     customization: {
       sauces: {
@@ -196,7 +196,7 @@ export const menuItems = [
     name: 'Servicio de Papas Francesas',
     category: 'entradas',
     price: 6.0,
-    description: 'Papas fritas con 2 salsas a escoger.',
+    description: '500 gr de Papas fritas con 2 salsas a escoger.',
     image: '/papas_sierra.jpg',
     customization: {
       sauces: {
@@ -208,10 +208,10 @@ export const menuItems = [
   },
   {
     id: 'ent_tenders',
-    name: 'Tenders de Pollo',
+    name: '5und.Tenders de Pollo',
     category: 'entradas',
     price: 7.0,
-    description: 'Crujientes tenders de pollo con papas francesas y salsa a escoger.',
+    description: '5und. Crujientes tenders de pollo con papas francesas y salsa a escoger.',
     image: '/tenders_pollo.jpg',
     customization: {
       sauces: {
@@ -240,7 +240,7 @@ export const menuItems = [
     name: 'Papas La Culata',
     category: 'entradas',
     price: 9.0,
-    description: 'Papas francesas bañadas en fondue de queso mozzarella, tocineta y maíz.',
+    description: '500gr de Papas francesas bañadas en fondue de queso mozzarella, tocineta y maíz.',
     image: '/papas_culata.jpg',
     customization: {
       extraProteins: [
@@ -255,7 +255,7 @@ export const menuItems = [
     name: 'Papas Mifafí',
     category: 'entradas',
     price: 11.0,
-    description: 'Papas francesas con proteína a escoger (chuleta, lomito o pollo a la plancha), tocineta, maíz, salsas clásicas y queso de año.',
+    description: '500gr de Papas francesas con proteína a escoger (chuleta, lomito o pollo a la plancha), tocineta, maíz, salsas clásicas y queso de año.',
     image: '/papas_mifafi.jpg',
     customization: {
       baseProtein: {
