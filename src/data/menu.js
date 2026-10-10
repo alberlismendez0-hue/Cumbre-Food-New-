@@ -83,8 +83,8 @@ export const BURGER_SIDES = [
 ];
 
 export const CHICKEN_COOKING_TYPES = [
-  { id: 'crispy', icon: '🍗' , name: ' Pollo Crispy', description: 'Empanizado extra crujiente' },
-  { id: 'plancha', icon:'🥩' , name: ' Pollo a la Plancha', description: 'Jugosa pechuga a la parrilla' }
+  { id: 'crispy', name: ' Pollo Crispy', description: 'Empanizado extra crujiente' },
+  { id: 'plancha', name: ' Pollo a la Plancha', description: 'Jugosa pechuga a la parrilla' }
 ];
 
 export const BURGER_ADDONS = [
@@ -93,7 +93,6 @@ export const BURGER_ADDONS = [
   { id: 'ad_cebolla_caram', name: 'Cebolla Caramelizada', price: 1.0, icon: '🧅', category: 'vegetales' },
   { id: 'ad_huevo', name: 'Huevo Frito', price: 1.0, icon: '🍳', category: 'extras' },
   { id: 'ad_aguacate', name: 'Aguacate', price: 1.0, icon: '🥑', category: 'vegetales' },
-  { id: 'ad_maiz', name: 'Maíz dulce', price: 1.0, icon: '🌽', category: 'vegetales' },
   { id: 'ad_fondue_mozz', name: 'Fondue Mozzarella', price: 1.0, icon: '🫕', category: 'quesos' },
   { id: 'ad_cebolla_vino', name: 'Cebolla en Vino de Mora', price: 1.5, icon: '🍷', category: 'vegetales' },
   { id: 'ad_tocineta', name: 'Tocineta Crujiente', price: 1.5, icon: '🥓', category: 'carnes' },
@@ -111,7 +110,8 @@ export const CROSS_SELL_DRINKS = [
   { id: 'personal', name: 'Refresco Personal/Bombita', price: 1.0, icon: '/bombita.png' },
   { id: '1l', name: 'Refresco 1L', price: 2.5, icon: '/soda.png' },
   { id: '1.5l', name: 'Refresco 1.5L', price: 3.0, icon: '/soda.png' },
-  { id: '2l', name: 'Refresco 2L', price: 3.5, icon: '/soda.png' }
+  { id: '2l', name: 'Refresco 2L', price: 3.5, icon: '/soda.png' },
+  { id: 'Lata', name: 'Refresco de Lata', price: 1.5, icon: '/latasoda.png' }
 ];
 
 export const DRINK_FLAVORS = [
@@ -119,7 +119,10 @@ export const DRINK_FLAVORS = [
   'Pepsi',
   'Chinotto / 7Up',
   'Kolita',
-  'Naranja'
+  'Naranja',
+  'Uva',
+  'Manzanita'
+
 ];
 
 export const COMBO_1Y1_MEAT_OPTIONS = [
