@@ -112,7 +112,6 @@ export const CROSS_SELL_DRINKS = [
   { id: '1l', name: 'Refresco 1L', price: 2.5, icon: '/soda.png' },
   { id: '1.5l', name: 'Refresco 1.5L', price: 3.0, icon: '/soda.png' },
   { id: '2l', name: 'Refresco 2L', price: 3.5, icon: '/soda.png' },
-  { id: '2l', name: 'Refresco 2L', price: 3.5, icon: '/soda.png' },
   { id: 'agua', name: 'Agua Mineral', price: 1.0, icon: '💧' }
  
 ];
