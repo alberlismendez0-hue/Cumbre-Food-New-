@@ -495,60 +495,76 @@ export default function ProductCustomizerModal({
             </div>
           )}
 
-          {/* PASO: ACOMPAÑANTE HAMBURGUESA */}
-          {currentStep === 'burger_side' && (
-            <div>
-              <div className="mb-3">
-                <h4 className="fw-bold text-warning mb-1">🥔 Elige tu Acompañante</h4>
-                <p className="text-secondary small">Haz clic en una opción para avanzar automáticamente</p>
-              </div>
-              <div className="row g-2">
-                {BURGER_SIDES.map((side) => {
-                  const isSelected = burgerSide === side.id;
-                  const hasExtraPrice = side.price && side.price > 0;
-                  return (
-                    <div key={side.id} className="col-12 col-sm-6">
-                      <div
-                        className={`cf-choice-card ${isSelected ? 'selected' : ''}`}
-                        onClick={() => {
-                          setBurgerSide(side.id);
-                          setTimeout(nextStep, 200);
-                        }}
-                        role="button"
-                      >
-                        <div className="d-flex align-items-center gap-3">
-                          <span className="cf-radio-circle">{isSelected && <span className="cf-radio-dot" />}</span>
-                          
-                          {/* ÍCONO / IMAGEN */}
-                          {side.icon && (
-                            <div className="d-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
-                              {side.icon.startsWith('/') || side.icon.endsWith('.png') || side.icon.endsWith('.svg') ? (
-                                <img
-                                  src={side.icon}
-                                  alt={side.name}
-                                  style={{ width: '22px', height: '22px', objectFit: 'contain' }}
-                                />
-                              ) : (
-                                <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>{side.icon}</span>
-                              )}
-                            </div>
-                          )}
+         {/* PASO: ACOMPAÑANTE HAMBURGUESA */}
+          {currentStep === 'burger_side' && (() => {
+            // Detecta si la hamburguesa actual es Toro o Bolívar
+            const isToroOrBolivar = 
+              product?.id === 'h_toro' || 
+              product?.id === 'h_bolivar' ||
+              product?.name?.toLowerCase().includes('toro') ||
+              product?.name?.toLowerCase().includes('bolívar') ||
+              product?.name?.toLowerCase().includes('bolivar');
 
-                          <div>
-                            <div className="cf-choice-name">{side.name}</div>
-                            <div className="cf-choice-desc">{side.description}</div>
+            // Filtra: si no es Toro ni Bolívar, oculta las yuquitas
+            const availableBurgerSides = BURGER_SIDES.filter(side => {
+              if (side.id === 'yuquitas') return isToroOrBolivar;
+              return true;
+            });
+
+            return (
+              <div>
+                <div className="mb-3">
+                  <h4 className="fw-bold text-warning mb-1">🥔 Elige tu Acompañante</h4>
+                  <p className="text-secondary small">Haz clic en una opción para avanzar automáticamente</p>
+                </div>
+                <div className="row g-2">
+                  {availableBurgerSides.map((side) => {
+                    const isSelected = burgerSide === side.id;
+                    const hasExtraPrice = side.price && side.price > 0;
+                    return (
+                      <div key={side.id} className="col-12 col-sm-6">
+                        <div
+                          className={`cf-choice-card ${isSelected ? 'selected' : ''}`}
+                          onClick={() => {
+                            setBurgerSide(side.id);
+                            setTimeout(nextStep, 200);
+                          }}
+                          role="button"
+                        >
+                          <div className="d-flex align-items-center gap-3">
+                            <span className="cf-radio-circle">{isSelected && <span className="cf-radio-dot" />}</span>
+                            
+                            {/* ÍCONO / IMAGEN */}
+                            {side.icon && (
+                              <div className="d-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
+                                {side.icon.startsWith('/') || side.icon.endsWith('.png') || side.icon.endsWith('.svg') ? (
+                                  <img
+                                    src={side.icon}
+                                    alt={side.name}
+                                    style={{ width: '22px', height: '22px', objectFit: 'contain' }}
+                                  />
+                                ) : (
+                                  <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>{side.icon}</span>
+                                )}
+                              </div>
+                            )}
+
+                            <div>
+                              <div className="cf-choice-name">{side.name}</div>
+                              <div className="cf-choice-desc">{side.description}</div>
+                            </div>
                           </div>
+                          <span className={hasExtraPrice ? "cf-addon-price fw-bold" : "cf-choice-free"} style={{ color: hasExtraPrice ? '#f59e0b' : undefined }}>
+                            {hasExtraPrice ? `+$${side.price.toFixed(2)}` : 'Gratis'}
+                          </span>
                         </div>
-                        <span className={hasExtraPrice ? "cf-addon-price fw-bold" : "cf-choice-free"} style={{ color: hasExtraPrice ? '#f59e0b' : undefined }}>
-                          {hasExtraPrice ? `+$${side.price.toFixed(2)}` : 'Gratis'}
-                        </span>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* PASO: COCCIÓN POLLO */}
           {(currentStep === 'chicken_cooking' || currentStep === 'salad_chicken' || currentStep === 'plato_chicken') && (
