@@ -78,8 +78,9 @@ export const deliveryZones = [
 // --- MODIFICADORES Y OPCIONES DE PERSONALIZACIÓN ---
 
 export const BURGER_SIDES = [
-  { id: 'chips', icon:'/chips.png', name: ' Papas Chips',  description: 'Crujientes y artesanales' },
-  { id: 'francesas', icon:'🍟' , name: ' Papas Francesas', description: 'Doradas y al punto de sal', price: 1.0 }
+  { id: 'chips', icon:'/chips.png', name: 'Papas Chips',  description: 'Crujientes y artesanales' },
+  { id: 'francesas', icon:'🍟' , name: 'Papas Francesas', description: 'Doradas y al punto de sal', price: 1.0 },
+  { id: 'yuquitas', icon:'🍟', name: 'Yuquitas Fritas',  description: 'Doradas y Crujientes' }
 ];
 
 export const CHICKEN_COOKING_TYPES = [
@@ -160,8 +161,7 @@ export const ENTRADAS_SAUCE_OPTIONS = [
   'Mayonesa',
   'BBQ',
   'Mostaza',
-  'Salsa Tártara',
-  'Salsa de Maíz'
+  'Salsa Tártara'
 ];
 
 export const menuItems = [
