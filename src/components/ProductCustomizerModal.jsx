@@ -257,9 +257,11 @@ export default function ProductCustomizerModal({
     );
   };
 
-  const handleAddDrink = () => {
+ const handleAddDrink = () => {
     const drinkObj = CROSS_SELL_DRINKS.find((d) => d.id === currentDrinkType);
     if (!drinkObj || drinkObj.id === 'none') return;
+
+    const isWater = drinkObj.id === 'agua';
 
     setSelectedDrinksList((prev) => [
       ...prev,
@@ -268,7 +270,7 @@ export default function ProductCustomizerModal({
         id: drinkObj.id,
         name: drinkObj.name,
         price: drinkObj.price,
-        flavor: currentDrinkFlavor
+        flavor: isWater ? null : currentDrinkFlavor
       }
     ]);
   };
@@ -1018,29 +1020,43 @@ export default function ProductCustomizerModal({
                 })}
               </div>
 
-              {/* SELECTOR DE SABOR Y BOTÓN AGREGAR */}
+             {/* SELECTOR DE SABOR Y BOTÓN AGREGAR */}
               <div className="p-3 rounded-3 mb-3" style={{ backgroundColor: '#1b1613', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <label className="small text-secondary mb-2 d-block">Sabor:</label>
-                <div className="d-flex flex-wrap gap-2 mb-3">
-                  {DRINK_FLAVORS.map((flavor) => (
+                {currentDrinkType !== 'agua' ? (
+                  <>
+                    <label className="small text-secondary mb-2 d-block">Sabor:</label>
+                    <div className="d-flex flex-wrap gap-2 mb-3">
+                      {DRINK_FLAVORS.map((flavor) => (
+                        <button
+                          key={flavor}
+                          type="button"
+                          className={`cf-chip-btn ${currentDrinkFlavor === flavor ? 'active' : ''}`}
+                          onClick={() => setCurrentDrinkFlavor(flavor)}
+                        >
+                          {flavor}
+                        </button>
+                      ))}
+                    </div>
                     <button
-                      key={flavor}
                       type="button"
-                      className={`cf-chip-btn ${currentDrinkFlavor === flavor ? 'active' : ''}`}
-                      onClick={() => setCurrentDrinkFlavor(flavor)}
+                      className="btn btn-sm w-100 py-2 fw-bold text-white"
+                      style={{ backgroundColor: '#d97706', borderRadius: '10px', border: 'none' }}
+                      onClick={handleAddDrink}
                     >
-                      {flavor}
+                      + Añadir {CROSS_SELL_DRINKS.find(d => d.id === currentDrinkType)?.name} ({currentDrinkFlavor})
                     </button>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  className="btn btn-sm w-100 py-2 fw-bold text-white"
-                  style={{ backgroundColor: '#d97706', borderRadius: '10px', border: 'none' }}
-                  onClick={handleAddDrink}
-                >
-                  + Añadir {CROSS_SELL_DRINKS.find(d => d.id === currentDrinkType)?.name} ({currentDrinkFlavor})
-                </button>
+                  </>
+                ) : (
+                  /* Vista exclusiva para Agua Mineral (sin botones de sabores) */
+                  <button
+                    type="button"
+                    className="btn btn-sm w-100 py-2 fw-bold text-white"
+                    style={{ backgroundColor: '#d97706', borderRadius: '10px', border: 'none' }}
+                    onClick={handleAddDrink}
+                  >
+                    + Añadir Agua Mineral
+                  </button>
+                )}
               </div>
 
               {/* LISTA DE BEBIDAS AGREGADAS */}
@@ -1052,9 +1068,13 @@ export default function ProductCustomizerModal({
                       className="d-flex justify-content-between align-items-center p-2 px-3 rounded-3"
                       style={{ backgroundColor: '#211a15', border: '1px solid rgba(255, 255, 255, 0.08)' }}
                     >
-                      <div className="small">
-                        <span className="text-white fw-bold">🥤 {item.name}</span>
-                        <span className="text-secondary ms-2">({item.flavor})</span>
+                     <div className="small">
+                        <span className="text-white fw-bold">
+                          {item.id === 'agua' ? '💧' : '🥤'} {item.name}
+                        </span>
+                        {item.flavor && (
+                          <span className="text-secondary ms-2">({item.flavor})</span>
+                        )}
                       </div>
                       <div className="d-flex align-items-center gap-3">
                         <span className="text-warning fw-bold small">+${item.price.toFixed(2)}</span>
