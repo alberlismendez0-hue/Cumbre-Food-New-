@@ -628,23 +628,44 @@ export default function ProductCustomizerModal({
                 <p className="text-secondary small">Selecciona una opción para avanzar</p>
               </div>
               <div className="row g-2">
-                {PLATO_SIDES.map((side) => (
-                  <div key={side} className="col-12 col-sm-4">
-                    <div
-                      className={`cf-choice-card ${platoSide === side ? 'selected' : ''}`}
-                      onClick={() => {
-                        setPlatoSide(side);
-                        setTimeout(nextStep, 200);
-                      }}
-                      role="button"
-                    >
-                      <div className="d-flex align-items-center gap-2">
-                        <span className="cf-radio-circle">{platoSide === side && <span className="cf-radio-dot" />}</span>
-                        <span className="cf-choice-name">{side}</span>
+                {PLATO_SIDES.map((side) => {
+                  // Soporta tanto si platoSide guarda el objeto completo, el id o el nombre
+                  const isSelected = platoSide === side.id || platoSide === side.name;
+
+                  return (
+                    <div key={side.id || side} className="col-12 col-sm-4">
+                      <div
+                        className={`cf-choice-card ${isSelected ? 'selected' : ''}`}
+                        onClick={() => {
+                          setPlatoSide(side.name); // Guarda el nombre limpio para el pedido
+                          setTimeout(nextStep, 200);
+                        }}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">{isSelected && <span className="cf-radio-dot" />}</span>
+
+                          {/* Renderizado de ícono (PNG o Emoji) */}
+                          {side.icon && (
+                            <div className="d-flex align-items-center justify-content-center" style={{ width: '22px', height: '22px', flexShrink: 0 }}>
+                              {side.icon.startsWith('/') || side.icon.endsWith('.png') || side.icon.endsWith('.svg') ? (
+                                <img
+                                  src={side.icon}
+                                  alt={side.name}
+                                  style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                                />
+                              ) : (
+                                <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>{side.icon}</span>
+                              )}
+                            </div>
+                          )}
+
+                          <span className="cf-choice-name">{side.name}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}

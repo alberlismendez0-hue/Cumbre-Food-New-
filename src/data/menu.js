@@ -145,9 +145,9 @@ export const COMBO_1Y1_CHICKEN_OPTIONS = [
 ];
 
 export const PLATO_SIDES = [
-  '🍟 Papas Francesas',
-  '🥔 Papas Chips',
-  '🥔 Puré de Papa'
+  { id: 'francesas', name: 'Papas Francesas', icon: '🍟' },
+  { id: 'chips', name: 'Papas Chips', icon: '/chips.png' },
+  { id: 'pure', name: 'Puré de Papa', icon: '🥔' }
 ];
 
 export const PLATO_SALADS = [
