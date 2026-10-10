@@ -968,8 +968,13 @@ export default function ProductCustomizerModal({
                 <span className="badge bg-secondary bg-opacity-25 text-warning border border-warning border-opacity-25">Opcional</span>
               </div>
 
-              {/* GRILLA DE TARJETAS DE BEBIDAS */}
-              <div className="d-grid gap-2 mb-3" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+             {/* GRILLA DE TARJETAS DE BEBIDAS RESPONSIVA */}
+              <div 
+                className="d-grid gap-2 mb-3" 
+                style={{ 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(95px, 1fr))' 
+                }}
+              >
                 {CROSS_SELL_DRINKS.filter(d => d.id !== 'none').map((drink) => {
                   const isSelected = currentDrinkType === drink.id;
                   return (
@@ -1000,7 +1005,7 @@ export default function ProductCustomizerModal({
                       </div>
 
                       {/* NOMBRE */}
-                      <div className="text-white fw-bold" style={{ fontSize: '0.75rem', lineHeight: 1.1 }}>
+                      <div className="text-white fw-bold" style={{ fontSize: '0.72rem', lineHeight: 1.15 }}>
                         {drink.name}
                       </div>
 
