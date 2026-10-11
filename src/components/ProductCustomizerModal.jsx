@@ -635,6 +635,41 @@ export default function ProductCustomizerModal({
               </div>
             </div>
           )}
+          {/* PASO: PROTEÍNAS EXTRA (MIFAFÍ Y LA CULATA) */}
+          {currentStep === 'extra_proteins' && (
+            <div>
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h4 className="fw-bold text-warning mb-1">🍗 ¿Deseas Proteína Extra?</h4>
+                  <p className="text-secondary small m-0">Opcional. Si no deseas, pulsa Siguiente</p>
+                </div>
+                <span className="badge bg-secondary bg-opacity-25 text-warning border border-warning border-opacity-25">Opcional</span>
+              </div>
+              <div className="row g-2">
+                {extraProteinsConfig?.map((item) => {
+                  const isChecked = selectedExtraProteins.includes(item.id);
+                  return (
+                    <div key={item.id} className="col-12 col-sm-6">
+                      <div
+                        className={`cf-addon-card ${isChecked ? 'selected' : ''}`}
+                        onClick={() => toggleExtraProtein(item.id)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className={`cf-checkbox-square ${isChecked ? 'checked' : ''}`}>
+                            {isChecked ? '✓' : ''}
+                          </span>
+                          <span className="cf-addon-icon">{item.icon}</span>
+                          <span className="cf-addon-name">{item.name}</span>
+                        </div>
+                        <span className="cf-addon-price">+${item.price.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* PASO: GUARNICIÓN PLATO */}
           {currentStep === 'plato_sides' && (
