@@ -3,9 +3,9 @@ const TELEGRAM_BOT_TOKEN = '8096550202:AAEv1JDqvajKqXksA6aaPsoPxy-nR5M9MnU';
 const TELEGRAM_CHAT_ID = '501773007';
 
 /**
- * Envía la orden y el comprobante de Pago Móvil al Telegram del restaurante
+ * Envía la orden y el comprobante de pago al Telegram del restaurante
  * @param {Object} orderData Datos completos de la orden
- * @param {File|null} receiptFile Archivo de imagen del comprobante
+ * @param {File|null} receiptFile Archivo de imagen del comprobante / billetes
  */
 export const sendOrderToTelegram = async (orderData, receiptFile) => {
   try {
@@ -13,7 +13,7 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
     formData.append('chat_id', TELEGRAM_CHAT_ID);
 
     // Estructurar el texto de la comanda
-    let caption = `⛰️ *NUEVO PEDIDO - CUMBRE *\n`; 
+    let caption = `⛰️ *NUEVO PEDIDO - CUMBRE*\n`;
     caption += `🆔 *ORDEN:* \`#${orderData.orderId}\`\n`;
     caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
     caption += `👤 *Cliente:* ${orderData.customerName}\n`;
@@ -40,23 +40,41 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
     caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
     caption += `💵 *Subtotal:* $${orderData.subtotal.toFixed(2)}\n`;
     caption += `🛵 *Delivery:* $${orderData.deliveryCost.toFixed(2)}\n`;
-    caption += `💰 *TOTAL A PAGAR:* $${orderData.grandTotal.toFixed(2)}\n`;
-    caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
-    caption += `💳 *DATOS DE PAGO MÓVIL:*\n`;
-    caption += `🏦 *Banco Origen:* ${orderData.bankOrigin}\n`;
-    caption += `🔢 *Últimos 4 Dígitos:* \`${orderData.paymentReference}\`\n`;
+    caption += `💰 *TOTAL A PAGAR:* $${orderData.grandTotal.toFixed(2)}`;
+    if (orderData.grandTotalBs) {
+      caption += ` (${orderData.grandTotalBs} Bs.)`;
+    }
+    caption += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
+
+    // Bloque dinámico según el método de pago
+    if (orderData.paymentMethod === 'Efectivo Divisas ($)') {
+      caption += `💵 *PAGO EN EFECTIVO DIVISAS ($):*\n`;
+      caption += `💰 *Paga con:* ${orderData.cashAmountPaid || '$0.00'}\n`;
+      caption += `🔄 *Vuelto a Entregar:* ${orderData.cashChangeDue || '$0.00'}\n`;
+    } else if (orderData.paymentMethod === 'Pago Móvil') {
+      caption += `💳 *DATOS DE PAGO MÓVIL:*\n`;
+      caption += `🏦 *Banco Origen:* ${orderData.bankOrigin || 'N/A'}\n`;
+      caption += `🔢 *Últimos 4 Dígitos:* \`${orderData.paymentReference || 'N/A'}\`\n`;
+    } else if (['Zelle', 'Zinli', 'Binance Pay (USDT)'].includes(orderData.paymentMethod)) {
+      caption += `💳 *DATOS DE PAGO (${orderData.paymentMethod}):*\n`;
+      caption += `👤 *Titular / Nick emisor:* ${orderData.paymentSenderName || 'N/A'}\n`;
+    } else {
+      caption += `💵 *MÉTODO DE PAGO:* ${orderData.paymentMethod}\n`;
+      caption += `ℹ️ Pago presencial al recibir o retirar.\n`;
+    }
 
     if (orderData.notes && orderData.notes.trim()) {
+      caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
       caption += `📝 *Notas de Cocina:* ${orderData.notes.trim()}\n`;
     }
 
-    // Formateo del número de teléfono
+    // Formateo del número de teléfono para el botón de WhatsApp
     const cleanDigits = (orderData.customerPhone || '').replace(/\D/g, '');
-    const cleanPhone = cleanDigits.startsWith('0') 
-      ? '58' + cleanDigits.substring(1) 
+    const cleanPhone = cleanDigits.startsWith('0')
+      ? '58' + cleanDigits.substring(1)
       : (cleanDigits.startsWith('58') ? cleanDigits : '58' + cleanDigits);
 
-    // Mensaje para el cliente sin caracteres raros
+    // Mensaje para el cliente
     const clientName = orderData.customerName ? ` ${orderData.customerName}` : '';
     const rawMessage = `¡Hola${clientName}! 👋 Gracias por tu compra cumbrelover, su pedido está siendo procesado en cocina... 👨‍🍳🔥 le avisaremos cuando salga.`;
 
