@@ -112,6 +112,8 @@ function App() {
   const [copiedText, setCopiedText] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
+  const [cashAmountPaid, setCashAmountPaid] = useState('');
+  const [cashPhotoFile, setCashPhotoFile] = useState(null);
 
   const [bcvRate, setBcvRate] = useState(() => {
     const cached = localStorage.getItem('cumbre_bcv_rate');
@@ -465,9 +467,23 @@ function App() {
         return;
       }
     }
+    // Validación para Efectivo Divisas ($)
+    if (paymentMethod === 'Efectivo Divisas ($)') {
+      const paid = parseFloat(cashAmountPaid);
+      if (!paid || paid < grandTotal) {
+        alert(`Por favor indica el monto con el que pagarás (debe ser igual o mayor a $${grandTotal.toFixed(2)}).`);
+        return;
+      }
+      if (!receiptFile) {
+        alert('Es obligatorio adjuntar una foto de los billetes para verificar su estado.');
+        return;
+      }
+    }
 
     setIsSubmitting(true);
     const orderId = currentOrderId || generateOrderId();
+    const cashPaid = parseFloat(cashAmountPaid) || grandTotal;
+    const cashChange = cashPaid > grandTotal ? cashPaid - grandTotal : 0;
 
     const orderPayload = {
       orderId,
@@ -485,6 +501,10 @@ function App() {
       bankOrigin: paymentMethod === 'Pago Móvil' ? bankOrigin : 'N/A',
       paymentReference: paymentMethod === 'Pago Móvil' ? paymentReference.trim() : 'N/A',
       paymentSenderName: isDigitalInternational ? paymentSenderName.trim() : 'N/A',
+      paymentSenderName: isDigitalInternational ? paymentSenderName.trim() : 'N/A',
+      cashAmountPaid: paymentMethod === 'Efectivo Divisas ($)' ? `$${cashPaid.toFixed(2)}` : 'N/A',
+      cashChangeDue: paymentMethod === 'Efectivo Divisas ($)' ? `$${cashChange.toFixed(2)}` : 'N/A',
+      notes: notes.trim(),
       notes: notes.trim(),
       items: cart
     };
@@ -1710,8 +1730,96 @@ function App() {
                       </div>
                     )}
 
-                    {/* OTROS MÉTODOS (EFECTIVO O PUNTO DE VENTA) */}
-                    {!['Pago Móvil', 'Zelle', 'Zinli', 'Binance Pay (USDT)'].includes(paymentMethod) && (
+                    {/* BLOQUE DINÁMICO: EFECTIVO DIVISAS ($) */}
+                    {paymentMethod === 'Efectivo Divisas ($)' && (() => {
+                      const amountNumber = parseFloat(cashAmountPaid) || 0;
+                      const changeDue = amountNumber >= grandTotal ? amountNumber - grandTotal : 0;
+                      const isShort = amountNumber > 0 && amountNumber < grandTotal;
+
+                      return (
+                        <div 
+                          className="p-3 rounded mb-3" 
+                          style={{ backgroundColor: '#181411', border: '1px solid #10b981', color: '#fff' }}
+                        >
+                          <div className="d-flex justify-content-between align-items-center mb-2">
+                            <span className="small fw-bold text-success d-flex align-items-center gap-1">
+                              <span>💵</span> PAGO EN EFECTIVO DIVISAS ($)
+                            </span>
+                            <span className="badge bg-dark border border-secondary text-warning" style={{ fontSize: '0.75rem' }}>
+                              Total a pagar: ${grandTotal.toFixed(2)}
+                            </span>
+                          </div>
+
+                          <p className="text-secondary small mb-3" style={{ fontSize: '0.8rem', lineHeight: '1.4' }}>
+                            Ingresa el monto total con el que pagarás para preparar tu cambio y sube una foto de los billetes para verificar que estén en buen estado (sin roturas ni manchas).
+                          </p>
+
+                          <div className="row g-2">
+                            {/* Campo Abierto: Monto con el que paga */}
+                            <div className="col-12 col-md-6">
+                              <Form.Group>
+                                <Form.Label className="cf-form-label" style={{ fontSize: '0.8rem' }}>
+                                  ¿Con cuánto vas a pagar? ($) *
+                                </Form.Label>
+                                <Form.Control
+                                  type="number"
+                                  step="any"
+                                  min={grandTotal}
+                                  size="sm"
+                                  className="cf-form-control"
+                                  placeholder={`Ej: ${Math.ceil(grandTotal)}, 12, 15, 20...`}
+                                  value={cashAmountPaid}
+                                  onChange={(e) => setCashAmountPaid(e.target.value)}
+                                  required
+                                />
+                              </Form.Group>
+                            </div>
+
+                            {/* Foto del billete (reutiliza handleFileChange para guardar en receiptFile) */}
+                            <div className="col-12 col-md-6">
+                              <Form.Group>
+                                <Form.Label className="cf-form-label" style={{ fontSize: '0.8rem' }}>
+                                  Foto de los Billetes *
+                                </Form.Label>
+                                <Form.Control
+                                  type="file"
+                                  accept="image/*"
+                                  size="sm"
+                                  className="cf-form-control"
+                                  required
+                                  onChange={handleFileChange}
+                                />
+                              </Form.Group>
+                            </div>
+                          </div>
+
+                          {/* Cálculo del cambio en tiempo real */}
+                          {amountNumber >= grandTotal && (
+                            <div 
+                              className="mt-3 p-2 rounded d-flex justify-content-between align-items-center"
+                              style={{ backgroundColor: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.35)' }}
+                            >
+                              <span className="small text-light">
+                                {changeDue === 0 ? '✔️ Pagas exacto (sin cambio).' : '🛵 Cambio a entregarte:'}
+                              </span>
+                              <span className="fw-bold text-success" style={{ fontSize: '0.95rem' }}>
+                                {changeDue === 0 ? '$0.00' : `$${changeDue.toFixed(2)}`}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Alerta si ingresa menos del total */}
+                          {isShort && (
+                            <div className="mt-2 text-danger small fw-semibold" style={{ fontSize: '0.78rem' }}>
+                              ⚠️ El monto ingresado (${amountNumber.toFixed(2)}) es menor al total del pedido (${grandTotal.toFixed(2)}).
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+
+                    {/* OTROS MÉTODOS PRESENCIALES (EFECTIVO BS O PUNTO DE VENTA) */}
+                    {!['Pago Móvil', 'Zelle', 'Zinli', 'Binance Pay (USDT)', 'Efectivo Divisas ($)'].includes(paymentMethod) && (
                       <div className="p-3 rounded bg-dark border border-secondary border-opacity-25 small text-secondary">
                         <strong className="text-white d-block mb-1">Pago presencial: {paymentMethod}</strong>
                         Cancela directamente al momento de recibir o retirar tu orden.
