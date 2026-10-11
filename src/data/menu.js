@@ -282,7 +282,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 13.0,
     description: 'Pan de papa 110g, stick fries, 150g carne de res, 150g pechuga de pollo, 150g chuleta ahumada, queso Kraft, pepinillos, tocineta y salsas de la casa. Incluye papas chips o yuquitas.',
-    image: '/burger_latorre.jpg'
+    image: '/PICO LA TORRE.png'
   },
   {
     id: 'h_bolivar',
@@ -290,7 +290,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 12.0,
     description: 'Pan de papa 110g, 150g lomito marinado en chimichurri, 130g de pollo, pico de gallo, queso llanero asado, aguacate, chorizo de cerdo ahumado y tártara. Incluye papas chips o yuquitas.',
-    image: '/burger_bolivar.jpg'
+    image: '/pico bolivar.png'
   },
   {
     id: 'h_bosque_pino',
@@ -298,7 +298,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 9.0,
     description: 'Pan de papa 110g, 150g carne de res con fondue de queso mozzarella, cebollas caramelizadas en vino de mora, tocineta, lechuga, tomate y salsas clásicas. Incluye papas chips o yuquitas.',
-    image: '/burger_bosquepino.jpg'
+    image: '/BOSQUEPINO 2.png'
   },
   {
     id: 'h_double_cheese_bacon',
@@ -306,7 +306,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 9.0,
     description: 'Pan de papa 110g, 200g carne de res con queso Kraft, tocineta crocante, pepinillos, cebolla, salsa de tomate y BBQ de la casa. Incluye papas chips o yuquitas.',
-    image: '/burger_double_cheese.jpg'
+    image: '/DOBLE CHEESE BECON.png'
   },
   {
     id: 'h_codazzi',
@@ -314,7 +314,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 9.0,
     description: 'Pan de papa 110g, 150g carne de res, lechuga, queso asado, tocineta, piña asada con miel de papelón, mayomostaza y salsa BBQ. Incluye papas chips o yuquitas.',
-    image: '/burger_codazzi.jpg'
+    image: '/PICO CODAZZI.png'
   },
   {
     id: 'h_humboldt',
@@ -322,7 +322,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 8.5,
     description: 'Pan de papa 110g, 150g carne de res, ensalada rallada, stick fries, huevo frito, aguacate, tocineta y tártara. Incluye papas chips o yuquitas.',
-    image: '/burger_humboldt.jpg'
+    image: '/HUMBOLT.png'
   },
   {
     id: 'h_toro',
@@ -330,7 +330,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 8.0,
     description: 'Pan de papa 80g, 150g lomito al chimichurri, pico de gallo, queso llanero asado, aguacate y tártara. Incluye papas chips o yuquitas.',
-    image: '/burger_toro.jpg'
+    image: '/PICOTORO.png'
   },
   {
     id: 'h_leon',
@@ -338,7 +338,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 6.5,
     description: 'Pan de papa 80g, 100g carne de res, fondue de mozzarella, cebollas caramelizadas, lechuga, tomate y tártara. Incluye papas chips o yuquitas.',
-    image: '/burger_leon.jpg'
+    image: '/PICO LEON.png'
   },
   {
     id: 'h_cheeseburger',
@@ -346,7 +346,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 6.0,
     description: 'Pan de papa 80g, 100g carne de res, queso Kraft, cebolla, pepinillos, salsa de tomate y BBQ de la casa. Incluye papas chips o yuquitas.',
-    image: '/burger_cheeseburger.jpg'
+    image: '/CHEESE BUGUER_1.png'
   },
 
   // --- HAMBURGUESAS CON POLLO ---
@@ -356,7 +356,7 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 10.0,
     description: 'Pan de papa 110g, 150g pechuga (crispy o plancha), champiñones salteados con tocineta en crema de leche, stick fries y queso de año. Incluye papas chips o yuquitas.',
-    image: '/burger_chicken.jpg'
+    image: '/BONPLAND.png'
   },
   {
     id: 'h_aguila',
@@ -364,7 +364,7 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 9.0,
     description: 'Pan de papa 110g, 150g pechuga (crispy o plancha), tomate, lechuga, dip de ajoporro, tocineta y salsas clásicas. Incluye papas chips o yuquitas.',
-    image: '/burger_aguila.jpg'
+    image: '/PICO AGUILA.png'
   },
   {
     id: 'h_mucubaji',
@@ -372,7 +372,7 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 9.0,
     description: 'Pan de papa 110g, 150g pechuga (crispy o plancha), ensalada césar, tocineta y queso de año. Incluye papas chips o yuquitas.',
-    image: '/burger_mucubaji.jpg'
+    image: '/MUCUBAJI.png'
   },
   {
     id: 'h_sanguchito',
@@ -380,7 +380,7 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 8.0,
     description: 'Pan de papa 80g, 140g pollo crispy, queso Kraft, pepinillos, tocineta ahumada, salsa de tomate y BBQ de la casa. Incluye papas chips o yuquitas.',
-    image: '/burger_sanguchito.jpg'
+    image: '/SANGCHITO.png'
   },
 
   // --- HAMBURGUESAS CON CHULETA ---
@@ -390,7 +390,7 @@ export const menuItems = [
     category: 'hamburguesas_chuleta',
     price: 9.0,
     description: 'Pan de papa 110g, 150g chuleta ahumada con BBQ, ensalada coleslaw y aros de cebolla crujientes. Incluye papas chips o yuquitas.',
-    image: '/burger_laconcha.jpg'
+    image: '/LA CONCHA.png'
   },
 
   // --- PLATOS ---
