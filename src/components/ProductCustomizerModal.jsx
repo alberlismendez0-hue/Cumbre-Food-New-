@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Modal } from 'react-bootstrap';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import {
   BURGER_SIDES,
   CHICKEN_COOKING_TYPES,
@@ -107,6 +108,7 @@ export default function ProductCustomizerModal({
 
   // Control de pasos
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const flavorSectionRef = useRef(null);
 
   // Estados de opciones
   const [quantity, setQuantity] = useState(1);
@@ -135,6 +137,20 @@ export default function ProductCustomizerModal({
 
   const [directDrinkFlavor, setDirectDrinkFlavor] = useState('Coca Cola');
   const [itemNotes, setItemNotes] = useState('');
+
+  const handleSelectDrinkType = (drinkId) => {
+  setCurrentDrinkType(drinkId);
+
+  // Si no es agua mineral, hace scroll automático suave hacia los sabores
+  if (drinkId !== 'agua') {
+    setTimeout(() => {
+      flavorSectionRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 120);
+  }
+};
 
   // Generador dinámico de pasos según producto
   const steps = useMemo(() => {
@@ -1054,7 +1070,7 @@ export default function ProductCustomizerModal({
                   return (
                     <div
                       key={drink.id}
-                      onClick={() => setCurrentDrinkType(drink.id)}
+                      onClick={() => handleSelectDrinkType(drink.id)}
                       role="button"
                       className="p-2 rounded-3 text-center d-flex flex-column align-items-center justify-content-center"
                       style={{
@@ -1093,7 +1109,15 @@ export default function ProductCustomizerModal({
               </div>
 
              {/* SELECTOR DE SABOR Y BOTÓN AGREGAR */}
-              <div className="p-3 rounded-3 mb-3" style={{ backgroundColor: '#1b1613', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              <div 
+                ref={flavorSectionRef} 
+                className="p-3 rounded-3 mb-3" 
+                style={{ 
+                  backgroundColor: '#1b1613', 
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  scrollMarginTop: '16px' 
+                }}
+              >
                 {currentDrinkType !== 'agua' ? (
                   <>
                     <label className="small text-secondary mb-2 d-block">Sabor:</label>
@@ -1119,7 +1143,7 @@ export default function ProductCustomizerModal({
                     </button>
                   </>
                 ) : (
-                  /* Vista exclusiva para Agua Mineral (sin botones de sabores) */
+                  /* Vista para Agua Mineral */
                   <button
                     type="button"
                     className="btn btn-sm w-100 py-2 fw-bold text-white"
