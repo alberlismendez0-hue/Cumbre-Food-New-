@@ -463,7 +463,9 @@ h1, h2, h3, h4, h5, h6 {
 .product-card-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain; /* Muestra la hamburguesa completa sin recortar nada */
+  object-position: center;
+  padding: 8px; /* Margen interno opcional para que no toque los bordes */
   transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
