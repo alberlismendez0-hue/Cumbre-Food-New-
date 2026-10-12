@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Modal } from 'react-bootstrap';
 import { useState, useEffect, useMemo, useRef } from 'react';
+import { Modal } from 'react-bootstrap';
+
 import {
   BURGER_SIDES,
   CHICKEN_COOKING_TYPES,
@@ -109,6 +109,7 @@ export default function ProductCustomizerModal({
   // Control de pasos
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const flavorSectionRef = useRef(null);
+
 
   // Estados de opciones
   const [quantity, setQuantity] = useState(1);
