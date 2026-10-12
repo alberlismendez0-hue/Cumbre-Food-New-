@@ -6,6 +6,8 @@ export const categories = [
   { id: 'hamburguesas_chuleta', name: '🥩 Burgers Chuleta', rawName: 'Burgers Chuleta', icon: '🥩' },
   { id: 'platos', name: '🥘 Platos', rawName: 'Platos', icon: '🥘' },
   { id: 'combos', name: '🔥 Combos', rawName: 'Combos', icon: '🔥' },
+  { id: 'bebidas', name: '🥤Bebidas', rawName: 'Bebidas', icon: '🥤' },
+
   
 ];
 
@@ -493,38 +495,60 @@ export const menuItems = [
     image: '/combo_sierra_nevada.jpg'
   },
 
-  // --- BEBIDAS ---
+ // --- BEBIDAS ---
   {
-    id: 'beb_personal',
-    name: 'Refresco Personal',
+    id: 'beb_refresco_lata',
+    name: 'Refresco en Lata',
+    category: 'bebidas',
+    price: 1.5,
+    description: 'Refresco frío en lata (355ml). Elige tu sabor favorito.',
+    image: '/soda.png',
+    requiresFlavor: true,
+  },
+  {
+    id: 'beb_refresco_personal',
+    name: 'Refresco Personal / Bombita',
     category: 'bebidas',
     price: 1.0,
-    description: 'Refresco presentación individual.',
-    image: '/refresco_personal.jpg'
+    description: 'Refresco personal frío. Elige tu sabor favorito.',
+    image: '/soda.png',
+    requiresFlavor: true,
   },
   {
-    id: 'beb_1ltr',
-    name: 'Refresco 1 Litro',
+    id: 'beb_refresco_1l',
+    name: 'Refresco 1L',
     category: 'bebidas',
     price: 2.5,
-    description: 'Refresco botella de 1 Litro.',
-    image: '/refresco_1l.jpg'
+    description: 'Botella de refresco de 1 litro para compartir.',
+    image: '/soda.png',
+    requiresFlavor: true,
   },
   {
-    id: 'beb_1_5ltr',
-    name: 'Refresco 1.5 Litros',
+    id: 'beb_refresco_1_5l',
+    name: 'Refresco 1.5L',
     category: 'bebidas',
     price: 3.0,
-    description: 'Refresco botella de 1.5 Litros.',
-    image: '/refresco_1_5l.jpg'
+    description: 'Botella de refresco de 1.5 litros.',
+    image: '/soda.png',
+    requiresFlavor: true,
   },
   {
-    id: 'beb_2ltr',
-    name: 'Refresco 2 Litros',
+    id: 'beb_refresco_2l',
+    name: 'Refresco 2L',
     category: 'bebidas',
     price: 3.5,
-    description: 'Refresco botella de 2 Litros.',
-    image: '/refresco_2l.jpg'
+    description: 'Botella familiar de refresco de 2 litros.',
+    image: '/soda.png',
+    requiresFlavor: true,
+  },
+  {
+    id: 'beb_agua_mineral',
+    name: 'Agua Mineral',
+    category: 'bebidas',
+    price: 1.0,
+    description: 'Agua mineral en botella bien fría.',
+    image: '/soda.png',
+    requiresFlavor: false,
   },
 
   
