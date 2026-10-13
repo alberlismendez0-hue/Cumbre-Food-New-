@@ -121,6 +121,8 @@ export default function ProductCustomizerModal({
   const [currentDrinkFlavor, setCurrentDrinkFlavor] = useState(DRINK_FLAVORS[0]);
 
   const [comboDrinkFlavor, setComboDrinkFlavor] = useState('Coca Cola');
+  const [chicken1Burger, setChicken1Burger] = useState(COMBO_1Y1_CHICKEN_OPTIONS[0]);
+  const [chicken2Burger, setChicken2Burger] = useState(COMBO_1Y1_CHICKEN_OPTIONS[0]);
   const [chicken1Cooking, setChicken1Cooking] = useState('crispy');
   const [chicken2Cooking, setChicken2Cooking] = useState('crispy');
   const [combo1y1Meat, setCombo1y1Meat] = useState(COMBO_1Y1_MEAT_OPTIONS[0]);
@@ -212,6 +214,8 @@ export default function ProductCustomizerModal({
       setCurrentDrinkType('personal');
       setCurrentDrinkFlavor(DRINK_FLAVORS[0]);
       setComboDrinkFlavor('Coca Cola');
+      setChicken1Burger(COMBO_1Y1_CHICKEN_OPTIONS[0]);
+      setChicken2Burger(COMBO_1Y1_CHICKEN_OPTIONS[0]);
       setChicken1Cooking('crispy');
       setChicken2Cooking('crispy');
       setCombo1y1Meat(COMBO_1Y1_MEAT_OPTIONS[0]);
@@ -343,8 +347,8 @@ export default function ProductCustomizerModal({
       if (product.id === 'cb_chicken') {
         const c1 = CHICKEN_COOKING_TYPES.find((c) => c.id === chicken1Cooking)?.name;
         const c2 = CHICKEN_COOKING_TYPES.find((c) => c.id === chicken2Cooking)?.name;
-        details.push({ label: 'Burger 1', value: `Chama (${c1})` });
-        details.push({ label: 'Burger 2', value: `Chama (${c2})` });
+        details.push({ label: 'Burger 1', value: `${chicken1Burger} (${c1})` });
+        details.push({ label: 'Burger 2', value: `${chicken2Burger} (${c2})` });
         details.push({ label: 'Refresco 1L', value: comboDrinkFlavor });
       }
       if (product.id === 'cb_1_y_1') {
@@ -919,15 +923,37 @@ export default function ProductCustomizerModal({
           {currentStep === 'combo_chicken_prep' && (
             <div>
               <div className="mb-3">
-                <h4 className="fw-bold text-warning mb-1">🍗 Cocción de tus 2 Burgers de Pollo</h4>
-                <p className="text-secondary small">Elige cómo deseas la preparación de cada hamburguesa Chama</p>
+                <h4 className="fw-bold text-warning mb-1">🍗 Personaliza tus 2 Burgers de Pollo</h4>
+                <p className="text-secondary small">Selecciona el tipo de burger y la cocción para cada una</p>
               </div>
 
-              <div className="mb-3">
-                <label className="fw-bold text-light small mb-2 d-block">Primera Burger de Pollo:</label>
+              {/* PRIMERA BURGER */}
+              <div className="p-3 mb-3 rounded-3" style={{ backgroundColor: '#1b1613', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <label className="fw-bold text-warning small mb-2 d-block">1. Primera Burger de Pollo:</label>
+                
+                {/* Selección del tipo de hamburguesa */}
+                <div className="row g-2 mb-3">
+                  {COMBO_1Y1_CHICKEN_OPTIONS.map((chk) => (
+                    <div key={`c1-burger-${chk}`} className="col-12 col-sm-6">
+                      <div
+                        className={`cf-choice-card ${chicken1Burger === chk ? 'selected' : ''}`}
+                        onClick={() => setChicken1Burger(chk)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">{chicken1Burger === chk && <span className="cf-radio-dot" />}</span>
+                          <span className="cf-choice-name">{chk}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Cocción */}
+                <label className="small text-secondary mb-2 d-block">Cocción:</label>
                 <div className="row g-2">
                   {CHICKEN_COOKING_TYPES.map((type) => (
-                    <div key={type.id} className="col-6">
+                    <div key={`c1-cook-${type.id}`} className="col-6">
                       <div
                         className={`cf-choice-card ${chicken1Cooking === type.id ? 'selected' : ''}`}
                         onClick={() => setChicken1Cooking(type.id)}
@@ -943,11 +969,33 @@ export default function ProductCustomizerModal({
                 </div>
               </div>
 
-              <div>
-                <label className="fw-bold text-light small mb-2 d-block">Segunda Burger de Pollo:</label>
+              {/* SEGUNDA BURGER */}
+              <div className="p-3 rounded-3" style={{ backgroundColor: '#1b1613', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <label className="fw-bold text-warning small mb-2 d-block">2. Segunda Burger de Pollo:</label>
+                
+                {/* Selección del tipo de hamburguesa */}
+                <div className="row g-2 mb-3">
+                  {COMBO_1Y1_CHICKEN_OPTIONS.map((chk) => (
+                    <div key={`c2-burger-${chk}`} className="col-12 col-sm-6">
+                      <div
+                        className={`cf-choice-card ${chicken2Burger === chk ? 'selected' : ''}`}
+                        onClick={() => setChicken2Burger(chk)}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">{chicken2Burger === chk && <span className="cf-radio-dot" />}</span>
+                          <span className="cf-choice-name">{chk}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Cocción */}
+                <label className="small text-secondary mb-2 d-block">Cocción:</label>
                 <div className="row g-2">
                   {CHICKEN_COOKING_TYPES.map((type) => (
-                    <div key={type.id} className="col-6">
+                    <div key={`c2-cook-${type.id}`} className="col-6">
                       <div
                         className={`cf-choice-card ${chicken2Cooking === type.id ? 'selected' : ''}`}
                         onClick={() => setChicken2Cooking(type.id)}
