@@ -52,19 +52,19 @@ const PAYMENT_INFO = {
     titular: 'Cumbre C.A.'
   },
   zelle: {
-    email: 'pagos@cumbrefood.com',
-    titular: 'Cumbre LLC',
+    email: 'anieesjb@hotmail.com',
+    titular: 'anies jardines',
     min: 15
   },
   zinli: {
-    email: 'pagoszinli@cumbrefood.com',
-    titular: 'Cumbre',
+    email: 'edgarezb01@gmail.com',
+    titular: 'Edgar Zambrano',
     min: 15
   },
   binance: {
     payId: '84920194',
-    email: 'binance@cumbrefood.com',
-    titular: 'CumbrePay',
+    email: 'edgarezb01@gmail.com',
+    titular: 'EdgarZ01',
     min: 15
   }
 };

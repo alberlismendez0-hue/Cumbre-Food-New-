@@ -140,6 +140,7 @@ export const COMBO_1Y1_MEAT_OPTIONS = [
   'Pico Codazzi'
 ];
 
+
 export const COMBO_1Y1_CHICKEN_OPTIONS = [
   'Pico Bonpland',
   'Pico Águila',
@@ -215,7 +216,7 @@ export const menuItems = [
   },
   {
     id: 'ent_tenders',
-    name: '5und.Tenders de Pollo',
+    name: 'Tenders de Pollo',
     category: 'entradas',
     price: 7.0,
     description: '5und. Crujientes tenders de pollo con papas francesas y salsa a escoger.',
