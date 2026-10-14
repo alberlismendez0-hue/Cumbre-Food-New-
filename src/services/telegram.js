@@ -19,36 +19,38 @@ const fileToBase64 = (file) => {
  */
 export const sendOrderToTelegram = async (orderData, receiptFile) => {
   try {
-    // 1. Formateo del número de teléfono
+    // 1. Formateo del número de teléfono del cliente
     const cleanDigits = (orderData.customerPhone || '').replace(/\D/g, '');
     const cleanPhone = cleanDigits.startsWith('0')
       ? '58' + cleanDigits.substring(1)
       : (cleanDigits.startsWith('58') ? cleanDigits : '58' + cleanDigits);
 
-    // 2. Estructuración del texto de la comanda
+    // 2. Estructuración del texto de la comanda principal para cocina/Telegram
     let caption = `⛰️ *NUEVO PEDIDO - CUMBRE*\n`;
     caption += `🆔 *ORDEN:* \`#${orderData.orderId}\`\n`;
     caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
     caption += `👤 *Cliente:* ${orderData.customerName || 'No indicado'}\n`;
     caption += `🪪 *Cédula:* ${orderData.customerIdCard || 'No indicado'}\n`;
     caption += `📱 *Teléfono:* [${orderData.customerPhone}](https://wa.me/${cleanPhone})\n`;
-    caption += `🛵 *Tipo de Entrega:* ${orderData.deliveryZone || 'Pick Up'}\n`;
+    caption += `🛵 *Zona de Entrega:* ${orderData.deliveryZone || 'Pick Up'}\n`;
     if (orderData.deliveryAddress) {
-      caption += `📍 *Dirección:* ${orderData.deliveryAddress}\n`;
+      caption += `📍 *Dirección Exacta:* ${orderData.deliveryAddress}\n`;
     }
     caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
     caption += `📋 *PRODUCTOS:*\n`;
 
-    let simpleProductsList = '';
+    let productsForDelivery = '';
     if (orderData.items && orderData.items.length > 0) {
       orderData.items.forEach((item) => {
         const qty = item.quantity || 1;
         const sub = (Number(item.price || 0) * qty).toFixed(2);
         caption += `• *${qty}x* ${item.name} — $${sub}\n`;
-        simpleProductsList += `• ${qty}x ${item.name}\n`;
+        productsForDelivery += `• ${qty}x ${item.name}\n`;
+
         if (item.customizationDetails && item.customizationDetails.length > 0) {
           item.customizationDetails.forEach((d) => {
             caption += `   ↳ _${d.label}:_ ${d.value}\n`;
+            productsForDelivery += `   ↳ ${d.label}: ${d.value}\n`;
           });
         }
       });
@@ -56,7 +58,7 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
 
     caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
     caption += `💵 *Subtotal:* $${orderData.subtotal ? orderData.subtotal.toFixed(2) : '0.00'}\n`;
-    caption += `🛵 *Delivery:* $${orderData.deliveryCost ? orderData.deliveryCost.toFixed(2) : '0.00'}\n`;
+    caption += `🛵 *Delivery (${orderData.deliveryZone || 'Zona'}):* $${orderData.deliveryCost ? orderData.deliveryCost.toFixed(2) : '0.00'}\n`;
     caption += `💰 *TOTAL A PAGAR:* $${orderData.grandTotal ? orderData.grandTotal.toFixed(2) : '0.00'}`;
     if (orderData.grandTotalBs) {
       caption += ` (${orderData.grandTotalBs} Bs.)`;
@@ -85,32 +87,35 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
       caption += `📝 *Notas de Cocina:* ${orderData.notes.trim()}\n`;
     }
 
-    // 3. URLs y Mensajes para botones
+    // 3. Mensaje para el cliente
     const clientName = orderData.customerName ? ` ${orderData.customerName}` : '';
     const rawClientMessage = `¡Hola${clientName}! 👋 Gracias por tu compra cumbrelover, su pedido está siendo procesado en cocina... 👨‍🍳🔥 le avisaremos cuando salga.`;
 
+    // 4. Mensaje estructurado para los repartidores (sin mapa)
     const DELIVERY_JULIO_PHONE = '584247441670';
     const DELIVERY_SPEEDY_PHONE = '584242773339';
 
-    const deliveryAddressText = orderData.deliveryAddress || 'Retiro en local / Sin dirección';
-    const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(deliveryAddressText + ', Merida')}`;
+    const deliveryCostText = orderData.deliveryCost ? `$${orderData.deliveryCost.toFixed(2)}` : '$0.00';
+    const deliveryZoneText = orderData.deliveryZone || 'No especificada';
+    const exactAddressText = orderData.deliveryAddress || 'Retiro en local / Sin dirección';
 
     const deliveryTextRaw = `🛵 *ENTREGA DE PEDIDO - CUMBRE FOOD*\n` +
+      `🆔 Orden: #${orderData.orderId}\n` +
       `━━━━━━━━━━━━━━━━━━━━━\n` +
       `👤 *Cliente:* ${orderData.customerName || 'No indicado'}\n` +
       `📱 *Teléfono:* https://wa.me/${cleanPhone}\n` +
-      `📍 *Dirección:* ${deliveryAddressText}\n` +
-      `🗺️ *Maps:* ${mapsLink}\n` +
+      `🛵 *Zona:* ${deliveryZoneText} (${deliveryCostText})\n` +
+      `📍 *Dirección Exacta:* ${exactAddressText}\n` +
       `━━━━━━━━━━━━━━━━━━━━━\n` +
-      `🍔 *PRODUCTOS:*\n` +
-      simpleProductsList +
+      `🍔 *PRODUCTOS A ENTREGAR:*\n` +
+      productsForDelivery +
       `━━━━━━━━━━━━━━━━━━━━━\n` +
       `💰 *Total a Cobrar:* $${orderData.grandTotal ? orderData.grandTotal.toFixed(2) : '0.00'}`;
 
     const deliveryJulioUrl = `https://api.whatsapp.com/send?phone=${DELIVERY_JULIO_PHONE}&text=${encodeURIComponent(deliveryTextRaw)}`;
     const deliverySpeedyUrl = `https://api.whatsapp.com/send?phone=${DELIVERY_SPEEDY_PHONE}&text=${encodeURIComponent(deliveryTextRaw)}`;
 
-    // 4. Botones interactivos
+    // 5. Botones interactivos (sin botón de mapa)
     const buttons = [
       [
         {
@@ -130,15 +135,6 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
       ]
     ];
 
-    if (orderData.deliveryAddress && orderData.deliveryAddress.trim()) {
-      buttons.push([
-        {
-          text: '📍 Ver Ubicación en Maps',
-          url: mapsLink
-        }
-      ]);
-    }
-
     const replyMarkup = {
       inline_keyboard: buttons
     };
@@ -148,7 +144,7 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
       photoBase64 = await fileToBase64(receiptFile);
     }
 
-    // 5. Petición al endpoint serverless
+    // 6. Enviar a través de la API serverless
     const response = await fetch('/api/telegram', {
       method: 'POST',
       headers: {
