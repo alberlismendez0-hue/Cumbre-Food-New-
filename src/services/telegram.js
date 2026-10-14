@@ -91,29 +91,29 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
     const clientName = orderData.customerName ? ` ${orderData.customerName}` : '';
     const rawClientMessage = `¡Hola${clientName}! 👋 Gracias por tu compra cumbrelover, su pedido está siendo procesado en cocina... 👨‍🍳🔥 le avisaremos cuando salga.`;
 
-    // 4. Mensaje estructurado para los repartidores (sin mapa)
+   // 4. Mensaje estructurado para los repartidores (sin '#' para evitar cortes en WhatsApp)
     const DELIVERY_JULIO_PHONE = '584247441670';
     const DELIVERY_SPEEDY_PHONE = '584242773339';
 
     const deliveryCostText = orderData.deliveryCost ? `$${orderData.deliveryCost.toFixed(2)}` : '$0.00';
     const deliveryZoneText = orderData.deliveryZone || 'No especificada';
-    const exactAddressText = orderData.deliveryAddress || 'Retiro en local / Sin dirección';
+    const exactAddressText = orderData.deliveryAddress || 'Retiro en local / Sin direccion';
 
     const deliveryTextRaw = `🛵 *ENTREGA DE PEDIDO - CUMBRE FOOD*\n` +
-      `🆔 Orden: #${orderData.orderId}\n` +
+      `📦 Orden: ${orderData.orderId || 'S/N'}\n` +
       `━━━━━━━━━━━━━━━━━━━━━\n` +
       `👤 *Cliente:* ${orderData.customerName || 'No indicado'}\n` +
-      `📱 *Teléfono:* https://wa.me/${cleanPhone}\n` +
+      `📱 *Telefono:* wa.me/${cleanPhone}\n` +
       `🛵 *Zona:* ${deliveryZoneText} (${deliveryCostText})\n` +
-      `📍 *Dirección Exacta:* ${exactAddressText}\n` +
+      `📍 *Direccion:* ${exactAddressText}\n` +
       `━━━━━━━━━━━━━━━━━━━━━\n` +
       `🍔 *PRODUCTOS A ENTREGAR:*\n` +
       productsForDelivery +
       `━━━━━━━━━━━━━━━━━━━━━\n` +
       `💰 *Total a Cobrar:* $${orderData.grandTotal ? orderData.grandTotal.toFixed(2) : '0.00'}`;
 
-    const deliveryJulioUrl = `https://api.whatsapp.com/send?phone=${DELIVERY_JULIO_PHONE}&text=${encodeURIComponent(deliveryTextRaw)}`;
-    const deliverySpeedyUrl = `https://api.whatsapp.com/send?phone=${DELIVERY_SPEEDY_PHONE}&text=${encodeURIComponent(deliveryTextRaw)}`;
+    const deliveryJulioUrl = `https://wa.me/${DELIVERY_JULIO_PHONE}?text=${encodeURIComponent(deliveryTextRaw)}`;
+    const deliverySpeedyUrl = `https://wa.me/${DELIVERY_SPEEDY_PHONE}?text=${encodeURIComponent(deliveryTextRaw)}`;
 
     // 5. Botones interactivos (sin botón de mapa)
     const buttons = [
