@@ -91,7 +91,7 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
     const clientName = orderData.customerName ? ` ${orderData.customerName}` : '';
     const rawClientMessage = `¡Hola${clientName}! 👋 Gracias por tu compra cumbrelover, su pedido está siendo procesado en cocina... 👨‍🍳🔥 le avisaremos cuando salga.`;
 
-   // 4. Mensaje estructurado para los repartidores (sin '#' para evitar cortes en WhatsApp)
+   // 4. Mensaje estructurado para los repartidores (solo datos de despacho)
     const DELIVERY_JULIO_PHONE = '584247441670';
     const DELIVERY_SPEEDY_PHONE = '584242773339';
 
@@ -105,16 +105,10 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
       `👤 *Cliente:* ${orderData.customerName || 'No indicado'}\n` +
       `📱 *Telefono:* wa.me/${cleanPhone}\n` +
       `🛵 *Zona:* ${deliveryZoneText} (${deliveryCostText})\n` +
-      `📍 *Direccion:* ${exactAddressText}\n` +
-      `━━━━━━━━━━━━━━━━━━━━━\n` +
-      `🍔 *PRODUCTOS A ENTREGAR:*\n` +
-      productsForDelivery +
-      `━━━━━━━━━━━━━━━━━━━━━\n` +
-      `💰 *Total a Cobrar:* $${orderData.grandTotal ? orderData.grandTotal.toFixed(2) : '0.00'}`;
+      `📍 *Direccion:* ${exactAddressText}`;
 
     const deliveryJulioUrl = `https://wa.me/${DELIVERY_JULIO_PHONE}?text=${encodeURIComponent(deliveryTextRaw)}`;
     const deliverySpeedyUrl = `https://wa.me/${DELIVERY_SPEEDY_PHONE}?text=${encodeURIComponent(deliveryTextRaw)}`;
-
     // 5. Botones interactivos (sin botón de mapa)
     const buttons = [
       [
