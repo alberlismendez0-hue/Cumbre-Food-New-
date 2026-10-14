@@ -8,67 +8,52 @@
     const clientName = orderData.customerName ? ` ${orderData.customerName}` : '';
     const rawMessage = `¡Hola${clientName}! 👋 Gracias por tu compra cumbrelover, su pedido está siendo procesado en cocina... 👨‍🍳🔥 le avisaremos cuando salga.`;
 
-    // ==============================================================
+   // ==============================================================
     // CONFIGURACIÓN DE LOS DOS REPARTIDORES
     // ==============================================================
     const DELIVERY_JULIO_PHONE = '584247441670';
     const DELIVERY_SPEEDY_PHONE = '584242773339';
 
-    // 2. Armar lista de productos para el repartidor
-    let productsList = '';
+    // 1. Mensaje limpio para los repartidores (formato seguro sin saltos rotos)
+    const deliveryAddressText = orderData.deliveryAddress || 'Retiro en local';
+    const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(deliveryAddressText + ', Merida')}`;
+
+    let simpleProducts = '';
     if (orderData.items && orderData.items.length > 0) {
-      orderData.items.forEach((item) => {
-        const qty = item.quantity || 1;
-        productsList += `• ${qty}x ${item.name}\n`;
-        if (item.customizationDetails && item.customizationDetails.length > 0) {
-          item.customizationDetails.forEach((d) => {
-            productsList += `   ↳ ${d.label}: ${d.value}\n`;
-          });
-        }
-      });
+      simpleProducts = orderData.items.map(it => `${it.quantity || 1}x ${it.name}`).join(', ');
     }
 
-    // 3. Dirección y enlace a Google Maps
-    const deliveryAddressText = orderData.deliveryAddress || 'Retiro en local / Sin dirección especificada';
-    const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(deliveryAddressText + ', Mérida')}`;
+    const deliveryTextRaw = `🛵 *PEDIDO CUMBRE FOOD* #${orderData.orderId}\n` +
+      `👤 Cliente: ${orderData.customerName || 'N/A'}\n` +
+      `📱 Tel: ${cleanPhone}\n` +
+      `📍 Dir: ${deliveryAddressText}\n` +
+      `🍔 Prod: ${simpleProducts}\n` +
+      `🗺️ Maps: ${mapsLink}`;
 
-    // 4. Ficha con los datos que se le enviarán al repartidor
-    const deliveryMessage = `🛵 *ENTREGA DE PEDIDO - CUMBRE FOOD*\n` +
-      `━━━━━━━━━━━━━━━━━━━━━\n` +
-      `👤 *Cliente:* ${orderData.customerName || 'No indicado'}\n` +
-      `📱 *Teléfono:* https://wa.me/${cleanPhone}\n` +
-      `📍 *Dirección:* ${deliveryAddressText}\n` +
-      `🗺️ *Ubicación Maps:* ${mapsLink}\n` +
-      `━━━━━━━━━━━━━━━━━━━━━\n` +
-      `🍔 *PRODUCTOS A ENTREGAR:*\n` +
-      productsList +
-      `━━━━━━━━━━━━━━━━━━━━━\n` +
-      `💰 *Total a Cobrar:* $${orderData.grandTotal ? orderData.grandTotal.toFixed(2) : '0.00'}`;
+    const deliveryJulioUrl = `https://api.whatsapp.com/send?phone=${DELIVERY_JULIO_PHONE}&text=${encodeURIComponent(deliveryTextRaw)}`;
+    const deliverySpeedyUrl = `https://api.whatsapp.com/send?phone=${DELIVERY_SPEEDY_PHONE}&text=${encodeURIComponent(deliveryTextRaw)}`;
 
-    const deliveryJulioUrl = `https://wa.me/${DELIVERY_JULIO_PHONE}?text=${encodeURIComponent(deliveryMessage)}`;
-    const deliverySpeedyUrl = `https://wa.me/${DELIVERY_SPEEDY_PHONE}?text=${encodeURIComponent(deliveryMessage)}`;
-
-    // 5. Botones interactivos para Telegram
+    // 2. Armar botones garantizados
     const buttons = [
       [
         {
-          text: '💬 Escribir al Cliente por WhatsApp',
-          url: `https://wa.me/${cleanPhone}?text=${encodeURIComponent(rawMessage)}`
+          text: '💬 Escribir al Cliente',
+          url: `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(rawMessage)}`
         }
       ],
       [
         {
-          text: '🛵 Enviar a deliveryJulio',
+          text: '🛵 deliveryJulio',
           url: deliveryJulioUrl
         },
         {
-          text: '🛵 Enviar a deliverySpeedy',
+          text: '🛵 deliverySpeedy',
           url: deliverySpeedyUrl
         }
       ]
     ];
 
-    // Si el pedido tiene dirección, sumamos el botón directo al mapa
+    // Botón de mapa si hay dirección
     if (orderData.deliveryAddress && orderData.deliveryAddress.trim()) {
       buttons.push([
         {
