@@ -1,6 +1,6 @@
 // Credenciales de Telegram (reemplaza con tus valores reales)
-const TELEGRAM_BOT_TOKEN = '8096550202:AAEv1JDqvajKqXksA6aaPsoPxy-nR5M9MnU';
-const TELEGRAM_CHAT_ID = '501773007';
+const TELEGRAM_BOT_TOKEN = '8805678614:AAGPkRYa1hCtaPJosBm6EwiMWmz3AQ00SKU';
+const TELEGRAM_CHAT_ID = '8637184646';
 
 /**
  * Envía la orden y el comprobante de pago al Telegram del restaurante
