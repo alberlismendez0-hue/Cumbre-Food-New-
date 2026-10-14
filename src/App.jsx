@@ -74,14 +74,14 @@ const getFallbackImage = (category) => {
     case 'entradas':
       return '/tequenos_nevados.jpg';
     case 'hamburguesas_pollo':
-      return '/burger_chicken.jpg';
+      return '/bonpland.png';
     case 'hamburguesas_carne':
     case 'hamburguesas_chuleta':
-      return '/burger_latorre.jpg';
+      return '/chesse_buguer.png';
     case 'combos':
       return '/combo_cheeseburger_conpapas.jpg';
     case 'platos':
-      return '/burger_bosquepino.jpg';
+      return '/bosquepino.png';
     default:
       return '/hero_background.jpg';
   }
