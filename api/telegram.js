@@ -1,10 +1,4 @@
 // api/telegram.js
-export const config = {
-  api: {
-    bodyParser: false, // Permitir recibir archivos (capturas de pago)
-  },
-};
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
@@ -18,56 +12,59 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Si la petición viene con FormData (archivo/imagen)
-    const contentType = req.headers['content-type'] || '';
-    
-    if (contentType.includes('multipart/form-data')) {
-      const buffer = await req.arrayBuffer ? await req.arrayBuffer() : await getRawBody(req);
-      
-      // Enviamos el stream/buffer directo a Telegram sendPhoto
-      const response = await fetch(`https://api.telegram.org/bot${token}/sendPhoto?chat_id=${chatId}`, {
+    const { caption, photoBase64, replyMarkup } = req.body;
+
+    if (photoBase64) {
+      // Extraer y decodificar el Base64
+      const base64Data = photoBase64.replace(/^data:image\/\w+;base64,/, '');
+      const buffer = Buffer.from(base64Data, 'base64');
+      const blob = new Blob([buffer], { type: 'image/jpeg' });
+
+      const formData = new FormData();
+      formData.append('chat_id', chatId);
+      formData.append('photo', blob, 'comprobante.jpg');
+      formData.append('caption', caption || '');
+      formData.append('parse_mode', 'Markdown');
+
+      if (replyMarkup) {
+        formData.append('reply_markup', JSON.stringify(replyMarkup));
+      }
+
+      const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
         method: 'POST',
-        headers: {
-          'Content-Type': contentType,
-        },
-        body: buffer,
+        body: formData,
       });
 
-      const data = await response.json();
+      const data = await tgRes.json();
       if (!data.ok) {
         return res.status(500).json({ error: data.description });
       }
-      return res.status(200).json({ success: true });
+      return res.status(200).json(data);
     } else {
-      // Por si se envía solo texto JSON
-      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      // Envío de texto con botón si no adjuntaron comprobante
+      const payload = {
+        chat_id: chatId,
+        text: caption,
+        parse_mode: 'Markdown',
+      };
+
+      if (replyMarkup) {
+        payload.reply_markup = replyMarkup;
+      }
+
+      const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: body.text || body.caption,
-          parse_mode: 'HTML',
-        }),
+        body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      const data = await tgRes.json();
       if (!data.ok) {
         return res.status(500).json({ error: data.description });
       }
-      return res.status(200).json({ success: true });
+      return res.status(200).json(data);
     }
   } catch (err) {
     return res.status(500).json({ error: 'Error procesando el pedido en el servidor' });
   }
-}
-
-// Helper para leer el stream en Node/Vercel
-function getRawBody(readable) {
-  return new Promise((resolve, reject) => {
-    let chunks = [];
-    readable.on('data', (chunk) => chunks.push(chunk));
-    readable.on('end', () => resolve(Buffer.concat(chunks)));
-    readable.on('error', reject);
-  });
 }
