@@ -537,8 +537,8 @@ function App() {
               }}
             >
               <img 
-                src="/logocumbrefood.jpg" 
-                alt="Logo Cumbre Food" 
+                src="/logocumbrefood.png" 
+                alt="Logo Cumbre" 
                 style={{ height: '38px', width: 'auto', objectFit: 'contain' }} 
               />
               <span
@@ -1966,8 +1966,8 @@ function App() {
               }}
             >
               <img 
-                src="/logocumbrefood.jpg" 
-                alt="Cumbre Food" 
+                src="/logocumbrefood.png" 
+                alt="Cumbre" 
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
               />
             </div>
@@ -2047,7 +2047,7 @@ function App() {
         <div className="container px-3">
           {/* Logo y lema */}
           <div className="mb-4">
-            <h3 className="fw-black text-warning m-0 tracking-wide"> <img src="public/logocumbrefood.jpg" alt="" />CUMBRE </h3>
+            <h3 className="fw-black text-warning m-0 tracking-wide"> <img src="public/logocumbrefood.png" alt="" />CUMBRE </h3>
             <p className="text-secondary small mt-1 mb-0">
               ¡Haz cumbre con nosotros!
             </p>
