@@ -2047,12 +2047,18 @@ function App() {
         <div className="container px-3">
           {/* Logo y lema */}
           <div className="mb-4">
-            <h3 className="fw-black text-warning m-0 tracking-wide"> <img src="logocumbrefood.png" alt="" />CUMBRE </h3>
+            <h3 className="fw-black text-warning m-0 tracking-wide d-inline-flex align-items-center justify-content-center gap-2">
+              <img 
+                src="logocumbrefood.png" 
+                alt="Logo Cumbre Food" 
+                style={{ width: "32px", height: "32px", objectFit: "contain" }} 
+              />
+              <span>CUMBRE</span>
+            </h3>
             <p className="text-secondary small mt-1 mb-0">
               ¡Haz cumbre con nosotros!
             </p>
           </div>
-
           {/* SÍGUENOS EN REDES */}
           <div className="mb-4">
             <span
