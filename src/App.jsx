@@ -347,7 +347,7 @@ function App() {
   const [customerPhone, setCustomerPhone] = useState('');
   const [selectedZoneId, setSelectedZoneId] = useState('pickup');
   const [customerAddress, setCustomerAddress] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState(PAYMENT_METHODS[0]);
+  const [paymentMethod, setPaymentMethod] = useState('');
   const [notes, setNotes] = useState('');
 
   // Datos específicos de pago
@@ -521,6 +521,11 @@ function App() {
   const handleCheckout = async (e) => {
     e.preventDefault();
     if (cart.length === 0) return;
+
+    if (!paymentMethod) {
+      alert('Por favor selecciona un método de pago para continuar.');
+      return;
+    }
 
     if (!customerName.trim()) {
       alert('Por favor indica tu Nombre y Apellido.');
@@ -1532,7 +1537,9 @@ function App() {
                       className="cf-form-select mb-3"
                       value={paymentMethod}
                       onChange={(e) => setPaymentMethod(e.target.value)}
+                      required
                     >
+                      <option value="">-- Selecciona un método de pago --</option>
                       {PAYMENT_METHODS.map((m) => (
                         <option key={m} value={m}>
                           {m}
