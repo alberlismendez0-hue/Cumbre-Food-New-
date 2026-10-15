@@ -100,10 +100,9 @@ const getTodayPromo = () => {
 // Datos oficiales de pago de Cumbre Food
 const PAYMENT_INFO = {
   pagoMovil: {
-    banco: 'Banesco (0134)',
+    banco: 'Bancamiga (0172)',
     telefono: '0416-8769923',
-    cedula: 'V-24555888',
-    titular: 'Cumbre C.A.'
+    cedula: 'V-10132565'
   },
   zelle: {
     email: 'anieesjb@hotmail.com',
@@ -113,13 +112,13 @@ const PAYMENT_INFO = {
   zinli: {
     email: 'edgarezb01@gmail.com',
     titular: 'Edgar Zambrano',
-    min: 15
+    
   },
   binance: {
-    payId: '84920194',
+    payId: '161520281',
     email: 'edgarezb01@gmail.com',
     titular: 'EdgarZ01',
-    min: 15
+    
   }
 };
 
@@ -538,8 +537,9 @@ function App() {
     }
 
     // Validaciones de monto mínimo para transferencias internacionales
-    const isDigitalInternational = ['Zelle', 'Zinli', 'Binance Pay (USDT)'].includes(paymentMethod);
-    if (isDigitalInternational && grandTotal < 15) {
+    // Validación de monto mínimo para Zelle
+    const isZelle = paymentMethod === 'Zelle';
+    if (isZelle && grandTotal < 15) {
       alert(`El monto mínimo para cancelar con ${paymentMethod} es de $15.00.`);
       return;
     }
@@ -1722,16 +1722,11 @@ function App() {
                           </button>
                         </div>
 
-                        {grandTotal < 15 && (
-                          <div className="alert alert-danger py-1 px-2 mb-2 small fw-bold">
-                            ⚠️ El monto mínimo para pagar con Zinli es de $15.00.
-                          </div>
-                        )}
+                        
 
                         <div className="small text-secondary mb-3" style={{ fontSize: '0.82rem', lineHeight: '1.5' }}>
                           <div>📧 <strong>Correo Zinli:</strong> {PAYMENT_INFO.zinli.email}</div>
                           <div>👤 <strong>Titular:</strong> {PAYMENT_INFO.zinli.titular}</div>
-                          <div>⚠️ <strong>Monto mínimo:</strong> $15.00</div>
                           <div className="mt-1 text-primary fw-bold fs-6">
                             Monto exacto a transferir: ${grandTotal.toFixed(2)}
                           </div>
@@ -1792,17 +1787,12 @@ function App() {
                           </button>
                         </div>
 
-                        {grandTotal < 15 && (
-                          <div className="alert alert-danger py-1 px-2 mb-2 small fw-bold">
-                            ⚠️ El monto mínimo para pagar con Binance Pay es de $15.00 USDT.
-                          </div>
-                        )}
+                       
 
                         <div className="small text-secondary mb-3" style={{ fontSize: '0.82rem', lineHeight: '1.5' }}>
                           <div>🆔 <strong>Binance Pay ID:</strong> {PAYMENT_INFO.binance.payId}</div>
                           <div>📧 <strong>Correo de cuenta:</strong> {PAYMENT_INFO.binance.email}</div>
                           <div>👤 <strong>Nickname:</strong> {PAYMENT_INFO.binance.titular}</div>
-                          <div>⚠️ <strong>Monto mínimo:</strong> $15.00 USDT</div>
                           <div className="mt-1 text-warning fw-bold fs-6">
                             Monto a enviar: ${grandTotal.toFixed(2)} USDT
                           </div>
