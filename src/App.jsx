@@ -49,7 +49,7 @@ const DAILY_PROMOS = [
     id: 'promo-cheese-miercoles',
     days: [3], // Miércoles
     name: 'Promo de Cheese',
-    image: '/promo_cheese.jpg',
+    image: '/promo_cheese.webp',
     type: 'simple',
     price: 8.0,
     description: 'Cheese Burger especial de Miércoles.'
@@ -58,7 +58,7 @@ const DAILY_PROMOS = [
     id: 'promo-humboldt-jueves',
     days: [4], // Jueves
     name: 'Promo Humboldt Tranqui',
-    image: '/promo_humboldt.jpg',
+    image: '/promo_humboldt.webp',
     type: 'combo_qty',
     options: [
       { label: '1x Humboldt Tranqui', qty: 1, price: 6.5 },
@@ -70,7 +70,7 @@ const DAILY_PROMOS = [
     id: 'promo-sanguchito-viernes',
     days: [5], // Viernes
     name: 'Promo Sanguchito a la Plancha',
-    image: '/promo_sanguchito.jpg',
+    image: '/promo_sanguchito.webp',
     type: 'combo_qty',
     options: [
       { label: '1x Sanguchito a la Plancha', qty: 1, price: 7.0 },
@@ -82,7 +82,7 @@ const DAILY_PROMOS = [
     id: 'promo-carne-pollo-domingo',
     days: [0], // Domingo
     name: 'Promo Carne o Pollo',
-    image: '/promo_domingo.jpg',
+    image: '/promo_domingo.webp',
     type: 'choice',
     price: 6.0,
     choices: ['Carne', 'Pollo'],
@@ -128,14 +128,14 @@ const getFallbackImage = (category) => {
     case 'entradas':
       return '/tequenos_nevados.jpg';
     case 'hamburguesas_pollo':
-      return '/bonpland.png';
+      return '/bonpland.webp';
     case 'hamburguesas_carne':
     case 'hamburguesas_chuleta':
-      return '/chesse_buguer.png';
+      return '/chesse_buguer.webp';
     case 'combos':
       return '/combo_cheeseburger_conpapas.jpg';
     case 'platos':
-      return '/bosquepino.png';
+      return '/bosquepino.webp';
     default:
       return '/hero_background.jpg';
   }
@@ -796,6 +796,7 @@ function App() {
                           alt={item.name}
                           className="product-card-img"
                           loading="lazy"
+                          decoding="async"
                           onError={(e) => {
                             e.currentTarget.onerror = null;
                             e.currentTarget.src = getFallbackImage(item.category);

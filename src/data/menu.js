@@ -175,7 +175,7 @@ export const menuItems = [
     category: 'entradas',
     price: 5.0,
     description: '500gr de Chips de Papas. Acompañados con 2 salsas a escoger.',
-    image: '/chips.jpg',
+    image: '/chips.webp',
     customization: {
       sauces: {
         required: true,
@@ -190,7 +190,7 @@ export const menuItems = [
     category: 'entradas',
     price: 6.0,
     description: '5und.Crujientes tequeños acompañados de salsa tártara de la casa.',
-    image: '/tequenos_nevados.jpg',
+    image: '/tequenos_nevados.webp',
     customization: {
       sauces: {
         required: true,
@@ -205,7 +205,7 @@ export const menuItems = [
     category: 'entradas',
     price: 6.0,
     description: '500 gr de Papas fritas con 2 salsas a escoger.',
-    image: '/papas_sierra.jpg',
+    image: '/papas_sierra.webp',
     customization: {
       sauces: {
         required: true,
@@ -220,7 +220,7 @@ export const menuItems = [
     category: 'entradas',
     price: 7.0,
     description: '5und. Crujientes tenders de pollo con papas francesas y salsa a escoger.',
-    image: '/tenders_pollo.jpg',
+    image: '/tenders_pollo.webp',
     customization: {
       sauces: {
         required: true,
@@ -235,7 +235,7 @@ export const menuItems = [
     category: 'entradas',
     price: 9.0,
     description: 'Clásica ensalada césar con pollo crispy o a la plancha.',
-    image: '/ensalada_cesar.jpg',
+    image: '/ensalada_cesar.webp',
     customization: {
       proteinCooking: {
         required: true,
@@ -249,7 +249,7 @@ export const menuItems = [
     category: 'entradas',
     price: 9.0,
     description: '500gr de Papas francesas bañadas en fondue de queso mozzarella, tocineta y maíz.',
-    image: '/papas_culata.jpg',
+    image: '/papas_culata.webp',
     customization: {
       extraProteins: [
         { id: 'extra_pollo', name: 'Extra Pollo', price: 2.0 },
@@ -264,7 +264,7 @@ export const menuItems = [
     category: 'entradas',
     price: 11.0,
     description: '500gr de Papas francesas con proteína a escoger (chuleta, lomito o pollo a la plancha), tocineta, maíz, salsas clásicas y queso de año.',
-    image: '/papas_mifafi.jpg',
+    image: '/papas_mifafi.webp',
     customization: {
       baseProtein: {
         required: true,
@@ -285,7 +285,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 13.0,
     description: 'Pan de papa 110g, stick fries, 150g carne de res, 150g pechuga de pollo, 150g chuleta ahumada, queso Kraft, pepinillos, tocineta y salsas de la casa. Incluye papas chips o yuquitas.',
-    image: '/pico_la_torre.png'
+    image: '/pico_la_torre.webp'
   },
   {
     id: 'h_bolivar',
@@ -293,7 +293,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 12.0,
     description: 'Pan de papa 110g, 150g lomito marinado en chimichurri, 130g de pollo, pico de gallo, queso llanero asado, aguacate, chorizo de cerdo ahumado y tártara. Incluye papas chips o yuquitas.',
-    image: '/pico_bolivar.png'
+    image: '/pico_bolivar.webp'
   },
   {
     id: 'h_bosque_pino',
@@ -301,7 +301,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 9.0,
     description: 'Pan de papa 110g, 150g carne de res con fondue de queso mozzarella, cebollas caramelizadas en vino de mora, tocineta, lechuga, tomate y salsas clásicas. Incluye papas chips o yuquitas.',
-    image: '/bosquepino.png'
+    image: '/bosquepino.webp'
   },
   {
     id: 'h_double_cheese_bacon',
@@ -309,7 +309,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 9.0,
     description: 'Pan de papa 110g, 200g carne de res con queso Kraft, tocineta crocante, pepinillos, cebolla, salsa de tomate y BBQ de la casa. Incluye papas chips o yuquitas.',
-    image: '/doble_chesse_becon.png'
+    image: '/doble_chesse_becon.webp'
   },
   {
     id: 'h_codazzi',
@@ -317,7 +317,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 9.0,
     description: 'Pan de papa 110g, 150g carne de res, lechuga, queso asado, tocineta, piña asada con miel de papelón, mayomostaza y salsa BBQ. Incluye papas chips o yuquitas.',
-    image: '/pico_codazzi.png'
+    image: '/pico_codazzi.webp'
   },
   {
     id: 'h_humboldt',
@@ -325,7 +325,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 8.5,
     description: 'Pan de papa 110g, 150g carne de res, ensalada rallada, stick fries, huevo frito, aguacate, tocineta y tártara. Incluye papas chips o yuquitas.',
-    image: '/humbolt.png'
+    image: '/humbolt.webp'
   },
   {
     id: 'h_toro',
@@ -333,7 +333,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 8.0,
     description: 'Pan de papa 80g, 150g lomito al chimichurri, pico de gallo, queso llanero asado, aguacate y tártara. Incluye papas chips o yuquitas.',
-    image: '/pico_toro.png'
+    image: '/pico_toro.webp'
   },
   {
     id: 'h_leon',
@@ -341,7 +341,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 6.5,
     description: 'Pan de papa 80g, 100g carne de res, fondue de mozzarella, cebollas caramelizadas, lechuga, tomate y tártara. Incluye papas chips o yuquitas.',
-    image: '/pico_leon.png'
+    image: '/pico_leon.webp'
   },
   {
     id: 'h_cheeseburger',
@@ -349,7 +349,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 6.0,
     description: 'Pan de papa 80g, 100g carne de res, queso Kraft, cebolla, pepinillos, salsa de tomate y BBQ de la casa. Incluye papas chips o yuquitas.',
-    image: '/chesse_buguer.png'
+    image: '/chesse_buguer.webp'
   },
 
   // --- HAMBURGUESAS CON POLLO ---
@@ -359,7 +359,7 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 10.0,
     description: 'Pan de papa 110g, 150g pechuga (crispy o plancha), champiñones salteados con tocineta en crema de leche, stick fries y queso de año. Incluye papas chips o yuquitas.',
-    image: '/bonpland.png'
+    image: '/bonpland.webp'
   },
   {
     id: 'h_aguila',
@@ -367,7 +367,7 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 9.0,
     description: 'Pan de papa 110g, 150g pechuga (crispy o plancha), tomate, lechuga, dip de ajoporro, tocineta y salsas clásicas. Incluye papas chips o yuquitas.',
-    image: '/pico_aguila.png'
+    image: '/pico_aguila.webp'
   },
   {
     id: 'h_mucubaji',
@@ -375,7 +375,7 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 9.0,
     description: 'Pan de papa 110g, 150g pechuga (crispy o plancha), ensalada césar, tocineta y queso de año. Incluye papas chips o yuquitas.',
-    image: '/mucubaji.png'
+    image: '/mucubaji.webp'
   },
   {
     id: 'h_sanguchito',
@@ -383,7 +383,7 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 8.0,
     description: 'Pan de papa 80g, 140g pollo crispy, queso Kraft, pepinillos, tocineta ahumada, salsa de tomate y BBQ de la casa. Incluye papas chips o yuquitas.',
-    image: '/sangchito.png'
+    image: '/sangchito.webp'
   },
 
   // --- HAMBURGUESAS CON CHULETA ---
@@ -393,7 +393,7 @@ export const menuItems = [
     category: 'hamburguesas_chuleta',
     price: 9.0,
     description: 'Pan de papa 110g, 150g chuleta ahumada con BBQ, ensalada coleslaw y aros de cebolla crujientes. Incluye papas chips o yuquitas.',
-    image: '/la_concha.png'
+    image: '/la_concha.webp'
   },
 
   // --- PLATOS ---
@@ -403,7 +403,7 @@ export const menuItems = [
     category: 'platos',
     price: 8.0,
     description: 'Acompañante a elegir: papas francesas, chips o puré de papa + ensalada césar o coleslaw.',
-    image: '/plato_pollo.jpg'
+    image: '/plato_pollo.webp'
   },
   {
     id: 'pl_chuleta',
@@ -411,7 +411,7 @@ export const menuItems = [
     category: 'platos',
     price: 8.0,
     description: 'Acompañante a elegir: papas francesas, chips o puré de papa + ensalada césar o coleslaw.',
-    image: '/plato_chuleta.jpg'
+    image: '/plato_chuleta.webp'
   },
   {
     id: 'pl_lomito_salteado',
@@ -419,7 +419,7 @@ export const menuItems = [
     category: 'platos',
     price: 9.0,
     description: 'Lomito salteado con cebolla y pimentón en salsa BBQ. Incluye acompañante y ensalada.',
-    image: '/plato_lomito_salteado.jpg'
+    image: '/plato_lomito_salteado.webp'
   },
   {
     id: 'pl_lomito_gratinado',
@@ -427,7 +427,7 @@ export const menuItems = [
     category: 'platos',
     price: 9.0,
     description: 'Lomito cubierto con fondue de queso mozzarella. Incluye acompañante y ensalada.',
-    image: '/plato_lomito_gratinado.jpg'
+    image: '/plato_lomito_gratinado.webp'
   },
   {
     id: 'pl_parmigiana',
@@ -435,7 +435,7 @@ export const menuItems = [
     category: 'platos',
     price: 9.0,
     description: 'Pechuga gratinada con salsa y queso. Incluye acompañante y ensalada.',
-    image: '/plato_parmigiana.jpg'
+    image: '/plato_parmigiana.webp'
   },
   {
     id: 'pl_pollo_crema',
@@ -443,7 +443,7 @@ export const menuItems = [
     category: 'platos',
     price: 10.0,
     description: 'En crema blanca de champiñones y tocineta. Incluye acompañante y ensalada.',
-    image: '/plato_pollo_crema.jpg'
+    image: '/plato_pollo_crema.webp'
   },
 
   // --- COMBOS ---
@@ -453,7 +453,7 @@ export const menuItems = [
     category: 'combos',
     price: 16.0,
     description: '4 cheeseburgers clásicas sin papas chips.',
-    image: '/combo_chesse.png'
+    image: '/combo_chesse.webp'
   },
   {
     id: 'cb_cheeseburger_con_papas',
@@ -461,7 +461,7 @@ export const menuItems = [
     category: 'combos',
     price: 18.0,
     description: '4 cheeseburgers clásicas con 2 raciones de papas chips.',
-    image: '/combo_cheeseburger_conpapas.jpg'
+    image: '/combo_cheeseburger_conpapas.webp'
   },
   {
     id: 'cb_lomito',
@@ -469,7 +469,7 @@ export const menuItems = [
     category: 'combos',
     price: 18.0,
     description: 'Burger Bolívar + Burger Toro + Refresco 1 Ltr.',
-    image: '/combo_lomito.jpg'
+    image: '/combo_lomito.webp'
   },
   {
     id: 'cb_chicken',
@@ -477,7 +477,7 @@ export const menuItems = [
     category: 'combos',
     price: 18.0,
     description: 'Escoge 2 burgers de pollo (crispy o plancha) + Refresco 1 Ltr.',
-    image: '/combo_chicken.jpg'
+    image: '/combo_chicken.webp'
   },
   {
     id: 'cb_1_y_1',
@@ -485,7 +485,7 @@ export const menuItems = [
     category: 'combos',
     price: 18.0,
     description: 'Una burger de carne y una burger de pollo a escoger + Refresco 1 Ltr (No incluye Bolívar ni La Torre).',
-    image: '/combo_1y1.jpg'
+    image: '/combo_1y1.webp'
   },
   {
     id: 'cb_sierra_nevada',
@@ -493,7 +493,7 @@ export const menuItems = [
     category: 'combos',
     price: 28.0,
     description: 'Cheeseburger + León + Bosque Pino + Humboldt + Refresco 1.5 Ltrs.',
-    image: '/combo_sierra_nevada.jpg'
+    image: '/combo_sierra_nevada.webp'
   },
 
  // --- BEBIDAS ---
@@ -503,7 +503,7 @@ export const menuItems = [
     category: 'bebidas',
     price: 1.5,
     description: 'Refresco frío en lata (355ml). Elige tu sabor favorito.',
-    image: '/latacoca.png',
+    image: '/latacoca.webp',
     requiresFlavor: true,
   },
   {
@@ -512,7 +512,7 @@ export const menuItems = [
     category: 'bebidas',
     price: 1.0,
     description: 'Refresco personal frío. Elige tu sabor favorito.',
-    image: '/bombitacoca.png',
+    image: '/bombitacoca.webp',
     requiresFlavor: true,
   },
   {
@@ -521,7 +521,7 @@ export const menuItems = [
     category: 'bebidas',
     price: 2.5,
     description: 'Botella de refresco de 1 litro para compartir.',
-    image: '/cocacola1lt.png',
+    image: '/cocacola1lt.webp',
     requiresFlavor: true,
   },
   {
@@ -530,7 +530,7 @@ export const menuItems = [
     category: 'bebidas',
     price: 3.0,
     description: 'Botella de refresco de 1.5 litros.',
-    image: '/cocacola1lt.png',
+    image: '/cocacola1lt.webp',
     requiresFlavor: true,
   },
   {
@@ -539,7 +539,7 @@ export const menuItems = [
     category: 'bebidas',
     price: 3.5,
     description: 'Botella familiar de refresco de 2 litros.',
-    image: '/coca2lt.png',
+    image: '/coca2lt.webp',
     requiresFlavor: true,
   },
   {
@@ -548,7 +548,7 @@ export const menuItems = [
     category: 'bebidas',
     price: 1.0,
     description: 'Agua mineral en botella pequeña de 355ml bien fría.',
-    image: '/agua.png',
+    image: '/agua.webp',
     requiresFlavor: false,
   },
   {
@@ -557,7 +557,7 @@ export const menuItems = [
     category: 'bebidas',
     price: 1.5,
     description: 'Agua mineral en botella de 600ml bien fría.',
-    image: '/agua.png',
+    image: '/agua.webp',
     requiresFlavor: false,
   },
 
