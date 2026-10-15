@@ -180,7 +180,7 @@ export const menuItems = [
       sauces: {
         required: true,
         max: 2,
-        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara', 'Salsa de Maíz']
+        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara']
       }
     }
   },
@@ -195,7 +195,7 @@ export const menuItems = [
       sauces: {
         required: true,
         max: 2,
-        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara', 'Salsa de Maíz']
+        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara']
       }
     }
   },
@@ -210,7 +210,7 @@ export const menuItems = [
       sauces: {
         required: true,
         max: 2,
-        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara', 'Salsa de Maíz']
+        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara']
       }
     }
   },
@@ -225,7 +225,7 @@ export const menuItems = [
       sauces: {
         required: true,
         max: 2,
-        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara', 'Salsa de Maíz']
+        options: ['Kétchup', 'Mayonesa', 'BBQ', 'Mostaza', 'Salsa Tártara']
       }
     }
   },

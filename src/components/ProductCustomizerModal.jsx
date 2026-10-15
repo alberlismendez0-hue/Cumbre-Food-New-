@@ -28,9 +28,6 @@ const getSauceIcon = (sauceName) => {
     case 'salsa tártara':
     case 'tártara':
       return '🧄';
-    case 'salsa de maíz':
-    case 'maíz':
-      return '🌽';
     default:
       return '🥫';
   }
