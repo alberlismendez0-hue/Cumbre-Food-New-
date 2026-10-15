@@ -43,6 +43,60 @@ const VENEZUELAN_BANKS = [
   'Dancor / Otros'
 ];
 
+// Configuración de promociones automáticas por día (0 = Domingo, 3 = Miércoles, 4 = Jueves, 5 = Viernes)
+const DAILY_PROMOS = [
+  {
+    id: 'promo-cheese-miercoles',
+    days: [3], // Miércoles
+    name: 'Promo de Cheese',
+    image: '/promo_cheese.jpg',
+    type: 'simple',
+    price: 8.0,
+    description: 'Cheese Burger especial de Miércoles.'
+  },
+  {
+    id: 'promo-humboldt-jueves',
+    days: [4], // Jueves
+    name: 'Promo Humboldt Tranqui',
+    image: '/promo_humboldt.jpg',
+    type: 'combo_qty',
+    options: [
+      { label: '1x Humboldt Tranqui', qty: 1, price: 6.5 },
+      { label: '2x Humboldt Tranqui', qty: 2, price: 12.0 }
+    ],
+    description: '1 por $6.50 o 2 por $12.00.'
+  },
+  {
+    id: 'promo-sanguchito-viernes',
+    days: [5], // Viernes
+    name: 'Promo Sanguchito a la Plancha',
+    image: '/promo_sanguchito.jpg',
+    type: 'combo_qty',
+    options: [
+      { label: '1x Sanguchito a la Plancha', qty: 1, price: 7.0 },
+      { label: '2x Sanguchito a la Plancha', qty: 2, price: 12.0 }
+    ],
+    description: '1 por $7.00 o 2 por $12.00.'
+  },
+  {
+    id: 'promo-carne-pollo-domingo',
+    days: [0], // Domingo
+    name: 'Promo Carne o Pollo',
+    image: '/promo_domingo.jpg',
+    type: 'choice',
+    price: 6.0,
+    choices: ['Carne', 'Pollo'],
+    description: 'Elige tu favorita entre Carne o Pollo por solo $6.00.'
+  }
+];
+
+const getTodayPromo = () => {
+  const venezuelaDate = new Date(
+    new Date().toLocaleString('en-US', { timeZone: 'America/Caracas' })
+  );
+  const currentDay = venezuelaDate.getDay();
+  return DAILY_PROMOS.find((p) => p.days.includes(currentDay)) || null;
+};
 // Datos oficiales de pago de Cumbre Food
 const PAYMENT_INFO = {
   pagoMovil: {
@@ -110,10 +164,63 @@ const checkIsOpen = () => {
 function App() {
   const [checkoutStep, setCheckoutStep] = useState(1);
   const [copiedText, setCopiedText] = useState(false);
+  // Control de la promo del día
+  const [activePromo] = useState(() => getTodayPromo());
+  const [showPromoModal, setShowPromoModal] = useState(false);
+  const [promoSelectionIndex, setPromoSelectionIndex] = useState(0);
+  const [promoMeatChoice, setPromoMeatChoice] = useState('Carne');
+
+  useEffect(() => {
+    if (activePromo) {
+      const alreadySeen = sessionStorage.getItem(`cumbre_promo_seen_${activePromo.id}`);
+      if (!alreadySeen) {
+        setShowPromoModal(true);
+      }
+    }
+  }, [activePromo]);
+
+  const handleClosePromoModal = () => {
+    if (activePromo) {
+      sessionStorage.setItem(`cumbre_promo_seen_${activePromo.id}`, 'true');
+    }
+    setShowPromoModal(false);
+  };
+
+  const handleAddPromoToCart = () => {
+    if (!activePromo) return;
+
+    let finalName = activePromo.name;
+    let finalPrice = activePromo.price;
+    let finalDetails = [{ label: 'Promoción', value: 'Promo del Día' }];
+
+    if (activePromo.type === 'combo_qty') {
+      const opt = activePromo.options[promoSelectionIndex] || activePromo.options[0];
+      finalName = opt.label;
+      finalPrice = opt.price;
+      finalDetails.push({ label: 'Opción Promo', value: opt.label });
+    } else if (activePromo.type === 'choice') {
+      finalName = `${activePromo.name} (${promoMeatChoice})`;
+      finalDetails.push({ label: 'Proteína', value: promoMeatChoice });
+    }
+
+    handleAddCustomizedToCart({
+      id: `${activePromo.id}-${Date.now()}`,
+      name: finalName,
+      price: finalPrice,
+      quantity: 1,
+      image: activePromo.image,
+      category: 'combos',
+      customizationDetails: finalDetails
+    });
+
+    handleClosePromoModal();
+    setShowCart(true);
+  };
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [cashAmountPaid, setCashAmountPaid] = useState('');
   const [cashPhotoFile, setCashPhotoFile] = useState(null);
+ 
 
   const [bcvRate, setBcvRate] = useState(() => {
     const cached = localStorage.getItem('cumbre_bcv_rate');
@@ -1933,6 +2040,136 @@ function App() {
           )}
         </Modal.Body>
       </Modal>
+
+      {/* MODAL DE PROMO DEL DÍA */}
+      {activePromo && (
+        <Modal
+          show={showPromoModal}
+          onHide={handleClosePromoModal}
+          centered
+          backdrop="static"
+          className="cf-promo-modal"
+          contentClassName="border-0 bg-transparent"
+        >
+          <div
+            className="p-3 p-md-4 text-center text-white position-relative"
+            style={{
+              backgroundColor: '#161311',
+              borderRadius: '24px',
+              border: '2px solid #d97706',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.9)',
+              maxWidth: '440px',
+              margin: '0 auto'
+            }}
+          >
+            <button
+              type="button"
+              className="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+              style={{ zIndex: 10 }}
+              onClick={handleClosePromoModal}
+              aria-label="Cerrar promo"
+            ></button>
+
+            <div className="mb-2">
+              <span className="badge bg-warning text-dark fw-black text-uppercase px-3 py-1" style={{ fontSize: '0.78rem', letterSpacing: '1px' }}>
+                🔥 PROMO EXCLUSIVA DE HOY
+              </span>
+            </div>
+
+            <div className="mb-3 rounded-3 overflow-hidden shadow" style={{ maxHeight: '380px' }}>
+              <img
+                src={activePromo.image}
+                alt={activePromo.name}
+                className="img-fluid rounded-3"
+                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = '/hero_background.jpg';
+                }}
+              />
+            </div>
+
+            <h4 className="fw-black text-warning mb-1">{activePromo.name}</h4>
+            <p className="text-secondary small mb-3">{activePromo.description}</p>
+
+            {activePromo.type === 'combo_qty' && (
+              <div className="d-flex justify-content-center gap-2 mb-3">
+                {activePromo.options.map((opt, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`btn btn-sm ${promoSelectionIndex === idx ? 'btn-warning fw-bold text-dark' : 'btn-outline-secondary text-white'}`}
+                    style={{ borderRadius: '12px', padding: '8px 12px', fontSize: '0.85rem' }}
+                    onClick={() => setPromoSelectionIndex(idx)}
+                  >
+                    <div>{opt.label}</div>
+                    <div className="fw-black" style={{ fontSize: '0.95rem' }}>${opt.price.toFixed(2)}</div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {activePromo.type === 'choice' && (
+              <div className="mb-3">
+                <span className="text-secondary small d-block mb-2">Elige tu proteína:</span>
+                <div className="d-flex justify-content-center gap-2">
+                  {activePromo.choices.map((choice) => (
+                    <button
+                      key={choice}
+                      type="button"
+                      className={`btn btn-sm px-4 py-2 ${promoMeatChoice === choice ? 'btn-warning fw-bold text-dark' : 'btn-outline-secondary text-white'}`}
+                      style={{ borderRadius: '12px' }}
+                      onClick={() => setPromoMeatChoice(choice)}
+                    >
+                      {choice === 'Carne' ? '🥩 Carne' : '🍗 Pollo'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(() => {
+              const currentPrice =
+                activePromo.type === 'combo_qty'
+                  ? activePromo.options[promoSelectionIndex]?.price || activePromo.price
+                  : activePromo.price;
+
+              return (
+                <div className="d-flex flex-column gap-2 mt-2">
+                  <div className="small text-secondary mb-1">
+                    Total Promo: <strong className="text-success fs-5">${currentPrice.toFixed(2)}</strong>{' '}
+                    <span className="text-warning">({formatBs(currentPrice)} Bs.)</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="btn w-100 py-3 fw-black text-uppercase"
+                    style={{
+                      backgroundColor: '#22c55e',
+                      color: '#000000',
+                      borderRadius: '9999px',
+                      fontSize: '0.95rem',
+                      border: 'none',
+                      boxShadow: '0 0 16px rgba(34, 197, 94, 0.45)'
+                    }}
+                    onClick={handleAddPromoToCart}
+                  >
+                    🛒 ¡Aprovechar Promo y Agregar!
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-link text-secondary text-decoration-none small py-1"
+                    onClick={handleClosePromoModal}
+                  >
+                    No, gracias. Ver el menú completo
+                  </button>
+                </div>
+              );
+            })()}
+          </div>
+        </Modal>
+      )}
 
       {/* MODAL HORARIOS / GLASSMORPHISM */}
       <Modal
