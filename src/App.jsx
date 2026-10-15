@@ -2052,36 +2052,45 @@ function App() {
           contentClassName="border-0 bg-transparent"
         >
           <div
-            className="p-3 p-md-4 text-center text-white position-relative"
+            className="p-3 text-center text-white position-relative mx-auto"
             style={{
               backgroundColor: '#161311',
-              borderRadius: '24px',
+              borderRadius: '20px',
               border: '2px solid #d97706',
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.9)',
-              maxWidth: '440px',
-              margin: '0 auto'
+              boxShadow: '0 16px 45px rgba(0, 0, 0, 0.9)',
+              width: '92%',
+              maxWidth: '350px'
             }}
           >
+            {/* Botón X de cerrar flotante */}
             <button
               type="button"
-              className="btn-close btn-close-white position-absolute top-0 end-0 m-3"
-              style={{ zIndex: 10 }}
+              className="btn-close btn-close-white position-absolute top-0 end-0 m-2"
+              style={{ zIndex: 10, transform: 'scale(0.85)' }}
               onClick={handleClosePromoModal}
               aria-label="Cerrar promo"
             ></button>
 
+            {/* Badge de Promo Activa */}
             <div className="mb-2">
-              <span className="badge bg-warning text-dark fw-black text-uppercase px-3 py-1" style={{ fontSize: '0.78rem', letterSpacing: '1px' }}>
+              <span
+                className="badge bg-warning text-dark fw-black text-uppercase px-2 py-1"
+                style={{ fontSize: '0.7rem', letterSpacing: '0.5px' }}
+              >
                 🔥 PROMO EXCLUSIVA DE HOY
               </span>
             </div>
 
-            <div className="mb-3 rounded-3 overflow-hidden shadow" style={{ maxHeight: '380px' }}>
+            {/* Imagen del Folleto compacta */}
+            <div
+              className="mb-2 rounded-3 overflow-hidden shadow-sm d-flex justify-content-center align-items-center"
+              style={{ maxHeight: '250px' }}
+            >
               <img
                 src={activePromo.image}
                 alt={activePromo.name}
                 className="img-fluid rounded-3"
-                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                style={{ maxHeight: '250px', width: 'auto', objectFit: 'contain' }}
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = '/hero_background.jpg';
@@ -2089,36 +2098,44 @@ function App() {
               />
             </div>
 
-            <h4 className="fw-black text-warning mb-1">{activePromo.name}</h4>
-            <p className="text-secondary small mb-3">{activePromo.description}</p>
+            <h5 className="fw-black text-warning mb-1" style={{ fontSize: '1.1rem' }}>
+              {activePromo.name}
+            </h5>
+            <p className="text-secondary small mb-2" style={{ fontSize: '0.78rem' }}>
+              {activePromo.description}
+            </p>
 
+            {/* Selector de opciones para Jueves y Viernes (1x o 2x) */}
             {activePromo.type === 'combo_qty' && (
-              <div className="d-flex justify-content-center gap-2 mb-3">
+              <div className="d-flex justify-content-center gap-2 mb-2">
                 {activePromo.options.map((opt, idx) => (
                   <button
                     key={idx}
                     type="button"
                     className={`btn btn-sm ${promoSelectionIndex === idx ? 'btn-warning fw-bold text-dark' : 'btn-outline-secondary text-white'}`}
-                    style={{ borderRadius: '12px', padding: '8px 12px', fontSize: '0.85rem' }}
+                    style={{ borderRadius: '10px', padding: '5px 10px', fontSize: '0.78rem' }}
                     onClick={() => setPromoSelectionIndex(idx)}
                   >
                     <div>{opt.label}</div>
-                    <div className="fw-black" style={{ fontSize: '0.95rem' }}>${opt.price.toFixed(2)}</div>
+                    <div className="fw-black">${opt.price.toFixed(2)}</div>
                   </button>
                 ))}
               </div>
             )}
 
+            {/* Selector de Carne o Pollo para Domingo */}
             {activePromo.type === 'choice' && (
-              <div className="mb-3">
-                <span className="text-secondary small d-block mb-2">Elige tu proteína:</span>
+              <div className="mb-2">
+                <span className="text-secondary small d-block mb-1" style={{ fontSize: '0.75rem' }}>
+                  Elige tu proteína:
+                </span>
                 <div className="d-flex justify-content-center gap-2">
                   {activePromo.choices.map((choice) => (
                     <button
                       key={choice}
                       type="button"
-                      className={`btn btn-sm px-4 py-2 ${promoMeatChoice === choice ? 'btn-warning fw-bold text-dark' : 'btn-outline-secondary text-white'}`}
-                      style={{ borderRadius: '12px' }}
+                      className={`btn btn-sm px-3 py-1 ${promoMeatChoice === choice ? 'btn-warning fw-bold text-dark' : 'btn-outline-secondary text-white'}`}
+                      style={{ borderRadius: '10px', fontSize: '0.78rem' }}
                       onClick={() => setPromoMeatChoice(choice)}
                     >
                       {choice === 'Carne' ? '🥩 Carne' : '🍗 Pollo'}
@@ -2128,6 +2145,7 @@ function App() {
               </div>
             )}
 
+            {/* Precio en Bs y Botón de Acción compacto */}
             {(() => {
               const currentPrice =
                 activePromo.type === 'combo_qty'
@@ -2135,34 +2153,37 @@ function App() {
                   : activePromo.price;
 
               return (
-                <div className="d-flex flex-column gap-2 mt-2">
-                  <div className="small text-secondary mb-1">
-                    Total Promo: <strong className="text-success fs-5">${currentPrice.toFixed(2)}</strong>{' '}
+                <div className="d-flex flex-column gap-1 mt-1">
+                  <div className="text-secondary mb-1" style={{ fontSize: '0.82rem' }}>
+                    Total: <strong className="text-success fs-6">${currentPrice.toFixed(2)}</strong>{' '}
                     <span className="text-warning">({formatBs(currentPrice)} Bs.)</span>
                   </div>
 
                   <button
                     type="button"
-                    className="btn w-100 py-3 fw-black text-uppercase"
+                    className="btn w-100 py-2 fw-black text-uppercase mx-auto"
                     style={{
                       backgroundColor: '#22c55e',
                       color: '#000000',
                       borderRadius: '9999px',
-                      fontSize: '0.95rem',
+                      fontSize: '0.82rem',
+                      letterSpacing: '0.3px',
                       border: 'none',
-                      boxShadow: '0 0 16px rgba(34, 197, 94, 0.45)'
+                      boxShadow: '0 0 10px rgba(34, 197, 94, 0.35)',
+                      maxWidth: '290px'
                     }}
                     onClick={handleAddPromoToCart}
                   >
-                    🛒 ¡Aprovechar Promo y Agregar!
+                    🛒 Aprovechar Promo y Agregar
                   </button>
 
                   <button
                     type="button"
-                    className="btn btn-link text-secondary text-decoration-none small py-1"
+                    className="btn btn-link text-secondary text-decoration-none py-1"
+                    style={{ fontSize: '0.75rem' }}
                     onClick={handleClosePromoModal}
                   >
-                    No, gracias. Ver el menú completo
+                    No, gracias. Ver menú
                   </button>
                 </div>
               );
