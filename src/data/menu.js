@@ -453,7 +453,7 @@ export const menuItems = [
     category: 'combos',
     price: 16.0,
     description: '4 cheeseburgers clásicas sin papas chips.',
-    image: '/combo_chesse.jpg'
+    image: '/combo_chesse.png'
   },
   {
     id: 'cb_cheeseburger_con_papas',
