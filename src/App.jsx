@@ -517,7 +517,7 @@ function App() {
     setTimeout(() => setCopiedText(false), 2000);
   };
 
-  const handleCheckout = async (e) => {
+ const handleCheckout = async (e) => {
     e.preventDefault();
     if (cart.length === 0) return;
 
@@ -536,19 +536,21 @@ function App() {
       return;
     }
 
-    // Validaciones de monto mínimo para transferencias internacionales
-    // Validación de monto mínimo para Zelle
-    const isZelle = paymentMethod === 'Zelle';
-    if (isZelle && grandTotal < 15) {
-      alert(`El monto mínimo para cancelar con ${paymentMethod} es de $15.00.`);
+    // Identificador para métodos digitales internacionales
+    const isDigitalInternational = ['Zelle', 'Zinli', 'Binance Pay (USDT)'].includes(paymentMethod);
+
+    // Validación de monto mínimo ÚNICAMENTE para Zelle
+    if (paymentMethod === 'Zelle' && grandTotal < 15) {
+      alert('El monto mínimo para cancelar con Zelle es de $15.00.');
       return;
     }
+
     if (!termsAccepted) {
       alert('Debes aceptar los Términos y Condiciones y la Política de Privacidad para enviar tu pedido.');
       return;
     }
 
-    // Validaciones para Zelle, Zinli o Binance
+    // Validaciones para Zelle, Zinli o Binance (titular y capture obligatorios)
     if (isDigitalInternational) {
       if (!paymentSenderName.trim()) {
         alert(`Por favor coloca el Nombre del titular de la cuenta que envió el pago por ${paymentMethod}.`);
@@ -575,6 +577,7 @@ function App() {
         return;
       }
     }
+
     // Validación para Efectivo Divisas ($)
     if (paymentMethod === 'Efectivo Divisas ($)') {
       const paid = parseFloat(cashAmountPaid);
@@ -609,10 +612,8 @@ function App() {
       bankOrigin: paymentMethod === 'Pago Móvil' ? bankOrigin : 'N/A',
       paymentReference: paymentMethod === 'Pago Móvil' ? paymentReference.trim() : 'N/A',
       paymentSenderName: isDigitalInternational ? paymentSenderName.trim() : 'N/A',
-      paymentSenderName: isDigitalInternational ? paymentSenderName.trim() : 'N/A',
       cashAmountPaid: paymentMethod === 'Efectivo Divisas ($)' ? `$${cashPaid.toFixed(2)}` : 'N/A',
       cashChangeDue: paymentMethod === 'Efectivo Divisas ($)' ? `$${cashChange.toFixed(2)}` : 'N/A',
-      notes: notes.trim(),
       notes: notes.trim(),
       items: cart
     };
