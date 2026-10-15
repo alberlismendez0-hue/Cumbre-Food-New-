@@ -1574,7 +1574,6 @@ function App() {
                           <div>🏦 <strong>Banco:</strong> {PAYMENT_INFO.pagoMovil.banco}</div>
                           <div>🪪 <strong>Cédula / RIF:</strong> {PAYMENT_INFO.pagoMovil.cedula}</div>
                           <div>📱 <strong>Teléfono:</strong> {PAYMENT_INFO.pagoMovil.telefono}</div>
-                          <div>👤 <strong>Titular:</strong> {PAYMENT_INFO.pagoMovil.titular}</div>
                           <div className="mt-2 text-warning fw-bold fs-6">
                             Monto exacto: {formatBs(grandTotal)} Bs. (${grandTotal.toFixed(2)})
                           </div>
