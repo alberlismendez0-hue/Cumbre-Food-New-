@@ -17,5 +17,17 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+  // Bloquear gesto de pellizco (pinch-to-zoom) en Safari iOS
+  document.addEventListener('gesturestart', function (e) {
+    e.preventDefault();
+  });
+  document.addEventListener('gesturechange', function (e) {
+    e.preventDefault();
+  });
+  document.addEventListener('gestureend', function (e) {
+    e.preventDefault();
+  });
+</script>
   </body>
 </html>

@@ -31,6 +31,17 @@ html, body {
   box-sizing: border-box;
 }
 
+/* Desactiva el zoom por gestos en iOS Safari */
+html, body {
+  touch-action: pan-x pan-y;
+  -webkit-touch-callout: none;
+}
+
+/* Evita que Safari en iPhone haga zoom automático al tocar inputs */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
 /* Reset y Base */
 body {
   background-color: var(--color-bg-primary) !important;
