@@ -165,24 +165,20 @@ function App() {
   const [checkoutStep, setCheckoutStep] = useState(1);
   const [copiedText, setCopiedText] = useState(false);
   // Control de la promo del día
-  const [activePromo] = useState(() => getTodayPromo());
+ const [activePromo] = useState(() => getTodayPromo());
   const [showPromoModal, setShowPromoModal] = useState(false);
   const [promoSelectionIndex, setPromoSelectionIndex] = useState(0);
   const [promoMeatChoice, setPromoMeatChoice] = useState('Carne');
 
+  // Abre el modal siempre que haya promo para hoy al cargar/recargar la página
   useEffect(() => {
     if (activePromo) {
-      const alreadySeen = sessionStorage.getItem(`cumbre_promo_seen_${activePromo.id}`);
-      if (!alreadySeen) {
-        setShowPromoModal(true);
-      }
+      setShowPromoModal(true);
     }
   }, [activePromo]);
 
+  // Cierra el modal sin guardarlo en sessionStorage para que vuelva a salir al recargar
   const handleClosePromoModal = () => {
-    if (activePromo) {
-      sessionStorage.setItem(`cumbre_promo_seen_${activePromo.id}`, 'true');
-    }
     setShowPromoModal(false);
   };
 
@@ -2055,18 +2051,18 @@ function App() {
             className="p-3 text-center text-white position-relative mx-auto"
             style={{
               backgroundColor: '#161311',
-              borderRadius: '20px',
+              borderRadius: '22px',
               border: '2px solid #d97706',
-              boxShadow: '0 16px 45px rgba(0, 0, 0, 0.9)',
-              width: '92%',
-              maxWidth: '350px'
+              boxShadow: '0 20px 55px rgba(0, 0, 0, 0.95)',
+              width: '94%',
+              maxWidth: '400px'
             }}
           >
             {/* Botón X de cerrar flotante */}
             <button
               type="button"
-              className="btn-close btn-close-white position-absolute top-0 end-0 m-2"
-              style={{ zIndex: 10, transform: 'scale(0.85)' }}
+              className="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+              style={{ zIndex: 10, transform: 'scale(0.9)' }}
               onClick={handleClosePromoModal}
               aria-label="Cerrar promo"
             ></button>
@@ -2074,23 +2070,23 @@ function App() {
             {/* Badge de Promo Activa */}
             <div className="mb-2">
               <span
-                className="badge bg-warning text-dark fw-black text-uppercase px-2 py-1"
-                style={{ fontSize: '0.7rem', letterSpacing: '0.5px' }}
+                className="badge bg-warning text-dark fw-black text-uppercase px-3 py-1"
+                style={{ fontSize: '0.74rem', letterSpacing: '0.5px' }}
               >
                 🔥 PROMO EXCLUSIVA DE HOY
               </span>
             </div>
 
-            {/* Imagen del Folleto compacta */}
+            {/* Imagen del Folleto más amplia para lectura clara */}
             <div
               className="mb-2 rounded-3 overflow-hidden shadow-sm d-flex justify-content-center align-items-center"
-              style={{ maxHeight: '250px' }}
+              style={{ maxHeight: '330px' }}
             >
               <img
                 src={activePromo.image}
                 alt={activePromo.name}
                 className="img-fluid rounded-3"
-                style={{ maxHeight: '250px', width: 'auto', objectFit: 'contain' }}
+                style={{ maxHeight: '330px', width: 'auto', objectFit: 'contain' }}
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = '/hero_background.jpg';
@@ -2098,10 +2094,10 @@ function App() {
               />
             </div>
 
-            <h5 className="fw-black text-warning mb-1" style={{ fontSize: '1.1rem' }}>
+            <h5 className="fw-black text-warning mb-1" style={{ fontSize: '1.2rem' }}>
               {activePromo.name}
             </h5>
-            <p className="text-secondary small mb-2" style={{ fontSize: '0.78rem' }}>
+            <p className="text-secondary small mb-2" style={{ fontSize: '0.82rem' }}>
               {activePromo.description}
             </p>
 
@@ -2113,7 +2109,7 @@ function App() {
                     key={idx}
                     type="button"
                     className={`btn btn-sm ${promoSelectionIndex === idx ? 'btn-warning fw-bold text-dark' : 'btn-outline-secondary text-white'}`}
-                    style={{ borderRadius: '10px', padding: '5px 10px', fontSize: '0.78rem' }}
+                    style={{ borderRadius: '10px', padding: '6px 12px', fontSize: '0.82rem' }}
                     onClick={() => setPromoSelectionIndex(idx)}
                   >
                     <div>{opt.label}</div>
@@ -2126,7 +2122,7 @@ function App() {
             {/* Selector de Carne o Pollo para Domingo */}
             {activePromo.type === 'choice' && (
               <div className="mb-2">
-                <span className="text-secondary small d-block mb-1" style={{ fontSize: '0.75rem' }}>
+                <span className="text-secondary small d-block mb-1" style={{ fontSize: '0.78rem' }}>
                   Elige tu proteína:
                 </span>
                 <div className="d-flex justify-content-center gap-2">
@@ -2135,7 +2131,7 @@ function App() {
                       key={choice}
                       type="button"
                       className={`btn btn-sm px-3 py-1 ${promoMeatChoice === choice ? 'btn-warning fw-bold text-dark' : 'btn-outline-secondary text-white'}`}
-                      style={{ borderRadius: '10px', fontSize: '0.78rem' }}
+                      style={{ borderRadius: '10px', fontSize: '0.82rem' }}
                       onClick={() => setPromoMeatChoice(choice)}
                     >
                       {choice === 'Carne' ? '🥩 Carne' : '🍗 Pollo'}
@@ -2145,7 +2141,7 @@ function App() {
               </div>
             )}
 
-            {/* Precio en Bs y Botón de Acción compacto */}
+            {/* Precio en Bs y Botón de Acción */}
             {(() => {
               const currentPrice =
                 activePromo.type === 'combo_qty'
@@ -2153,9 +2149,9 @@ function App() {
                   : activePromo.price;
 
               return (
-                <div className="d-flex flex-column gap-1 mt-1">
-                  <div className="text-secondary mb-1" style={{ fontSize: '0.82rem' }}>
-                    Total: <strong className="text-success fs-6">${currentPrice.toFixed(2)}</strong>{' '}
+                <div className="d-flex flex-column gap-2 mt-2">
+                  <div className="text-secondary" style={{ fontSize: '0.85rem' }}>
+                    Total: <strong className="text-success fs-5">${currentPrice.toFixed(2)}</strong>{' '}
                     <span className="text-warning">({formatBs(currentPrice)} Bs.)</span>
                   </div>
 
@@ -2166,21 +2162,21 @@ function App() {
                       backgroundColor: '#22c55e',
                       color: '#000000',
                       borderRadius: '9999px',
-                      fontSize: '0.82rem',
-                      letterSpacing: '0.3px',
+                      fontSize: '0.92rem',
+                      letterSpacing: '0.5px',
                       border: 'none',
-                      boxShadow: '0 0 10px rgba(34, 197, 94, 0.35)',
-                      maxWidth: '290px'
+                      boxShadow: '0 0 12px rgba(34, 197, 94, 0.4)',
+                      maxWidth: '310px'
                     }}
                     onClick={handleAddPromoToCart}
                   >
-                    🛒 Aprovechar Promo y Agregar
+                    ¡ORDENAR AHORA!
                   </button>
 
                   <button
                     type="button"
                     className="btn btn-link text-secondary text-decoration-none py-1"
-                    style={{ fontSize: '0.75rem' }}
+                    style={{ fontSize: '0.78rem' }}
                     onClick={handleClosePromoModal}
                   >
                     No, gracias. Ver menú
