@@ -146,6 +146,13 @@ export const COMBO_1Y1_ALL_OPTIONS = [
   'Sanguchito de Pollo'
 ];
 
+export const COMBO_1Y1_CHICKEN_OPTIONS = [
+  'Pico Bonpland',
+  'Pico Águila',
+  'Mucubají',
+  'Sanguchito de Pollo'
+];
+
 export const PLATO_SIDES = [
   { id: 'francesas', name: 'Papas Francesas', icon: '🍟' },
   { id: 'chips', name: 'Papas Chips', icon: '/chips.png' },
