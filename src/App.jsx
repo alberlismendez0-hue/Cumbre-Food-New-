@@ -1546,35 +1546,63 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
               {checkoutStep === 2 && (
                 <Form onSubmit={handleCheckout}>
                   {/* 1. TOTAL ARRIBA EN EL PASO 2 */}
-                  <div 
-                    className="p-3 rounded-3 mb-3 d-flex justify-content-between align-items-center" 
-                    style={{ backgroundColor: '#120f0d', border: '1px solid rgba(255, 255, 255, 0.08)' }}
+                  <div
+                    className="p-3 rounded-3 mb-3"
+                    style={{
+                      backgroundColor: '#120f0d',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                    }}
                   >
-                    <div>
-                      <div className="fw-black text-white text-uppercase" style={{ fontSize: '1.25rem' }}>
-                        TOTAL:
+                    {/* Fila principal: Título a la izquierda, Totales a la derecha */}
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <div
+                          className="fw-black text-white text-uppercase"
+                          style={{ fontSize: '1.15rem' }}
+                        >
+                          TOTAL:
+                        </div>
+                        <span
+                          className="badge mt-1 text-warning fw-bold bg-dark border border-secondary"
+                          style={{ fontSize: '0.7rem' }}
+                        >
+                          Tasa BCV: {bcvRate.toFixed(2)} Bs.
+                        </span>
                       </div>
-                      <span className="badge mt-1 text-warning fw-bold bg-dark border border-secondary" style={{ fontSize: '0.72rem' }}>
-                        Tasa Oficial BCV: {bcvRate.toFixed(2)} Bs.
-                      </span>
+
+                      <div className="text-end">
+                        <div
+                          className="fw-black"
+                          style={{ color: '#22c55e', fontSize: '1.75rem', lineHeight: '1.1' }}
+                        >
+                          ${grandTotal.toFixed(2)}
+                        </div>
+                        <div
+                          className="fw-bold text-warning"
+                          style={{ fontSize: '1.1rem', lineHeight: '1.2' }}
+                        >
+                          {formatBs(grandTotal)} Bs.
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="text-end">
-                      <div className="fw-black" style={{ color: '#22c55e', fontSize: '1.85rem', lineHeight: '1.1' }}>
-                        ${grandTotal.toFixed(2)}
-                      </div>
-                      <div className="fw-bold text-warning" style={{ fontSize: '1.2rem' }}>
-                        {formatBs(grandTotal)} Bs.
-                      </div>
-                    </div>
-                    {/* 👉 AQUÍ VA EL DESCUENTO (dentro del contenedor): */}
+                    {/* Fila inferior exclusiva para el cupón (sin sobreposiciones) */}
                     {appliedCoupon && (
-                    <div className="d-flex justify-content-between align-items-center text-success small mt-2 pt-2 border-top border-secondary border-opacity-25 fw-semibold">
-                      <span>🎟️ Descuento Cupón ({appliedCoupon}):</span>
-                      <span>-${discountAmount.toFixed(2)} (-{formatBs(discountAmount)} Bs.)</span>
-                    </div>
-                  )}
+                      <div
+                        className="d-flex justify-content-between align-items-center text-success small mt-2 pt-2 border-top border-secondary border-opacity-25"
+                        style={{ fontSize: '0.82rem' }}
+                      >
+                        <span className="fw-semibold">🎟️ Descuento ({appliedCoupon}):</span>
+                        <span className="fw-bold text-end">
+                          -${discountAmount.toFixed(2)}{' '}
+                          <span className="text-success text-opacity-75" style={{ fontSize: '0.75rem' }}>
+                            (-{formatBs(discountAmount)} Bs.)
+                          </span>
+                        </span>
+                      </div>
+                    )}
                   </div>
+                  
 
                   {/* 2. SELECTOR DE MÉTODO DE PAGO Y SUS DATOS DINÁMICOS */}
                   {/* CASILLA CUPÓN DE DESCUENTO */}
