@@ -146,12 +146,23 @@ export const COMBO_1Y1_ALL_OPTIONS = [
   'Sanguchito de Pollo'
 ];
 
+export const COMBO_1Y1_MEAT_OPTIONS = [
+  'Cheeseburger Clásica',
+  'Pico León',
+  'Pico Toro',
+  'Pico Humboldt',
+  'Bosque Pino',
+  'Double Cheese & Bacon',
+  'Pico Codazzi'
+];
+
 export const COMBO_1Y1_CHICKEN_OPTIONS = [
   'Pico Bonpland',
   'Pico Águila',
   'Mucubají',
   'Sanguchito de Pollo'
 ];
+
 
 export const PLATO_SIDES = [
   { id: 'francesas', name: 'Papas Francesas', icon: '🍟' },
