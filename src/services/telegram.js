@@ -58,6 +58,12 @@ export const sendOrderToTelegram = async (orderData, receiptFile) => {
 
     caption += `━━━━━━━━━━━━━━━━━━━━━\n`;
     caption += `💵 *Subtotal:* $${orderData.subtotal ? orderData.subtotal.toFixed(2) : '0.00'}\n`;
+     // 🎟️ Desglose del descuento si fue aplicado:
+    if (orderData.couponApplied && orderData.couponApplied !== 'Ninguno' && Number(orderData.discountAmount) > 0) {
+      const descUsd = Number(orderData.discountAmount).toFixed(2);
+      const descBs = orderData.discountAmountBs ? ` (-${orderData.discountAmountBs} Bs.)` : '';
+      caption += `🎟️ *Cupón (${orderData.couponApplied}):* -$${descUsd}${descBs}\n`;
+    }
     caption += `🛵 *Delivery (${orderData.deliveryZone || 'Zona'}):* $${orderData.deliveryCost ? orderData.deliveryCost.toFixed(2) : '0.00'}\n`;
     caption += `💰 *TOTAL A PAGAR:* $${orderData.grandTotal ? orderData.grandTotal.toFixed(2) : '0.00'}`;
     if (orderData.grandTotalBs) {
