@@ -215,6 +215,10 @@ function App() {
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [cashAmountPaid, setCashAmountPaid] = useState('');
   const [cashPhotoFile, setCashPhotoFile] = useState(null);
+  // Estados para el cupón de descuento
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null); // 'CUMBREMDA' o null
+  const [couponError, setCouponError] = useState('');
  
 
   const [bcvRate, setBcvRate] = useState(() => {
@@ -469,13 +473,47 @@ function App() {
     () => deliveryZones.find((z) => z.id === selectedZoneId) || deliveryZones[0],
     [selectedZoneId]
   );
-  const deliveryCost = selectedZone ? selectedZone.price : 0;
-  const grandTotal = subtotal + deliveryCost;
+ const deliveryCost = selectedZone ? selectedZone.price : 0;
+
+// Descuento del 10% si se aplicó el cupón CUMBREMDA
+const discountAmount = useMemo(() => {
+  if (appliedCoupon === 'CUMBREMDA') {
+    return subtotal * 0.10;
+  }
+  return 0;
+}, [appliedCoupon, subtotal]);
+
+const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
   const totalItemsCount = useMemo(
     () => cart.reduce((sum, item) => sum + item.quantity, 0),
     [cart]
   );
 
+  const handleApplyCoupon = () => {
+    const code = couponCode.trim().toUpperCase();
+    setCouponError('');
+    if (!code) return;
+
+    const alreadyUsed = localStorage.getItem('cumbre_coupon_used_CUMBREMDA');
+    if (alreadyUsed) {
+      setCouponError('Este cupón ya fue utilizado en este dispositivo.');
+      return;
+    }
+
+    if (code === 'CUMBREMDA') {
+      setAppliedCoupon('CUMBREMDA');
+      setCouponError('');
+    } else {
+      setAppliedCoupon(null);
+      setCouponError('Cupón inválido o no reconocido.');
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+    setCouponError('');
+  };
   const filteredItems = useMemo(() => {
     return menuItems.filter((item) => {
       const matchesCategory =
@@ -605,6 +643,8 @@ function App() {
       deliveryAddress: selectedZone.id !== 'pickup' ? customerAddress.trim() : null,
       deliveryCost,
       subtotal,
+      discountAmount,
+      couponApplied: appliedCoupon || 'Ninguno',
       grandTotal,
       grandTotalBs: formatBs(grandTotal),
       bcvRate: bcvRate.toFixed(2),
@@ -1527,9 +1567,67 @@ function App() {
                         {formatBs(grandTotal)} Bs.
                       </div>
                     </div>
+                    {/* 👉 AQUÍ VA EL DESCUENTO (dentro del contenedor): */}
+                    {appliedCoupon && (
+                    <div className="d-flex justify-content-between align-items-center text-success small mt-2 pt-2 border-top border-secondary border-opacity-25 fw-semibold">
+                      <span>🎟️ Descuento Cupón ({appliedCoupon}):</span>
+                      <span>-${discountAmount.toFixed(2)} (-{formatBs(discountAmount)} Bs.)</span>
+                    </div>
+                  )}
                   </div>
 
                   {/* 2. SELECTOR DE MÉTODO DE PAGO Y SUS DATOS DINÁMICOS */}
+                  {/* CASILLA CUPÓN DE DESCUENTO */}
+                  <div className="p-3 rounded-3 mb-3" style={{ backgroundColor: '#14110f', border: '1px solid #29211b' }}>
+                    <label className="form-label small fw-bold text-uppercase text-warning mb-2 d-flex align-items-center gap-1">
+                      <span>🎟️</span> ¿Tienes un Cupón de Descuento?
+                    </label>
+
+                    {!appliedCoupon ? (
+                      <div>
+                        <div className="input-group input-group-sm">
+                          <input
+                            type="text"
+                            className="form-control cf-form-control text-uppercase"
+                            placeholder="Ingresa tu cupón (ej. CUMBREMDA)"
+                            value={couponCode}
+                            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                          />
+                          <button
+                            type="button"
+                            className="btn btn-warning fw-bold px-3"
+                            onClick={handleApplyCoupon}
+                          >
+                            Aplicar
+                          </button>
+                        </div>
+                        {couponError && (
+                          <small className="text-danger mt-1 d-block fw-semibold">{couponError}</small>
+                        )}
+                        <small className="text-secondary d-block mt-1" style={{ fontSize: '0.72rem' }}>
+                          * Válido para 1 uso por cliente (10% de descuento).
+                        </small>
+                      </div>
+                    ) : (
+                      <div className="d-flex justify-content-between align-items-center p-2 rounded" style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)', border: '1px solid #22c55e' }}>
+                        <div>
+                          <span className="fw-bold text-success me-2">✅ Cupón CUMBREMDA aplicado</span>
+                          <span className="badge bg-success text-dark fw-bold">-10% OFF</span>
+                          <div className="text-secondary small mt-1">
+                            Ahorro: -${discountAmount.toFixed(2)} (-{formatBs(discountAmount)} Bs.)
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-outline-danger py-0 px-2 rounded-pill"
+                          onClick={handleRemoveCoupon}
+                          title="Quitar cupón"
+                        >
+                          ✕ Quitar
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   <div className="p-3 rounded-3 mb-3" style={{ backgroundColor: '#14110f', border: '1px solid #29211b' }}>
                     <label className="form-label small fw-bold text-uppercase text-warning">
                       💳 Elige tu Método de Pago *
