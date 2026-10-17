@@ -1589,7 +1589,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                           <input
                             type="text"
                             className="form-control cf-form-control text-uppercase"
-                            placeholder="Ingresa tu cupón (ej. CUMBREMDA)"
+                            placeholder="Ingresa tu cupón"
                             value={couponCode}
                             onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                           />
