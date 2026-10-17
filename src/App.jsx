@@ -1589,15 +1589,17 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                     {/* Fila inferior exclusiva para el cupón (sin sobreposiciones) */}
                     {appliedCoupon && (
                       <div
-                        className="d-flex justify-content-between align-items-center text-success small mt-2 pt-2 border-top border-secondary border-opacity-25"
-                        style={{ fontSize: '0.82rem' }}
+                        className="d-flex justify-content-between align-items-center text-success mt-2 pt-2 border-top border-secondary border-opacity-25"
+                        style={{ fontSize: '0.78rem' }}
                       >
-                        <span className="fw-semibold">🎟️ Descuento ({appliedCoupon}):</span>
-                        <span className="fw-bold text-end">
-                          -${discountAmount.toFixed(2)}{' '}
-                          <span className="text-success text-opacity-75" style={{ fontSize: '0.75rem' }}>
-                            (-{formatBs(discountAmount)} Bs.)
-                          </span>
+                        <span className="fw-semibold text-truncate me-2">
+                          🎟️ Desc. ({appliedCoupon}):
+                        </span>
+                        <span
+                          className="fw-bold text-end text-nowrap"
+                          style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                        >
+                          -${discountAmount.toFixed(2)} (-{formatBs(discountAmount)} Bs.)
                         </span>
                       </div>
                     )}
@@ -1636,25 +1638,33 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                           * Válido para 1 uso por cliente (10% de descuento).
                         </small>
                       </div>
-                    ) : (
-                      <div className="d-flex justify-content-between align-items-center p-2 rounded" style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)', border: '1px solid #22c55e' }}>
-                        <div>
-                          <span className="fw-bold text-success me-2">✅ Cupón CUMBREMDA aplicado</span>
-                          <span className="badge bg-success text-dark fw-bold">-10% OFF</span>
-                          <div className="text-secondary small mt-1">
-                            Ahorro: -${discountAmount.toFixed(2)} (-{formatBs(discountAmount)} Bs.)
-                          </div>
+                  ) : (
+                    <div
+                      className="d-flex justify-content-between align-items-center p-2 rounded"
+                      style={{ backgroundColor: 'rgba(34, 197, 94, 0.12)', border: '1px solid #22c55e' }}
+                    >
+                      <div className="me-2 text-truncate">
+                        <div className="d-flex align-items-center gap-1">
+                          <span className="fw-bold text-success small">✅ Cupón aplicado</span>
+                          <span className="badge bg-success text-dark fw-bold" style={{ fontSize: '0.65rem' }}>-10%</span>
                         </div>
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-outline-danger py-0 px-2 rounded-pill"
-                          onClick={handleRemoveCoupon}
-                          title="Quitar cupón"
-                        >
-                          ✕ Quitar
-                        </button>
+                        <div className="text-secondary small mt-0.5 text-nowrap" style={{ fontSize: '0.72rem', whiteSpace: 'nowrap' }}>
+                          Ahorro: -${discountAmount.toFixed(2)} (-{formatBs(discountAmount)} Bs.)
+                        </div>
                       </div>
-                    )}
+
+                      {/* Botón minimalista: solo la X */}
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger p-0 d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                        style={{ width: '26px', height: '26px', fontSize: '0.85rem', lineHeight: 1 }}
+                        onClick={handleRemoveCoupon}
+                        title="Quitar cupón"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
                   </div>
                   <div className="p-3 rounded-3 mb-3" style={{ backgroundColor: '#14110f', border: '1px solid #29211b' }}>
                     <label className="form-label small fw-bold text-uppercase text-warning">
