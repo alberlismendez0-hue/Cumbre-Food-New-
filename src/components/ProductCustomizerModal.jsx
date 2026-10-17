@@ -7,8 +7,7 @@ import {
   BURGER_ADDONS,
   CROSS_SELL_DRINKS,
   DRINK_FLAVORS,
-  COMBO_1Y1_MEAT_OPTIONS,
-  COMBO_1Y1_CHICKEN_OPTIONS,
+  COMBO_1Y1_ALL_OPTIONS,
   PLATO_SIDES,
   PLATO_SALADS,
   ENTRADAS_SAUCE_OPTIONS
@@ -215,8 +214,8 @@ export default function ProductCustomizerModal({
       setChicken2Burger(COMBO_1Y1_CHICKEN_OPTIONS[0]);
       setChicken1Cooking('crispy');
       setChicken2Cooking('crispy');
-      setCombo1y1Meat(COMBO_1Y1_MEAT_OPTIONS[0]);
-      setCombo1y1Chicken(COMBO_1Y1_CHICKEN_OPTIONS[0]);
+      setCombo1y1Meat(COMBO_1Y1_ALL_OPTIONS[0]);
+      setCombo1y1Chicken(COMBO_1Y1_ALL_OPTIONS[1]);
       setCombo1y1ChickenCooking('crispy');
       setPlatoSide(PLATO_SIDES[0]);
       setPlatoSalad(PLATO_SALADS[0]);
@@ -350,8 +349,14 @@ export default function ProductCustomizerModal({
       }
       if (product.id === 'cb_1_y_1') {
         const cCook = CHICKEN_COOKING_TYPES.find((c) => c.id === combo1y1ChickenCooking)?.name;
-        details.push({ label: 'Burger Carne', value: combo1y1Meat });
-        details.push({ label: 'Burger Pollo', value: `${combo1y1Chicken} (${cCook})` });
+        const hasChicken = combo1y1Meat.includes('(Pollo)') || combo1y1Meat.includes('Sanguchito') ||
+                          combo1y1Chicken.includes('(Pollo)') || combo1y1Chicken.includes('Sanguchito');
+
+        details.push({ label: 'Burger 1', value: combo1y1Meat });
+        details.push({ label: 'Burger 2', value: combo1y1Chicken });
+        if (hasChicken && cCook) {
+          details.push({ label: 'Cocción Pollo', value: cCook });
+        }
         details.push({ label: 'Refresco 1L', value: comboDrinkFlavor });
       }
       if (product.id === 'cb_sierra_nevada') details.push({ label: 'Refresco 1.5L', value: comboDrinkFlavor });
@@ -823,23 +828,29 @@ export default function ProductCustomizerModal({
             <div>
               <div className="mb-3">
                 <h4 className="fw-bold text-warning mb-1">🍔 Elige tus Hamburguesas</h4>
-                <p className="text-secondary small">Selecciona 1 burger de carne y 1 burger de pollo</p>
+                <p className="text-secondary small">
+                  Escoge tus 2 burgers favoritas a tu gusto (Carne o Pollo)
+                </p>
               </div>
 
-              {/* 1. Burger de Carne */}
+              {/* 1. Primera Burger */}
               <div className="mb-3">
-                <label className="fw-bold text-light small mb-2 d-block">1. Burger de Carne:</label>
+                <label className="fw-bold text-light small mb-2 d-block">
+                  1. Primera Burger (Carne o Pollo):
+                </label>
                 <div className="row g-2">
-                  {COMBO_1Y1_MEAT_OPTIONS.map((meat) => (
-                    <div key={meat} className="col-12 col-sm-6">
+                  {COMBO_1Y1_ALL_OPTIONS.map((burger) => (
+                    <div key={`b1-${burger}`} className="col-12 col-sm-6">
                       <div
-                        className={`cf-choice-card ${combo1y1Meat === meat ? 'selected' : ''}`}
-                        onClick={() => setCombo1y1Meat(meat)}
+                        className={`cf-choice-card ${combo1y1Meat === burger ? 'selected' : ''}`}
+                        onClick={() => setCombo1y1Meat(burger)}
                         role="button"
                       >
                         <div className="d-flex align-items-center gap-2">
-                          <span className="cf-radio-circle">{combo1y1Meat === meat && <span className="cf-radio-dot" />}</span>
-                          <span className="cf-choice-name">{meat}</span>
+                          <span className="cf-radio-circle">
+                            {combo1y1Meat === burger && <span className="cf-radio-dot" />}
+                          </span>
+                          <span className="cf-choice-name">{burger}</span>
                         </div>
                       </div>
                     </div>
@@ -847,20 +858,24 @@ export default function ProductCustomizerModal({
                 </div>
               </div>
 
-              {/* 2. Burger de Pollo */}
+              {/* 2. Segunda Burger */}
               <div className="mb-3">
-                <label className="fw-bold text-light small mb-2 d-block">2. Burger de Pollo:</label>
+                <label className="fw-bold text-light small mb-2 d-block">
+                  2. Segunda Burger (Carne o Pollo):
+                </label>
                 <div className="row g-2">
-                  {COMBO_1Y1_CHICKEN_OPTIONS.map((chk) => (
-                    <div key={chk} className="col-12 col-sm-6">
+                  {COMBO_1Y1_ALL_OPTIONS.map((burger) => (
+                    <div key={`b2-${burger}`} className="col-12 col-sm-6">
                       <div
-                        className={`cf-choice-card ${combo1y1Chicken === chk ? 'selected' : ''}`}
-                        onClick={() => setCombo1y1Chicken(chk)}
+                        className={`cf-choice-card ${combo1y1Chicken === burger ? 'selected' : ''}`}
+                        onClick={() => setCombo1y1Chicken(burger)}
                         role="button"
                       >
                         <div className="d-flex align-items-center gap-2">
-                          <span className="cf-radio-circle">{combo1y1Chicken === chk && <span className="cf-radio-dot" />}</span>
-                          <span className="cf-choice-name">{chk}</span>
+                          <span className="cf-radio-circle">
+                            {combo1y1Chicken === burger && <span className="cf-radio-dot" />}
+                          </span>
+                          <span className="cf-choice-name">{burger}</span>
                         </div>
                       </div>
                     </div>
@@ -868,26 +883,37 @@ export default function ProductCustomizerModal({
                 </div>
               </div>
 
-              {/* 3. Cocción del Pollo */}
-              <div>
-                <label className="fw-bold text-light small mb-2 d-block">3. Cocción del Pollo:</label>
-                <div className="row g-2">
-                  {CHICKEN_COOKING_TYPES.map((type) => (
-                    <div key={type.id} className="col-6">
-                      <div
-                        className={`cf-choice-card ${combo1y1ChickenCooking === type.id ? 'selected' : ''}`}
-                        onClick={() => setCombo1y1ChickenCooking(type.id)}
-                        role="button"
-                      >
-                        <div className="d-flex align-items-center gap-2">
-                          <span className="cf-radio-circle">{combo1y1ChickenCooking === type.id && <span className="cf-radio-dot" />}</span>
-                          <span className="cf-choice-name">{type.name}</span>
+              {/* 3. Cocción del Pollo (Aparece únicamente si al menos una burger seleccionada es de pollo) */}
+              {(combo1y1Meat?.includes('(Pollo)') ||
+                combo1y1Meat?.includes('Sanguchito') ||
+                combo1y1Chicken?.includes('(Pollo)') ||
+                combo1y1Chicken?.includes('Sanguchito')) && (
+                <div>
+                  <label className="fw-bold text-light small mb-2 d-block">
+                    3. Cocción del Pollo:
+                  </label>
+                  <div className="row g-2">
+                    {CHICKEN_COOKING_TYPES.map((type) => (
+                      <div key={type.id} className="col-6">
+                        <div
+                          className={`cf-choice-card ${combo1y1ChickenCooking === type.id ? 'selected' : ''}`}
+                          onClick={() => setCombo1y1ChickenCooking(type.id)}
+                          role="button"
+                        >
+                          <div className="d-flex align-items-center gap-2">
+                            <span className="cf-radio-circle">
+                              {combo1y1ChickenCooking === type.id && (
+                                <span className="cf-radio-dot" />
+                              )}
+                            </span>
+                            <span className="cf-choice-name">{type.name}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 

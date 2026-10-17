@@ -130,21 +130,19 @@ export const DRINK_FLAVORS = [
 
 ];
 
-export const COMBO_1Y1_MEAT_OPTIONS = [
-  'Cheeseburger Clásica',
-  'Pico León',
-  'Pico Toro',
-  'Pico Humboldt',
-  'Bosque Pino',
-  'Double Cheese & Bacon',
-  'Pico Codazzi'
-];
-
-
-export const COMBO_1Y1_CHICKEN_OPTIONS = [
-  'Pico Bonpland',
-  'Pico Águila',
-  'Mucubají',
+export const COMBO_1Y1_ALL_OPTIONS = [
+  // Opciones de Carne
+  'Cheeseburger Clásica (Carne)',
+  'Pico León (Carne)',
+  'Pico Toro (Carne)',
+  'Pico Humboldt (Carne)',
+  'Bosque Pino (Carne)',
+  'Double Cheese & Bacon (Carne)',
+  'Pico Codazzi (Carne)',
+  // Opciones de Pollo
+  'Pico Bonpland (Pollo)',
+  'Pico Águila (Pollo)',
+  'Mucubají (Pollo)',
   'Sanguchito de Pollo'
 ];
 
