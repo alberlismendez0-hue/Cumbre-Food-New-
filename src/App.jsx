@@ -1482,12 +1482,9 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                         {/* Selector de zona */}
                         <div className="mb-3">
                           <div className="d-flex justify-content-between align-items-center mb-1">
-                            <label className="form-label small fw-bold text-uppercase text-warning m-0">
+                            <label className="form-label small fw-bold text-uppercase text-warning mb-1.5 d-block">
                               📍 Selecciona tu Zona de Mérida *
                             </label>
-                            <span className="text-secondary" style={{ fontSize: '0.72rem' }}>
-                              Tarifas oficiales
-                            </span>
                           </div>
 
                           <Form.Select
