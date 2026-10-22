@@ -1119,7 +1119,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
         <Modal.Header className="cf-checkout-modal-header d-flex align-items-center justify-content-between">
           <div>
             <div className="cf-modal-badge-order mb-1 d-flex align-items-center gap-2">
-              <span>🆔 Pedido: <strong>#{orderSuccessData ? orderSuccessData.orderId : currentOrderId}</strong></span>
+              <span> Pedido: <strong>#{orderSuccessData ? orderSuccessData.orderId : currentOrderId}</strong></span>
               {!orderSuccessData && (
                 <span className="badge bg-dark border border-secondary text-warning" style={{ fontSize: '0.72rem' }}>
                   Paso {checkoutStep} de 2
@@ -1511,7 +1511,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                             }}
                           >
                             <div className="text-warning fw-bold mb-0.5">
-                              🛵 Cobertura {selectedZone.name}:
+                               Cobertura {selectedZone.name}:
                             </div>
                             <div className="text-secondary" style={{ lineHeight: '1.4' }}>
                               {selectedZone.description}
@@ -1522,7 +1522,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                         {/* Dirección exacta */}
                         <div>
                           <label className="form-label small fw-bold text-uppercase text-warning mb-1">
-                            🏠 Dirección Exacta de Entrega *
+                             Dirección Exacta de Entrega *
                           </label>
                           <Form.Control
                             as="textarea"
@@ -2217,7 +2217,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                       {isSubmitting ? (
                         <span>⏳ Procesando comanda a cocina...</span>
                       ) : (
-                        <span>🚀 Confirmar y Enviar Pedido</span>
+                        <span> Confirmar y Enviar Pedido</span>
                       )}
                     </button>
                   </div>
