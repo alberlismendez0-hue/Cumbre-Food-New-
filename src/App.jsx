@@ -1127,7 +1127,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
               )}
             </div>
             <Modal.Title className="cf-checkout-modal-title">
-              <span>{orderSuccessData ? '✅' : checkoutStep === 1 ? '🛍️' : '💳'}</span>
+              <span>{orderSuccessData ? '✅' : checkoutStep === 1 ? '' : '💳'}</span>
               <span>
                 {orderSuccessData 
                   ? 'Comanda Confirmada' 
@@ -1151,7 +1151,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
           ></button>
         </Modal.Header>
 
-        <Modal.Body className="cf-checkout-modal-body p-3 p-md-4">
+        <Modal.Body className="cf-checkout-modal-body p-3 p-md-4 w-100" style={{ overflowX: 'hidden' }}>
           {orderSuccessData ? (
             /* PANTALLA DE ÉXITO */
             <div className="text-center py-4 px-2 d-flex flex-column align-items-center">
@@ -1408,7 +1408,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                     </label>
 
                     {/* TARJETAS SELECTORAS (DELIVERY VS RETIRO EN LOCAL) */}
-                    <div className="row g-2 mb-3">
+                    <div className="row g-2 mb-3 mx-0">
                       {/* Tarjeta Delivery */}
                       <div className="col-6">
                         <div
@@ -1460,7 +1460,12 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                             transition: 'all 0.2s ease-in-out'
                           }}
                         >
-                          <span style={{ fontSize: '1.75rem' }} className="mb-1">🏪</span>
+                          <img
+                            src="/icono-tienda.png"
+                            alt="Retiro en local"
+                            className="mb-1"
+                            style={{ width: '32px', height: '32px', objectFit: 'contain' }}
+                          />
                           <span className={`fw-black ${deliveryMode === 'pickup' ? 'text-success' : 'text-white'}`} style={{ fontSize: '0.98rem' }}>
                             Retiro en local
                           </span>
