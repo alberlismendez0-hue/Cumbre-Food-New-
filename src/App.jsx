@@ -348,7 +348,11 @@ function App() {
   // Formulario Checkout
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
-  const [selectedZoneId, setSelectedZoneId] = useState('pickup');
+  const [deliveryMode, setDeliveryMode] = useState('delivery'); // 'delivery' o 'pickup'
+  const [selectedZoneId, setSelectedZoneId] = useState(() => {
+    const firstDelivery = deliveryZones.find((z) => z.id !== 'pickup');
+    return firstDelivery ? firstDelivery.id : 'pickup';
+  });
   const [customerAddress, setCustomerAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
   const [notes, setNotes] = useState('');
@@ -639,9 +643,9 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
       customerName: customerName.trim(),
       customerIdCard: customerIdCard.trim() || 'N/A',
       customerPhone: customerPhone.trim(),
-      deliveryZone: selectedZone.name,
-      deliveryAddress: selectedZone.id !== 'pickup' ? customerAddress.trim() : null,
-      deliveryCost,
+      deliveryZone: deliveryMode === 'pickup' ? 'Pick Up: Feria C.C. Plaza Mayor' : selectedZone.name,
+      deliveryAddress: deliveryMode === 'pickup' ? null : customerAddress.trim(),
+      deliveryCost: deliveryMode === 'pickup' ? 0 : deliveryCost,
       subtotal,
       discountAmount,
       couponApplied: appliedCoupon || 'Ninguno',
@@ -1397,114 +1401,167 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                     </div>
                   </div>
 
-                  {/* 3. MODALIDAD DE ENTREGA Y NOTAS */}
-                  <div className="row g-3 mb-3">
-                    <div className="col-12">
-                      <div className="d-flex justify-content-between align-items-center mb-1">
-                        <label className="form-label small fw-bold text-uppercase text-warning m-0">
-                          🛵 Modalidad del Pedido *
-                        </label>
-                        <span className="text-secondary" style={{ fontSize: '0.72rem' }}>
-                          Tarifas oficiales Mérida
-                        </span>
-                      </div>
+                 {/* 3. MODALIDAD DE ENTREGA Y NOTAS */}
+                  <div className="mb-3">
+                    <label className="form-label small fw-bold text-uppercase text-warning mb-2 d-flex align-items-center gap-1">
+                      <span>🛵</span> MODALIDAD DE ENTREGA *
+                    </label>
 
-                      {/* Buscador inteligente de sector */}
-                      <div className="mb-2">
-                        <input
-                          type="text"
-                          className="form-control form-control-sm cf-form-control"
-                          placeholder="🔎 Escribe tu sector (ej: El Campito, Belén, Pedregosa...)"
-                          onChange={(e) => {
-                            const query = e.target.value.toLowerCase().trim();
-                            if (query.length >= 3) {
-                              const matched = deliveryZones.find(
-                                (z) => z.id !== 'pickup' && z.description.toLowerCase().includes(query)
-                              );
-                              if (matched) setSelectedZoneId(matched.id);
+                    {/* TARJETAS SELECTORAS (DELIVERY VS RETIRO EN LOCAL) */}
+                    <div className="row g-2 mb-3">
+                      {/* Tarjeta Delivery */}
+                      <div className="col-6">
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
+                            setDeliveryMode('delivery');
+                            if (selectedZoneId === 'pickup') {
+                              const firstDelivery = deliveryZones.find((z) => z.id !== 'pickup');
+                              if (firstDelivery) setSelectedZoneId(firstDelivery.id);
                             }
                           }}
-                        />
-                      </div>
-
-                      {/* Selector desplegable con sectores resumidos */}
-                      <Form.Select
-                        size="sm"
-                        className="cf-form-select"
-                        value={selectedZoneId}
-                        onChange={(e) => setSelectedZoneId(e.target.value)}
-                      >
-                        {deliveryZones.map((z) => {
-                          if (z.id === 'pickup') {
-                            return (
-                              <option key={z.id} value={z.id}>
-                                📍 Pick Up: C.C. Plaza Mayor (Gratis)
-                              </option>
-                            );
-                          }
-
-                          const previewSectors = z.description.length > 50 
-                            ? z.description.slice(0, 50) + '...' 
-                            : z.description;
-
-                          return (
-                            <option key={z.id} value={z.id}>
-                              {z.name} (+${z.price.toFixed(2)}) — {previewSectors}
-                            </option>
-                          );
-                        })}
-                      </Form.Select>
-
-                      {/* Tarjeta de cobertura detallada */}
-                      <div 
-                        className="p-2 px-3 rounded mt-2" 
-                        style={{ 
-                          backgroundColor: '#181411', 
-                          border: '1px solid rgba(217, 119, 6, 0.35)',
-                          fontSize: '0.8rem' 
-                        }}
-                      >
-                        <div className="d-flex justify-content-between align-items-center mb-1">
-                          <span className="text-warning fw-bold">
-                            {selectedZone.id === 'pickup' ? '📍 Retiro en Tienda' : `🛵 Cobertura de ${selectedZone.name}`}:
+                          className="p-3 text-center rounded-4 h-100 d-flex flex-column align-items-center justify-content-center"
+                          style={{
+                            cursor: 'pointer',
+                            backgroundColor: deliveryMode === 'delivery' ? '#1c1611' : '#120f0d',
+                            border: deliveryMode === 'delivery' ? '2px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.1)',
+                            boxShadow: deliveryMode === 'delivery' ? '0 0 14px rgba(245, 158, 11, 0.25)' : 'none',
+                            transition: 'all 0.2s ease-in-out'
+                          }}
+                        >
+                          <span style={{ fontSize: '1.75rem' }} className="mb-1">🛵</span>
+                          <span className={`fw-black ${deliveryMode === 'delivery' ? 'text-warning' : 'text-white'}`} style={{ fontSize: '0.98rem' }}>
+                            Delivery
                           </span>
-                          <span className="badge bg-dark border border-secondary text-light">
-                            {selectedZone.price === 0 ? 'Gratis' : `+$${selectedZone.price.toFixed(2)}`}
+                          <span className="small text-secondary mt-1 fw-semibold" style={{ fontSize: '0.78rem' }}>
+                            {deliveryMode === 'delivery' && selectedZone && selectedZone.id !== 'pickup'
+                              ? `+$${selectedZone.price.toFixed(2)}`
+                              : 'Tarifa por zona'}
                           </span>
                         </div>
-                        <div className="text-secondary" style={{ lineHeight: '1.45' }}>
-                          {selectedZone.description}
+                      </div>
+
+                      {/* Tarjeta Retiro en Local */}
+                      <div className="col-6">
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
+                            setDeliveryMode('pickup');
+                            setSelectedZoneId('pickup');
+                          }}
+                          className="p-3 text-center rounded-4 h-100 d-flex flex-column align-items-center justify-content-center"
+                          style={{
+                            cursor: 'pointer',
+                            backgroundColor: deliveryMode === 'pickup' ? '#1c1611' : '#120f0d',
+                            border: deliveryMode === 'pickup' ? '2px solid #22c55e' : '1px solid rgba(255, 255, 255, 0.1)',
+                            boxShadow: deliveryMode === 'pickup' ? '0 0 14px rgba(34, 197, 94, 0.25)' : 'none',
+                            transition: 'all 0.2s ease-in-out'
+                          }}
+                        >
+                          <span style={{ fontSize: '1.75rem' }} className="mb-1">🏪</span>
+                          <span className={`fw-black ${deliveryMode === 'pickup' ? 'text-success' : 'text-white'}`} style={{ fontSize: '0.98rem' }}>
+                            Retiro en local
+                          </span>
+                          <span className="small text-success mt-1 fw-bold" style={{ fontSize: '0.78rem' }}>
+                            Gratis ($0)
+                          </span>
                         </div>
                       </div>
                     </div>
 
-                    {selectedZoneId !== 'pickup' && (
-                      <div className="col-12">
-                        <label className="form-label small fw-bold text-uppercase text-warning">
-                          📍 Dirección Exacta de Entrega *
-                        </label>
-                        <Form.Control
-                          as="textarea"
-                          rows={2}
-                          size="sm"
-                          className="cf-form-control"
-                          placeholder="Sector, calle/avenida, edificio, casa, punto de referencia..."
-                          value={customerAddress}
-                          onChange={(e) => setCustomerAddress(e.target.value)}
-                          required
-                        />
+                    {/* SECCIÓN DESPLEGABLE DINÁMICA */}
+                    {deliveryMode === 'delivery' ? (
+                      <div className="p-3 rounded-3 mb-3" style={{ backgroundColor: '#14110f', border: '1px solid #29211b' }}>
+                        {/* Selector de zona */}
+                        <div className="mb-3">
+                          <div className="d-flex justify-content-between align-items-center mb-1">
+                            <label className="form-label small fw-bold text-uppercase text-warning m-0">
+                              📍 Selecciona tu Zona de Mérida *
+                            </label>
+                            <span className="text-secondary" style={{ fontSize: '0.72rem' }}>
+                              Tarifas oficiales
+                            </span>
+                          </div>
+
+                          <Form.Select
+                            size="sm"
+                            className="cf-form-select"
+                            value={selectedZoneId}
+                            onChange={(e) => setSelectedZoneId(e.target.value)}
+                            required
+                          >
+                            {deliveryZones
+                              .filter((z) => z.id !== 'pickup')
+                              .map((z) => (
+                                <option key={z.id} value={z.id}>
+                                  {z.name} (+${z.price.toFixed(2)}) — {z.description.length > 40 ? z.description.slice(0, 40) + '...' : z.description}
+                                </option>
+                              ))}
+                          </Form.Select>
+
+                          {/* Cobertura de la zona */}
+                          <div
+                            className="p-2 px-3 rounded mt-2"
+                            style={{
+                              backgroundColor: '#181411',
+                              border: '1px solid rgba(217, 119, 6, 0.35)',
+                              fontSize: '0.78rem'
+                            }}
+                          >
+                            <div className="text-warning fw-bold mb-0.5">
+                              🛵 Cobertura {selectedZone.name}:
+                            </div>
+                            <div className="text-secondary" style={{ lineHeight: '1.4' }}>
+                              {selectedZone.description}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Dirección exacta */}
+                        <div>
+                          <label className="form-label small fw-bold text-uppercase text-warning mb-1">
+                            🏠 Dirección Exacta de Entrega *
+                          </label>
+                          <Form.Control
+                            as="textarea"
+                            rows={2}
+                            size="sm"
+                            className="cf-form-control"
+                            placeholder="Sector, calle/avenida, edificio, casa, punto de referencia..."
+                            value={customerAddress}
+                            onChange={(e) => setCustomerAddress(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      /* Mensaje para Retiro en local */
+                      <div
+                        className="p-3 rounded-3 mb-3 d-flex align-items-center gap-3"
+                        style={{ backgroundColor: '#14110f', border: '1px solid rgba(34, 197, 94, 0.35)' }}
+                      >
+                        <span style={{ fontSize: '1.4rem' }}>📍</span>
+                        <div style={{ fontSize: '0.82rem', lineHeight: '1.4' }}>
+                          <span className="text-success fw-bold d-block">Punto de Retiro: C.C. Plaza Mayor</span>
+                          <span className="text-secondary">
+                            Retiras tu pedido directamente en nuestro local en la feria. Te notificaremos al estar listo.
+                          </span>
+                        </div>
                       </div>
                     )}
 
-                    <div className="col-12">
-                      <label className="form-label small fw-bold text-uppercase text-warning">
+                    {/* Notas para cocina */}
+                    <div>
+                      <label className="form-label small fw-bold text-uppercase text-warning mb-1">
                         📝 Notas Especiales para la Cocina (Opcional)
                       </label>
                       <Form.Control
                         type="text"
                         size="sm"
                         className="cf-form-control"
-                        placeholder="Ej. Salsas aparte, entregar en la recepción..."
+                        placeholder="Ej. Salsas aparte, sin cebolla, entregar en portería..."
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                       />
