@@ -105,7 +105,7 @@ const PAYMENT_INFO = {
     cedula: 'V-10132565'
   },
   zelle: {
-    email: 'anieesjb@hotmail.com',
+    email: 'aniesjb@hotmail.com',
     titular: 'anies jardines',
     min: 15
   },
