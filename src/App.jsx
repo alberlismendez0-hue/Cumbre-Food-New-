@@ -404,30 +404,48 @@ function App() {
         ? Math.floor(customizedItem.quantity)
         : 1;
 
-    const safeCartItemId =
-      customizedItem.cartItemId ||
-      `${customizedItem.id || 'item'}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    // Acepta customizationDetails tanto como arreglo directo o si viene en 'details'
+    const details = Array.isArray(customizedItem.customizationDetails)
+      ? customizedItem.customizationDetails
+      : Array.isArray(customizedItem.details)
+      ? customizedItem.details
+      : [];
 
     const sanitizedItem = {
       ...customizedItem,
       id: customizedItem.id || 'item',
-      cartItemId: safeCartItemId,
       name: customizedItem.name || 'Producto',
       price: validPrice,
       quantity: validQuantity,
       image: customizedItem.image || getFallbackImage(customizedItem.category),
       category: customizedItem.category || 'otros',
-      customizationDetails: Array.isArray(customizedItem.customizationDetails)
-        ? customizedItem.customizationDetails
-        : []
+      customizationDetails: details,
+      customizationSummary:
+        customizedItem.customizationSummary ||
+        details.map((d) => `${d.label}: ${d.value}`).join(' | '),
+      notes: (customizedItem.notes || '').trim()
     };
 
     setCart((prevCart) => {
-      const existingIndex = prevCart.findIndex(
-        (i) => i.cartItemId === sanitizedItem.cartItemId
-      );
+      // Convertimos los detalles e ingredientes a texto para comparar
+      const incomingDetailsStr = JSON.stringify(sanitizedItem.customizationDetails);
+      const incomingNotes = sanitizedItem.notes.toLowerCase();
+
+      // Buscamos si ya existe exactamente el mismo producto con la MISMA personalización y notas
+      const existingIndex = prevCart.findIndex((item) => {
+        const currentDetailsStr = JSON.stringify(item.customizationDetails || []);
+        const currentNotes = (item.notes || '').trim().toLowerCase();
+
+        return (
+          item.id === sanitizedItem.id &&
+          item.price === sanitizedItem.price &&
+          currentDetailsStr === incomingDetailsStr &&
+          currentNotes === incomingNotes
+        );
+      });
 
       if (existingIndex > -1) {
+        // Son exactamente idénticas: suma la cantidad
         const updated = [...prevCart];
         updated[existingIndex] = {
           ...updated[existingIndex],
@@ -435,7 +453,10 @@ function App() {
         };
         return updated;
       }
-      return [...prevCart, sanitizedItem];
+
+      // Si tienen acompañantes, precios o personalizaciones distintas: se agrega como tarjeta nueva e independiente
+      const uniqueCartId = `${sanitizedItem.id}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      return [...prevCart, { ...sanitizedItem, cartItemId: uniqueCartId }];
     });
   };
 
