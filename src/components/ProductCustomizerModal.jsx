@@ -360,50 +360,62 @@ export default function ProductCustomizerModal({
     return isBurger ? (BURGER_SIDES.find((s) => s.id === burgerSide) || BURGER_SIDES[0]) : null;
   }, [isBurger, burgerSide]);
 
- // Extra de competencia: Sola = $0 (total $6), Combo = +$4.00 (total $10)
-  const competenciaExtra = (isCompetenciaBurger && competenciaMode === 'combo') ? 4.0 : 0;
-
-  // Extra de carnes para Pico Espejo
+ // Extra de carnes para Pico Espejo
   const espejoExtra = isPicoEspejo ? (espejoMeatCount === 2 ? 1.5 : espejoMeatCount === 3 ? 3.0 : 0) : 0;
 
-  // Papas gratis en Pico Espejo o en el Combo de Competencia ($10)
+  // Papas gratis en Pico Espejo o en el Combo de Competencia
   const isFreeFrenchFries = isPicoEspejo || (isCompetenciaBurger && competenciaMode === 'combo');
   const sidePrice = isFreeFrenchFries ? 0 : (selectedBurgerSideObj?.price || 0);
 
-  const unitPrice = (product?.price || 0) + competenciaExtra + espejoExtra + sidePrice + addonsTotal + extraProteinsTotal + drinksTotal;
+  // Cálculo general para el resto del menú
+  let unitPrice = (product?.price || 0) + espejoExtra + sidePrice + addonsTotal + extraProteinsTotal + drinksTotal;
+
+  // Lógica fija para la burger de competencia
+  if (isCompetenciaBurger) {
+    if (competenciaMode === 'combo') {
+      unitPrice = 10.00; // Clavado en $10.00 exactos
+    } else {
+      unitPrice = product?.price || 6.00; // Sola sin adicionales ni papas
+    }
+  }
+
   const totalPrice = unitPrice * quantity;
 
   const buildCustomizationDetails = () => {
-    const details = [];
+  const details = [];
 
-    if (isBurger) {
-      if (isCompetenciaBurger) {
-        details.push({
-          label: 'Modalidad',
-          value: competenciaMode === 'combo' ? 'Combo Competencia ($10.00)' : 'Solo Burger ($6.00)'
-        });
-        if (competenciaMode === 'combo') {
-          details.push({ label: 'Acompañante', value: 'Papas Francesas (Incluidas en Combo)' });
-          details.push({ label: 'Refresco Combo', value: competenciaDrinkFlavor });
-        } else {
-          details.push({ label: 'Acompañante', value: 'Sin papas (Solo Burger)' });
-        }
-      } else if (isPicoEspejo) {
-        const meatLabels = { 1: '1 Carne (Sencilla)', 2: '2 Carnes (Doble)', 3: '3 Carnes (Triple)' };
-        details.push({ label: 'Cantidad de Carnes', value: meatLabels[espejoMeatCount] || '1 Carne' });
-        details.push({ label: 'Acompañante', value: 'Papas Francesas (Gratis)' });
+  if (isBurger) {
+    if (isCompetenciaBurger) {
+      details.push({
+        label: 'Modalidad',
+        value: competenciaMode === 'combo' ? 'Combo Competencia ($10.00)' : 'Solo Burger ($6.00)'
+      });
+      // Forzar siempre Pollo a la Plancha para competencia
+      details.push({ label: 'Preparación', value: 'Pollo a la Plancha' });
+
+      if (competenciaMode === 'combo') {
+        details.push({ label: 'Acompañante', value: 'Papas Chips (Incluidas en Combo)' });
+        details.push({ label: 'Refresco Combo', value: competenciaDrinkFlavor });
       } else {
-        const sideObj = BURGER_SIDES.find((s) => s.id === burgerSide);
-        if (sideObj) {
-          const sideLabel = sideObj.price > 0 ? `${sideObj.name} (+$${sideObj.price.toFixed(2)})` : sideObj.name;
-          details.push({ label: 'Acompañante', value: sideLabel });
-        }
+        details.push({ label: 'Acompañante', value: 'Sin papas (Solo Burger)' });
       }
-      if (isChickenBurger) {
-        const cookObj = CHICKEN_COOKING_TYPES.find((c) => c.id === chickenCooking);
-        if (cookObj) details.push({ label: 'Preparación', value: cookObj.name });
+    } else if (isPicoEspejo) {
+      const meatLabels = { 1: '1 Carne (Sencilla)', 2: '2 Carnes (Doble)', 3: '3 Carnes (Triple)' };
+      details.push({ label: 'Cantidad de Carnes', value: meatLabels[espejoMeatCount] || '1 Carne' });
+      details.push({ label: 'Acompañante', value: 'Papas Francesas (Gratis)' });
+    } else {
+      const sideObj = BURGER_SIDES.find((s) => s.id === burgerSide);
+      if (sideObj) {
+        const sideLabel = sideObj.price > 0 ? `${sideObj.name} (+$${sideObj.price.toFixed(2)})` : sideObj.name;
+        details.push({ label: 'Acompañante', value: sideLabel });
       }
     }
+
+    if (isChickenBurger && !isCompetenciaBurger) {
+      const cookObj = CHICKEN_COOKING_TYPES.find((c) => c.id === chickenCooking);
+      if (cookObj) details.push({ label: 'Preparación', value: cookObj.name });
+    }
+  }
     if (isCombo) {
       if (product.id === 'cb_lomito') details.push({ label: 'Refresco 1L', value: comboDrinkFlavor });
       if (product.id === 'cb_chicken') {
