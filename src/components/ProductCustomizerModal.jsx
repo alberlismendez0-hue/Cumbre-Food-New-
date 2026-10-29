@@ -590,18 +590,30 @@ export default function ProductCustomizerModal({
               return (
                 <div>
                   <div className="mb-3">
-                    <h4 className="fw-bold text-warning mb-1">🍟 Acompañante Incluido</h4>
+                    <h4 className="fw-bold text-warning mb-1">🍟 Elige tu Acompañante</h4>
                     <p className="text-secondary small">Este producto ya incluye su acompañante sin costo extra</p>
                   </div>
-                  <div className="p-3 rounded-4 d-flex align-items-center justify-content-between" style={{ backgroundColor: '#1c1611', border: '2px solid #22c55e' }}>
-                    <div className="d-flex align-items-center gap-3">
-                      <span style={{ fontSize: '1.6rem' }}>🍟</span>
-                      <div>
-                        <div className="fw-bold text-white">Papas Francesas</div>
-                        <div className="small text-secondary">Doradas, crujientes y al punto de sal</div>
+                  <div className="row g-2">
+                    <div className="col-12">
+                      <div className="cf-choice-card selected" style={{ cursor: 'default' }}>
+                        <div className="d-flex align-items-center gap-3">
+                          <span className="cf-radio-circle">
+                            <span className="cf-radio-dot" />
+                          </span>
+
+                          <div className="d-flex align-items-center justify-content-center" style={{ width: '24px', height: '24px', flexShrink: 0 }}>
+                            <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>🍟</span>
+                          </div>
+
+                          <div>
+                            <div className="cf-choice-name">Papas Francesas</div>
+                            <div className="cf-choice-desc">Doradas y al punto de sal</div>
+                          </div>
+                        </div>
+
+                        <span className="cf-choice-free">Gratis</span>
                       </div>
                     </div>
-                    <span className="badge bg-success text-dark fw-bold px-3 py-2">Gratis ($0)</span>
                   </div>
                 </div>
               );

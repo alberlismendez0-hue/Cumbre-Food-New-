@@ -374,7 +374,7 @@ export const menuItems = [
     category: 'hamburguesas_carne',
     price: 8.0,
     description: 'Pan de papa 80g, 100g carne de res, facilitas Kraft, salsa M1 y mermelada de tocineta. Acompañada de papas francesas gratis.',
-    image: '/pico_espejo.webp',
+    image: '/picoespejo.png',
     isPicoEspejo: true
   },
 
