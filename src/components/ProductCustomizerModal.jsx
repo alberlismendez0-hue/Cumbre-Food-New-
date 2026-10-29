@@ -168,20 +168,22 @@ export default function ProductCustomizerModal({
     if (baseProteinConfig) list.push('mifafi_protein');
     if (extraProteinsConfig) list.push('extra_proteins');
 
-    if (isBurger) {
+   if (isBurger) {
       if (isCompetenciaBurger) {
         list.push('competencia_mode');
-      }
-      if (isPicoEspejo) {
-        list.push('espejo_meats');
-      }
-      // Si es competencia sola ($6.00), no pide papas; si es en combo ($10.00) o cualquier otra burger, sí va
-      if (!isCompetenciaBurger || competenciaMode === 'combo') {
+        // Si es competencia y eligió Combo ($10), agrega papas y su refresco incluido
+        if (competenciaMode === 'combo') {
+          list.push('burger_side');
+          list.push('competencia_drink');
+        }
+        // Para competencia NO se agrega 'chicken_cooking' porque siempre es a la plancha fija
+      } else {
+        // Flujo habitual para el resto de hamburguesas
+        if (isPicoEspejo) {
+          list.push('espejo_meats');
+        }
         list.push('burger_side');
-      }
-      if (isChickenBurger) list.push('chicken_cooking');
-      if (isCompetenciaBurger && competenciaMode === 'combo') {
-        list.push('competencia_drink');
+        if (isChickenBurger) list.push('chicken_cooking');
       }
     }
 
@@ -206,11 +208,21 @@ export default function ProductCustomizerModal({
 
     if (isBebida) list.push('direct_drink');
 
-    if (isBurger || isPlato || isEntrada) {
+    // Si es la hamburguesa de competencia sola ($6), NO mostramos adicionales ni bebidas extra
+    const isCompetenciaSola = isCompetenciaBurger && competenciaMode === 'sola';
+
+    if ((isBurger || isPlato || isEntrada) && !isCompetenciaSola) {
       list.push('addons');
     }
 
-    if (!isBebida && product.id !== 'cb_lomito' && product.id !== 'cb_chicken' && product.id !== 'cb_1_y_1' && product.id !== 'cb_sierra_nevada') {
+    if (
+      !isBebida &&
+      !isCompetenciaSola &&
+      product.id !== 'cb_lomito' &&
+      product.id !== 'cb_chicken' &&
+      product.id !== 'cb_1_y_1' &&
+      product.id !== 'cb_sierra_nevada'
+    ) {
       list.push('drinks');
     }
 
@@ -225,6 +237,9 @@ export default function ProductCustomizerModal({
       setEspejoMeatCount(1);
       setCompetenciaMode('sola');
       setCompetenciaDrinkFlavor(DRINK_FLAVORS[0]);
+      if (isCompetenciaBurger) {
+        setChickenCooking('plancha');
+      }
       if (isPicoEspejo) {
         setBurgerSide('francesas');
       } else {
