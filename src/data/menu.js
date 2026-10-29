@@ -380,6 +380,17 @@ export const menuItems = [
 
   // --- HAMBURGUESAS CON POLLO ---
   {
+    id: 'h_bonpland_competencia',
+    name: 'Pico Bonpland (Edición Competencia) 🏆',
+    category: 'hamburguesas_pollo',
+    price: 6.99,
+    basePrice: 6.99,
+    description: 'Versión oficial de competencia: Pan de papa 80g, 100g de pechuga (crispy o plancha), champiñones salteados con tocineta en crema de leche, stick fries y queso de año.',
+    image: '/competencia.png',
+    isCompetenciaBurger: true,
+    badge: '🏆 EDICIÓN COMPETENCIA'
+  },
+  {
     id: 'h_bonpland',
     name: 'Pico Bonpland 4.823 m.s.n.m.',
     category: 'hamburguesas_pollo',

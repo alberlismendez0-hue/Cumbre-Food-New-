@@ -47,6 +47,7 @@ export default function ProductCustomizerModal({
     product?.category === 'hamburguesas_chuleta';
   const isChickenBurger = product?.category === 'hamburguesas_pollo';
   const isPicoEspejo = product?.id === 'h_pico_espejo' || product?.isPicoEspejo;
+  const isCompetenciaBurger = product?.id === 'h_bonpland_competencia' || product?.isCompetenciaBurger;
   const isPlato = product?.category === 'platos';
   const isPlatoPollo =
     isPlato && (product?.id === 'pl_pollo' || product?.id === 'pl_pollo_crema');
@@ -114,6 +115,8 @@ export default function ProductCustomizerModal({
   const [quantity, setQuantity] = useState(1);
   const [burgerSide, setBurgerSide] = useState('chips');
   const [espejoMeatCount, setEspejoMeatCount] = useState(1); // 1, 2 o 3
+  const [competenciaMode, setCompetenciaMode] = useState('sola'); // 'sola' ($6,99) o 'combo' ($10)
+  const [competenciaDrinkFlavor, setCompetenciaDrinkFlavor] = useState(DRINK_FLAVORS[0]);
   const [chickenCooking, setChickenCooking] = useState('crispy');
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [selectedDrinksList, setSelectedDrinksList] = useState([]);
@@ -166,11 +169,20 @@ export default function ProductCustomizerModal({
     if (extraProteinsConfig) list.push('extra_proteins');
 
     if (isBurger) {
+      if (isCompetenciaBurger) {
+        list.push('competencia_mode');
+      }
       if (isPicoEspejo) {
         list.push('espejo_meats');
       }
-      list.push('burger_side');
+      // Si es competencia sola ($6.00), no pide papas; si es en combo ($10.00) o cualquier otra burger, sí va
+      if (!isCompetenciaBurger || competenciaMode === 'combo') {
+        list.push('burger_side');
+      }
       if (isChickenBurger) list.push('chicken_cooking');
+      if (isCompetenciaBurger && competenciaMode === 'combo') {
+        list.push('competencia_drink');
+      }
     }
 
     if (isCombo) {
@@ -211,6 +223,8 @@ export default function ProductCustomizerModal({
       setCurrentStepIndex(0);
       setQuantity(1);
       setEspejoMeatCount(1);
+      setCompetenciaMode('sola');
+      setCompetenciaDrinkFlavor(DRINK_FLAVORS[0]);
       if (isPicoEspejo) {
         setBurgerSide('francesas');
       } else {
@@ -331,20 +345,35 @@ export default function ProductCustomizerModal({
     return isBurger ? (BURGER_SIDES.find((s) => s.id === burgerSide) || BURGER_SIDES[0]) : null;
   }, [isBurger, burgerSide]);
 
-  // Extra de carne para Pico Espejo: 1 carne = $0, 2 carnes = +$1.50 ($9.50), 3 carnes = +$3.00 ($11.00)
+ // Extra de competencia: Sola = $0 (total $6), Combo = +$4.00 (total $10)
+  const competenciaExtra = (isCompetenciaBurger && competenciaMode === 'combo') ? 4.0 : 0;
+
+  // Extra de carnes para Pico Espejo
   const espejoExtra = isPicoEspejo ? (espejoMeatCount === 2 ? 1.5 : espejoMeatCount === 3 ? 3.0 : 0) : 0;
 
-  // Para Pico Espejo las papas francesas son gratis (costo 0)
-  const sidePrice = isPicoEspejo ? 0 : (selectedBurgerSideObj?.price || 0);
+  // Papas gratis en Pico Espejo o en el Combo de Competencia ($10)
+  const isFreeFrenchFries = isPicoEspejo || (isCompetenciaBurger && competenciaMode === 'combo');
+  const sidePrice = isFreeFrenchFries ? 0 : (selectedBurgerSideObj?.price || 0);
 
-  const unitPrice = (product?.price || 0) + espejoExtra + sidePrice + addonsTotal + extraProteinsTotal + drinksTotal;
+  const unitPrice = (product?.price || 0) + competenciaExtra + espejoExtra + sidePrice + addonsTotal + extraProteinsTotal + drinksTotal;
   const totalPrice = unitPrice * quantity;
 
   const buildCustomizationDetails = () => {
     const details = [];
 
     if (isBurger) {
-      if (isPicoEspejo) {
+      if (isCompetenciaBurger) {
+        details.push({
+          label: 'Modalidad',
+          value: competenciaMode === 'combo' ? 'Combo Competencia ($10.00)' : 'Solo Burger ($6.00)'
+        });
+        if (competenciaMode === 'combo') {
+          details.push({ label: 'Acompañante', value: 'Papas Francesas (Incluidas en Combo)' });
+          details.push({ label: 'Refresco Combo', value: competenciaDrinkFlavor });
+        } else {
+          details.push({ label: 'Acompañante', value: 'Sin papas (Solo Burger)' });
+        }
+      } else if (isPicoEspejo) {
         const meatLabels = { 1: '1 Carne (Sencilla)', 2: '2 Carnes (Doble)', 3: '3 Carnes (Triple)' };
         details.push({ label: 'Cantidad de Carnes', value: meatLabels[espejoMeatCount] || '1 Carne' });
         details.push({ label: 'Acompañante', value: 'Papas Francesas (Gratis)' });
@@ -360,7 +389,6 @@ export default function ProductCustomizerModal({
         if (cookObj) details.push({ label: 'Preparación', value: cookObj.name });
       }
     }
-
     if (isCombo) {
       if (product.id === 'cb_lomito') details.push({ label: 'Refresco 1L', value: comboDrinkFlavor });
       if (product.id === 'cb_chicken') {
@@ -542,6 +570,83 @@ export default function ProductCustomizerModal({
           )}
 
          {/* PASO: ACOMPAÑANTE HAMBURGUESA */}
+         {/* PASO: MODALIDAD COMPETENCIA */}
+          {currentStep === 'competencia_mode' && (
+            <div>
+              <div className="mb-3">
+                <span className="badge bg-warning text-dark fw-bold px-3 py-1 mb-2">🏆 EDICIÓN COMPETENCIA</span>
+                <h4 className="fw-bold text-warning mb-1">Elige tu Presentación</h4>
+                <p className="text-secondary small">Selecciona cómo deseas disfrutar tu Pico Bonpland participante</p>
+              </div>
+              <div className="row g-3">
+                <div className="col-12 col-sm-6">
+                  <div
+                    className={`cf-choice-card p-3 ${competenciaMode === 'sola' ? 'selected' : ''}`}
+                    onClick={() => {
+                      setCompetenciaMode('sola');
+                      setTimeout(nextStep, 200);
+                    }}
+                    role="button"
+                  >
+                    <div className="d-flex align-items-center gap-3">
+                      <span className="cf-radio-circle">{competenciaMode === 'sola' && <span className="cf-radio-dot" />}</span>
+                      <div>
+                        <div className="cf-choice-name fs-6">🍔 Solo la Burger</div>
+                        <div className="cf-choice-desc">Hamburguesa sola (sin papas ni bebida)</div>
+                      </div>
+                    </div>
+                    <span className="fw-bold fs-6 text-warning">$6.00</span>
+                  </div>
+                </div>
+
+                <div className="col-12 col-sm-6">
+                  <div
+                    className={`cf-choice-card p-3 ${competenciaMode === 'combo' ? 'selected' : ''}`}
+                    onClick={() => {
+                      setCompetenciaMode('combo');
+                      setBurgerSide('francesas');
+                      setTimeout(nextStep, 200);
+                    }}
+                    role="button"
+                  >
+                    <div className="d-flex align-items-center gap-3">
+                      <span className="cf-radio-circle">{competenciaMode === 'combo' && <span className="cf-radio-dot" />}</span>
+                      <div>
+                        <div className="cf-choice-name fs-6">🥤🍟 En Combo</div>
+                        <div className="cf-choice-desc">Burger + Papas Francesas + Refresco</div>
+                      </div>
+                    </div>
+                    <span className="fw-bold fs-6 text-warning">$10.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* PASO: SABOR DE REFRESCO COMBO COMPETENCIA */}
+          {currentStep === 'competencia_drink' && (
+            <div>
+              <div className="mb-3">
+                <h4 className="fw-bold text-warning mb-1">🥤 Sabor de tu Refresco</h4>
+                <p className="text-secondary small">Incluido en el combo de competencia</p>
+              </div>
+              <div className="d-flex flex-wrap gap-2">
+                {DRINK_FLAVORS.map((flavor) => (
+                  <button
+                    key={flavor}
+                    type="button"
+                    className={`cf-chip-btn ${competenciaDrinkFlavor === flavor ? 'active' : ''}`}
+                    onClick={() => {
+                      setCompetenciaDrinkFlavor(flavor);
+                      setTimeout(nextStep, 200);
+                    }}
+                  >
+                    {flavor}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
          {/* PASO: CANTIDAD DE CARNES PICO ESPEJO */}
           {currentStep === 'espejo_meats' && (
             <div>
@@ -586,7 +691,7 @@ export default function ProductCustomizerModal({
             </div>
           )}
           {currentStep === 'burger_side' && (() => {
-            if (isPicoEspejo) {
+            if (isPicoEspejo || (isCompetenciaBurger && competenciaMode === 'combo')) {
               return (
                 <div>
                   <div className="mb-3">
