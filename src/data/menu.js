@@ -385,8 +385,8 @@ export const menuItems = [
     category: 'hamburguesas_pollo',
     price: 6.99,
     basePrice: 6.99,
-    description: 'Versión oficial de competencia: Pan de papa 80g, 100g de pechuga (crispy o plancha), champiñones salteados con tocineta en crema de leche, stick fries y queso de año.',
-    image: '/competencia.png',
+    description: 'Pan de papa 80g, 140grs de pechuga a la plancha, bañada en crema blanca con salteado de champiñones y tocinetas, papitas chiquitas para dar ese toque crunchy que no debe faltar, coronadocon queso de año y pimienta.',
+    image: '/competencia1.png',
     isCompetenciaBurger: true,
     badge: '🏆 EDICIÓN COMPETENCIA'
   },
