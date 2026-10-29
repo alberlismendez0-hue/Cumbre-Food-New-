@@ -610,7 +610,7 @@ export default function ProductCustomizerModal({
                         <div className="cf-choice-desc">Hamburguesa sola (sin papas ni bebida)</div>
                       </div>
                     </div>
-                    <span className="fw-bold fs-6 text-warning">$6.00</span>
+                    <span className="fw-bold fs-6 text-warning">$6.99</span>
                   </div>
                 </div>
 
