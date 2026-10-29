@@ -368,6 +368,16 @@ export const menuItems = [
     image: '/chesse_buguer.webp'
   },
 
+  {
+    id: 'h_pico_espejo',
+    name: 'Pico Espejo',
+    category: 'hamburguesas_carne',
+    price: 8.0,
+    description: 'Pan de papa 80g, 100g carne de res, facilitas Kraft, salsa M1 y mermelada de tocineta. Acompañada de papas francesas gratis.',
+    image: '/pico_espejo.webp',
+    isPicoEspejo: true
+  },
+
   // --- HAMBURGUESAS CON POLLO ---
   {
     id: 'h_bonpland',

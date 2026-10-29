@@ -46,6 +46,7 @@ export default function ProductCustomizerModal({
     product?.category === 'hamburguesas_pollo' ||
     product?.category === 'hamburguesas_chuleta';
   const isChickenBurger = product?.category === 'hamburguesas_pollo';
+  const isPicoEspejo = product?.id === 'h_pico_espejo' || product?.isPicoEspejo;
   const isPlato = product?.category === 'platos';
   const isPlatoPollo =
     isPlato && (product?.id === 'pl_pollo' || product?.id === 'pl_pollo_crema');
@@ -112,6 +113,7 @@ export default function ProductCustomizerModal({
   // Estados de opciones
   const [quantity, setQuantity] = useState(1);
   const [burgerSide, setBurgerSide] = useState('chips');
+  const [espejoMeatCount, setEspejoMeatCount] = useState(1); // 1, 2 o 3
   const [chickenCooking, setChickenCooking] = useState('crispy');
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [selectedDrinksList, setSelectedDrinksList] = useState([]);
@@ -164,6 +166,9 @@ export default function ProductCustomizerModal({
     if (extraProteinsConfig) list.push('extra_proteins');
 
     if (isBurger) {
+      if (isPicoEspejo) {
+        list.push('espejo_meats');
+      }
       list.push('burger_side');
       if (isChickenBurger) list.push('chicken_cooking');
     }
@@ -205,7 +210,12 @@ export default function ProductCustomizerModal({
     if (show) {
       setCurrentStepIndex(0);
       setQuantity(1);
-      setBurgerSide('chips');
+      setEspejoMeatCount(1);
+      if (isPicoEspejo) {
+        setBurgerSide('francesas');
+      } else {
+        setBurgerSide('chips');
+      }
       setChickenCooking('crispy');
       setSelectedAddons([]);
       setSelectedDrinksList([]);
@@ -321,18 +331,29 @@ export default function ProductCustomizerModal({
     return isBurger ? (BURGER_SIDES.find((s) => s.id === burgerSide) || BURGER_SIDES[0]) : null;
   }, [isBurger, burgerSide]);
 
-  const sidePrice = selectedBurgerSideObj?.price || 0;
-  const unitPrice = (product?.price || 0) + sidePrice + addonsTotal + extraProteinsTotal + drinksTotal;
+  // Extra de carne para Pico Espejo: 1 carne = $0, 2 carnes = +$1.50 ($9.50), 3 carnes = +$3.00 ($11.00)
+  const espejoExtra = isPicoEspejo ? (espejoMeatCount === 2 ? 1.5 : espejoMeatCount === 3 ? 3.0 : 0) : 0;
+
+  // Para Pico Espejo las papas francesas son gratis (costo 0)
+  const sidePrice = isPicoEspejo ? 0 : (selectedBurgerSideObj?.price || 0);
+
+  const unitPrice = (product?.price || 0) + espejoExtra + sidePrice + addonsTotal + extraProteinsTotal + drinksTotal;
   const totalPrice = unitPrice * quantity;
 
   const buildCustomizationDetails = () => {
     const details = [];
 
     if (isBurger) {
-      const sideObj = BURGER_SIDES.find((s) => s.id === burgerSide);
-      if (sideObj) {
-        const sideLabel = sideObj.price > 0 ? `${sideObj.name} (+$${sideObj.price.toFixed(2)})` : sideObj.name;
-        details.push({ label: 'Acompañante', value: sideLabel });
+      if (isPicoEspejo) {
+        const meatLabels = { 1: '1 Carne (Sencilla)', 2: '2 Carnes (Doble)', 3: '3 Carnes (Triple)' };
+        details.push({ label: 'Cantidad de Carnes', value: meatLabels[espejoMeatCount] || '1 Carne' });
+        details.push({ label: 'Acompañante', value: 'Papas Francesas (Gratis)' });
+      } else {
+        const sideObj = BURGER_SIDES.find((s) => s.id === burgerSide);
+        if (sideObj) {
+          const sideLabel = sideObj.price > 0 ? `${sideObj.name} (+$${sideObj.price.toFixed(2)})` : sideObj.name;
+          details.push({ label: 'Acompañante', value: sideLabel });
+        }
       }
       if (isChickenBurger) {
         const cookObj = CHICKEN_COOKING_TYPES.find((c) => c.id === chickenCooking);
@@ -521,7 +542,70 @@ export default function ProductCustomizerModal({
           )}
 
          {/* PASO: ACOMPAÑANTE HAMBURGUESA */}
+         {/* PASO: CANTIDAD DE CARNES PICO ESPEJO */}
+          {currentStep === 'espejo_meats' && (
+            <div>
+              <div className="mb-3">
+                <h4 className="fw-bold text-warning mb-1">🥩 Cantidad de Carnes</h4>
+                <p className="text-secondary small">Selecciona la cantidad de carnes para tu Pico Espejo</p>
+              </div>
+              <div className="row g-2">
+                {[
+                  { count: 1, label: '1 Carne (Sencilla)', price: '$8.00', extra: 'Incluido' },
+                  { count: 2, label: '2 Carnes (Doble)', price: '$9.50', extra: '+$1.50' },
+                  { count: 3, label: '3 Carnes (Triple)', price: '$11.00', extra: '+$3.00' }
+                ].map((opt) => {
+                  const isSelected = espejoMeatCount === opt.count;
+                  return (
+                    <div key={opt.count} className="col-12 col-sm-4">
+                      <div
+                        className={`cf-choice-card ${isSelected ? 'selected' : ''}`}
+                        onClick={() => {
+                          setEspejoMeatCount(opt.count);
+                          setTimeout(nextStep, 200);
+                        }}
+                        role="button"
+                      >
+                        <div className="d-flex align-items-center gap-2">
+                          <span className="cf-radio-circle">
+                            {isSelected && <span className="cf-radio-dot" />}
+                          </span>
+                          <div>
+                            <div className="cf-choice-name">{opt.label}</div>
+                            <div className="text-warning fw-bold small">{opt.price}</div>
+                          </div>
+                        </div>
+                        <span className="cf-choice-free" style={{ color: opt.count > 1 ? '#f59e0b' : undefined }}>
+                          {opt.extra}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
           {currentStep === 'burger_side' && (() => {
+            if (isPicoEspejo) {
+              return (
+                <div>
+                  <div className="mb-3">
+                    <h4 className="fw-bold text-warning mb-1">🍟 Acompañante Incluido</h4>
+                    <p className="text-secondary small">Este producto ya incluye su acompañante sin costo extra</p>
+                  </div>
+                  <div className="p-3 rounded-4 d-flex align-items-center justify-content-between" style={{ backgroundColor: '#1c1611', border: '2px solid #22c55e' }}>
+                    <div className="d-flex align-items-center gap-3">
+                      <span style={{ fontSize: '1.6rem' }}>🍟</span>
+                      <div>
+                        <div className="fw-bold text-white">Papas Francesas</div>
+                        <div className="small text-secondary">Doradas, crujientes y al punto de sal</div>
+                      </div>
+                    </div>
+                    <span className="badge bg-success text-dark fw-bold px-3 py-2">Gratis ($0)</span>
+                  </div>
+                </div>
+              );
+            }
             // Detecta si la hamburguesa actual es Toro o Bolívar
             const isToroOrBolivar = 
               product?.id === 'h_toro' || 
