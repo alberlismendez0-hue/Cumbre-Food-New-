@@ -540,7 +540,21 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
     setCouponError('');
   };
   const filteredItems = useMemo(() => {
+    // Hora y fecha oficial de Venezuela
+    const vzlaDate = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'America/Caracas' })
+    );
+
+    // Se activa automáticamente a partir de mañana (30 de octubre de 2026 a las 00:00)
+    const competenciaReleaseDate = new Date('2026-10-30T00:00:00-04:00');
+    const isCompetenciaActive = vzlaDate >= competenciaReleaseDate;
+
     return menuItems.filter((item) => {
+      // Si aún no es 30 de octubre, oculta la hamburguesa de competencia
+      if (item.id === 'h_bonpland_competencia' && !isCompetenciaActive) {
+        return false;
+      }
+
       const matchesCategory =
         selectedCategory === 'all' || item.category === selectedCategory;
       const query = searchQuery.trim().toLowerCase();
