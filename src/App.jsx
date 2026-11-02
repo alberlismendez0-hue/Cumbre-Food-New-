@@ -513,24 +513,19 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
     [cart]
   );
 
-  const handleApplyCoupon = () => {
+const handleApplyCoupon = () => {
     const code = couponCode.trim().toUpperCase();
     setCouponError('');
     if (!code) return;
 
-    const alreadyUsed = localStorage.getItem('cumbre_coupon_used_CUMBREMDA');
-    if (alreadyUsed) {
-      setCouponError('Este cupón ya fue utilizado en este dispositivo.');
+    if (code === 'CUMBREMDA') {
+      setAppliedCoupon(null);
+      setCouponError('Este cupón ha vencido.');
       return;
     }
 
-    if (code === 'CUMBREMDA') {
-      setAppliedCoupon('CUMBREMDA');
-      setCouponError('');
-    } else {
-      setAppliedCoupon(null);
-      setCouponError('Cupón inválido o no reconocido.');
-    }
+    setAppliedCoupon(null);
+    setCouponError('Cupón inválido o no reconocido.');
   };
 
   const handleRemoveCoupon = () => {

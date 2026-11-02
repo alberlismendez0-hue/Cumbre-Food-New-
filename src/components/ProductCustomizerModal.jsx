@@ -248,7 +248,8 @@ export default function ProductCustomizerModal({
       setChickenCooking('crispy');
       setSelectedAddons([]);
       setSelectedDrinksList([]);
-      setCurrentDrinkType('personal');
+      const firstAvailableDrink = CROSS_SELL_DRINKS.find(d => d.id !== 'none' && !d.outOfStock)?.id || 'lata';
+      setCurrentDrinkType(firstAvailableDrink);
       setCurrentDrinkFlavor(DRINK_FLAVORS[0]);
       setComboDrinkFlavor('Coca Cola');
       setChicken1Burger(COMBO_1Y1_CHICKEN_OPTIONS[0]);
@@ -1432,66 +1433,83 @@ export default function ProductCustomizerModal({
                   scrollMarginTop: '16px' 
                 }}
               >
-                {currentDrinkType !== 'agua' ? (
-                  <>
-                    <label className="small text-secondary mb-2 d-block">
-                      Toca un sabor para añadirlo:
-                    </label>
-                    <div className="d-flex flex-wrap gap-2">
-                      {DRINK_FLAVORS.map((flavor) => (
+                {(() => {
+                  const currentDrinkData = CROSS_SELL_DRINKS.find(d => d.id === currentDrinkType);
+                  const isSoldOut = Boolean(currentDrinkData?.outOfStock);
+
+                  // 1. Si la bebida actual está agotada, se ocultan los sabores y se avisa al cliente
+                  if (isSoldOut) {
+                    return (
+                      <div className="text-center py-2">
+                        <span className="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 px-3 py-2">
+                          ⚠️ {currentDrinkData?.name || 'Esta bebida'} está agotada hoy. Por favor elige otra arriba.
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  // 2. Si es agua mineral
+                  if (currentDrinkType === 'agua') {
+                    return (
+                      <div className="text-center">
                         <button
-                          key={flavor}
                           type="button"
-                          className="cf-chip-btn"
+                          className="cf-chip-btn px-4 py-2 text-warning fw-bold"
                           onClick={() => {
-                            setCurrentDrinkFlavor(flavor);
-                            // Ejecutamos la adición directa
-                            const drinkData = CROSS_SELL_DRINKS.find(d => d.id === currentDrinkType);
-                            if (drinkData) {
+                            if (currentDrinkData && !isSoldOut) {
                               setSelectedDrinksList((prev) => [
                                 ...prev,
                                 {
-                                  uid: `${drinkData.id}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-                                  id: drinkData.id,
-                                  name: drinkData.name,
-                                  price: drinkData.price,
-                                  flavor: flavor
+                                  uid: `agua-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                                  id: 'agua',
+                                  name: currentDrinkData.name,
+                                  price: currentDrinkData.price,
+                                  flavor: null
                                 }
                               ]);
                             }
                           }}
                         >
-                          + {flavor}
+                          💧 + Añadir Agua Mineral (${currentDrinkData?.price.toFixed(2)})
                         </button>
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  /* Vista para Agua Mineral directa */
-                  <div className="text-center">
-                    <button
-                      type="button"
-                      className="cf-chip-btn px-4 py-2 text-warning fw-bold"
-                      onClick={() => {
-                        const drinkData = CROSS_SELL_DRINKS.find(d => d.id === 'agua');
-                        if (drinkData) {
-                          setSelectedDrinksList((prev) => [
-                            ...prev,
-                            {
-                              uid: `agua-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-                              id: 'agua',
-                              name: drinkData.name,
-                              price: drinkData.price,
-                              flavor: null
-                            }
-                          ]);
-                        }
-                      }}
-                    >
-                      💧 + Añadir Agua Mineral (${CROSS_SELL_DRINKS.find(d => d.id === 'agua')?.price.toFixed(2)})
-                    </button>
-                  </div>
-                )}
+                      </div>
+                    );
+                  }
+
+                  // 3. Vista estándar de sabores para bebidas disponibles
+                  return (
+                    <>
+                      <label className="small text-secondary mb-2 d-block">
+                        Toca un sabor para añadirlo:
+                      </label>
+                      <div className="d-flex flex-wrap gap-2">
+                        {DRINK_FLAVORS.map((flavor) => (
+                          <button
+                            key={flavor}
+                            type="button"
+                            className="cf-chip-btn"
+                            onClick={() => {
+                              if (!currentDrinkData || isSoldOut) return;
+                              setCurrentDrinkFlavor(flavor);
+                              setSelectedDrinksList((prev) => [
+                                ...prev,
+                                {
+                                  uid: `${currentDrinkData.id}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+                                  id: currentDrinkData.id,
+                                  name: currentDrinkData.name,
+                                  price: currentDrinkData.price,
+                                  flavor: flavor
+                                }
+                              ]);
+                            }}
+                          >
+                            + {flavor}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
 
               {/* LISTA DE BEBIDAS AGREGADAS CON PAPELERA */}
