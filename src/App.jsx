@@ -155,8 +155,7 @@ const checkIsOpen = () => {
   const minutes = venezuelaDate.getMinutes();
   const currentTime = hour + minutes / 60;
 
-  if (day === 1) return false;
-  if (day === 2) return currentTime >= 17 && currentTime < 22;
+  // Abierto todos los días de 1:00 PM a 10:00 PM
   return currentTime >= 13 && currentTime < 22;
 };
 
@@ -868,7 +867,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                     <div className="product-card">
                       <div
                         className="product-card-img-wrap"
-                        onClick={() => handleOpenCustomizer(item)}
+                        onClick={() => !item.outOfStock && handleOpenCustomizer(item)}
                         style={{ cursor: 'pointer' }}
                       >
                         <img
@@ -897,7 +896,7 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                       <div className="product-card-body">
                         <h3
                           className="product-card-title"
-                          onClick={() => handleOpenCustomizer(item)}
+                          onClick={() => !item.outOfStock && handleOpenCustomizer(item)}
                           style={{ cursor: 'pointer' }}
                         >
                           {item.name}
@@ -908,11 +907,15 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
                         <div className="mt-auto pt-2">
                           <button
                             type="button"
-                            className="btn-cf-add"
-                            onClick={() => handleOpenCustomizer(item)}
+                            className={`btn-cf-add ${item.outOfStock ? 'opacity-50' : ''}`}
+                            disabled={item.outOfStock}
+                            onClick={() => !item.outOfStock && handleOpenCustomizer(item)}
+                            style={item.outOfStock ? { cursor: 'not-allowed', backgroundColor: '#57534e' } : {}}
                           >
                             <span>
-                              {qtyInCart > 0
+                              {item.outOfStock
+                                ? '🚫 Agotado por hoy'
+                                : qtyInCart > 0
                                 ? `+ Agregar (${qtyInCart} en Mochila)`
                                 : '+ Agregar'}
                             </span>
@@ -2478,16 +2481,8 @@ const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
               fontSize: '0.85rem'
             }}
           >
-            <div className="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom border-secondary border-opacity-10">
-              <span className="text-secondary">Lunes:</span>
-              <span className="badge rounded-pill bg-danger bg-opacity-25 text-danger px-2 py-1">Cerrado</span>
-            </div>
-            <div className="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom border-secondary border-opacity-10">
-              <span className="text-secondary">Martes:</span>
-              <span className="text-warning fw-semibold">5:00 PM – 10:00 PM</span>
-            </div>
             <div className="d-flex justify-content-between align-items-center">
-              <span className="text-secondary">Miércoles a Domingo:</span>
+              <span className="text-secondary">Lunes a Domingo:</span>
               <span className="text-warning fw-semibold">1:00 PM – 10:00 PM</span>
             </div>
           </div>

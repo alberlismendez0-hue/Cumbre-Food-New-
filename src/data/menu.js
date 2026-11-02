@@ -111,7 +111,7 @@ export const BURGER_ADDONS = [
 export const CROSS_SELL_DRINKS = [
   { id: 'none', name: 'Ninguna', price: 0.0, icon: '🚫' },
   { id: 'lata', name: 'Refresco en Lata', price: 1.5, icon: '/latasoda.png' },
-  { id: 'personal', name: 'Refresco Personal/Bombita', price: 1.0, icon: '/bombita.png' },
+  { id: 'personal', name: 'Refresco Personal/Bombita', price: 1.0, icon: '/bombita.png', outOfStock: true }, 
   { id: '1l', name: 'Refresco 1L', price: 2.5, icon: '/soda.png' },
   { id: '1.5l', name: 'Refresco 1.5L', price: 3.0, icon: '/soda.png' },
   { id: '2l', name: 'Refresco 2L', price: 3.5, icon: '/soda.png' },
@@ -551,7 +551,9 @@ export const menuItems = [
     description: 'Refresco personal frío. Elige tu sabor favorito.',
     image: '/bombitacoca.webp',
     requiresFlavor: true,
+    outOfStock: true 
   },
+  
   {
     id: 'beb_refresco_1l',
     name: 'Refresco 1L',

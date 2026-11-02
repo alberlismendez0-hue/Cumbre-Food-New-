@@ -1367,49 +1367,61 @@ export default function ProductCustomizerModal({
                   gridTemplateColumns: 'repeat(auto-fill, minmax(95px, 1fr))' 
                 }}
               >
-                {CROSS_SELL_DRINKS.filter(d => d.id !== 'none').map((drink) => {
-                  const isSelected = currentDrinkType === drink.id;
-                  return (
-                    <div
-                      key={drink.id}
-                      onClick={() => handleSelectDrinkType(drink.id)}
-                      role="button"
-                      className="p-2 rounded-3 text-center d-flex flex-column align-items-center justify-content-center"
-                      style={{
-                        backgroundColor: isSelected ? 'rgba(217, 119, 6, 0.15)' : '#1b1613',
-                        border: isSelected ? '2px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.1)',
-                        cursor: 'pointer',
-                        minHeight: '85px',
-                        transition: 'all 0.2s ease'
-                      }}
-                    >
-                      {/* ÍCONO O IMAGEN */}
-                      <div className="mb-1 d-flex align-items-center justify-content-center" style={{ height: '28px' }}>
-                        {drink.icon && (drink.icon.startsWith('/') || drink.icon.endsWith('.png') || drink.icon.endsWith('.svg')) ? (
-                          <img
-                            src={drink.icon}
-                            alt={drink.name}
-                            style={{ width: '24px', height: '24px', objectFit: 'contain' }}
-                          />
-                        ) : (
-                          <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>{drink.icon}</span>
-                        )}
-                      </div>
+              {CROSS_SELL_DRINKS.filter(d => d.id !== 'none').map((drink) => {
+                const isSoldOut = Boolean(drink.outOfStock);
+                const isSelected = currentDrinkType === drink.id && !isSoldOut; // 👈 Solo activo si no está agotado
 
-                      {/* NOMBRE */}
-                      <div className="text-white fw-bold" style={{ fontSize: '0.72rem', lineHeight: 1.15 }}>
-                        {drink.name}
-                      </div>
+                return (
+                  <div
+                    key={drink.id}
+                    onClick={() => {
+                      if (!isSoldOut) {
+                        handleSelectDrinkType(drink.id);
+                      }
+                    }}
+                    role="button"
+                    className={`p-2 rounded-3 text-center d-flex flex-column align-items-center justify-content-center ${isSoldOut ? 'opacity-50' : ''}`}
+                    style={{
+                      backgroundColor: isSoldOut ? '#14110f' : isSelected ? 'rgba(217, 119, 6, 0.15)' : '#1b1613',
+                      border: isSoldOut ? '1px dashed #78716c' : isSelected ? '2px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.1)',
+                      cursor: isSoldOut ? 'not-allowed' : 'pointer',
+                      minHeight: '85px',
+                      transition: 'all 0.2s ease',
+                      pointerEvents: isSoldOut ? 'none' : 'auto' // 👈 Bloqueo nativo de interacción
+                    }}
+                  >
+                    {/* ÍCONO O IMAGEN */}
+                    <div className="mb-1 d-flex align-items-center justify-content-center" style={{ height: '28px' }}>
+                      {drink.icon && (drink.icon.startsWith('/') || drink.icon.endsWith('.png') || drink.icon.endsWith('.svg')) ? (
+                        <img
+                          src={drink.icon}
+                          alt={drink.name}
+                          style={{ width: '24px', height: '24px', objectFit: 'contain' }}
+                        />
+                      ) : (
+                        <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>{drink.icon}</span>
+                      )}
+                    </div>
 
-                      {/* PRECIO */}
+                    {/* NOMBRE */}
+                    <div className="text-white fw-bold" style={{ fontSize: '0.72rem', lineHeight: 1.15 }}>
+                      {drink.name}
+                    </div>
+
+                    {/* PRECIO O ETIQUETA AGOTADO */}
+                    {isSoldOut ? (
+                      <span className="badge bg-danger text-white mt-1" style={{ fontSize: '0.62rem', padding: '2px 5px' }}>
+                        Agotado hoy
+                      </span>
+                    ) : (
                       <div className="text-warning fw-bold mt-1" style={{ fontSize: '0.75rem' }}>
                         +${drink.price.toFixed(2)}
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-
+                    )}
+                  </div>
+                );
+              })}
+            </div>
              {/* SELECTOR DE SABOR DIRECTO (SIN BOTÓN MANUAL) */}
               <div 
                 ref={flavorSectionRef} 
