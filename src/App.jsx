@@ -146,32 +146,25 @@ const generateOrderId = () => {
 };
 
 // Reemplaza la comprobación del horario por esta:
-  const isStoreOpen = useMemo(() => {
-    const now = new Date();
-    // Hora local de Venezuela (UTC-4)
-    const vzlaDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/Caracas' }));
-    const day = vzlaDate.getDay(); // 0: Domingo, 1: Lunes, 2: Martes, ..., 6: Sábado
-    const hours = vzlaDate.getHours();
-    const minutes = vzlaDate.getMinutes();
-    const currentTimeInMinutes = hours * 60 + minutes;
+ const checkIsOpen = () => {
+  const now = new Date();
+  const vzlaDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/Caracas' }));
+  const day = vzlaDate.getDay(); // 0: Domingo, 1: Lunes, 2: Martes, ..., 6: Sábado
+  const hours = vzlaDate.getHours();
+  const minutes = vzlaDate.getMinutes();
+  const currentTime = hours + minutes / 60;
 
-    // Lunes (1): Cerrado todo el día
-    if (day === 1) {
-      return false;
-    }
+  // Lunes (1): Cerrado todo el día
+  if (day === 1) return false;
 
-    // Martes (2): 5:00 PM (17:00) a 10:00 PM (22:00)
-    if (day === 2) {
-      const openTime = 17 * 60; // 17:00 = 1020 min
-      const closeTime = 22 * 60; // 22:00 = 1320 min
-      return currentTimeInMinutes >= openTime && currentTimeInMinutes < closeTime;
-    }
+  // Martes (2): 5:00 PM (17:00) a 10:00 PM (22:00)
+  if (day === 2) {
+    return currentTime >= 17 && currentTime < 22;
+  }
 
-    // Miércoles a Domingo (0, 3, 4, 5, 6): 1:00 PM (13:00) a 10:00 PM (22:00)
-    const openTime = 13 * 60; // 13:00 = 780 min
-    const closeTime = 22 * 60; // 22:00 = 1320 min
-    return currentTimeInMinutes >= openTime && currentTimeInMinutes < closeTime;
-  }, []);
+  // Miércoles a Domingo (0, 3, 4, 5, 6): 1:00 PM (13:00) a 10:00 PM (22:00)
+  return currentTime >= 13 && currentTime < 22;
+};
 
 function App() {
   const [checkoutStep, setCheckoutStep] = useState(1);
