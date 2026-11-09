@@ -507,12 +507,13 @@ function App() {
  const deliveryCost = selectedZone ? selectedZone.price : 0;
 
 // Descuento del 10% si se aplicó el cupón CUMBREMDA
-const discountAmount = useMemo(() => {
-  if (appliedCoupon === 'CUMBREMDA') {
-    return subtotal * 0.10;
-  }
-  return 0;
-}, [appliedCoupon, subtotal]);
+// Descuento del 10% si se aplicó el cupón CUMBRE7K
+  const discountAmount = useMemo(() => {
+    if (appliedCoupon === 'CUMBRE7K') {
+      return subtotal * 0.10;
+    }
+    return 0;
+  }, [appliedCoupon, subtotal]);
 
 const grandTotal = Math.max(0, subtotal - discountAmount + deliveryCost);
   const totalItemsCount = useMemo(
@@ -530,6 +531,33 @@ const handleApplyCoupon = () => {
       setCouponError('Este cupón ha vencido.');
       return;
     }
+    // Nuevo cupón CUMBRE7K (Válido de martes a viernes)
+    if (code === 'CUMBRE7K') {
+      const now = new Date();
+      const vzlaDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/Caracas' }));
+      const day = vzlaDate.getDay(); // 0: Domingo, 1: Lunes, 2: Martes, 3: Miércoles, 4: Jueves, 5: Viernes, 6: Sábado
+
+      // Días válidos: Martes (2), Miércoles (3), Jueves (4) y Viernes (5)
+      const isValidDay = day >= 2 && day <= 5;
+
+      if (!isValidDay) {
+        setAppliedCoupon(null);
+        setCouponError('Este cupón solo es válido de martes a viernes.');
+        return;
+      }
+
+      // Validar si ya se usó en el dispositivo (opcional)
+      const alreadyUsed = localStorage.getItem('cumbre_coupon_used_CUMBRE7K');
+      if (alreadyUsed) {
+        setCouponError('Este cupón ya fue utilizado en este dispositivo.');
+        return;
+      }
+
+      setAppliedCoupon('CUMBRE7K');
+      setCouponError('');
+      return;
+    }
+
 
     setAppliedCoupon(null);
     setCouponError('Cupón inválido o no reconocido.');
