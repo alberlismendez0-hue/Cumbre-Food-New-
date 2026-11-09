@@ -379,6 +379,7 @@ export const menuItems = [
   },
 
   // --- HAMBURGUESAS CON POLLO ---
+  /*
   {
     id: 'h_bonpland_competencia',
     name: 'Pico Bonpland (Edición Competencia) 🏆',
@@ -390,6 +391,7 @@ export const menuItems = [
     isCompetenciaBurger: true,
     badge: '🏆 EDICIÓN COMPETENCIA'
   },
+  */
   {
     id: 'h_bonpland',
     name: 'Pico Bonpland 4.823 m.s.n.m.',
