@@ -2508,6 +2508,7 @@ const handleApplyCoupon = () => {
                 <span className="text-warning fw-bold small">1:00 PM – 10:00 PM</span>
               </div>
             </div>
+          </div>
 
           <p className="fw-semibold text-light mb-1" style={{ fontSize: '0.92rem' }}>
             Estamos cerrados por ahora, pero puedes pre-ordenar tu pedido.
