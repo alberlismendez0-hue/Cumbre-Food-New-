@@ -145,19 +145,33 @@ const generateOrderId = () => {
   return `CF-${randomSuffix}`;
 };
 
-const checkIsOpen = () => {
-  const venezuelaDate = new Date(
-    new Date().toLocaleString('en-US', { timeZone: 'America/Caracas' })
-  );
+// Reemplaza la comprobación del horario por esta:
+  const isStoreOpen = useMemo(() => {
+    const now = new Date();
+    // Hora local de Venezuela (UTC-4)
+    const vzlaDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/Caracas' }));
+    const day = vzlaDate.getDay(); // 0: Domingo, 1: Lunes, 2: Martes, ..., 6: Sábado
+    const hours = vzlaDate.getHours();
+    const minutes = vzlaDate.getMinutes();
+    const currentTimeInMinutes = hours * 60 + minutes;
 
-  const day = venezuelaDate.getDay();
-  const hour = venezuelaDate.getHours();
-  const minutes = venezuelaDate.getMinutes();
-  const currentTime = hour + minutes / 60;
+    // Lunes (1): Cerrado todo el día
+    if (day === 1) {
+      return false;
+    }
 
-  // Abierto todos los días de 1:00 PM a 10:00 PM
-  return currentTime >= 13 && currentTime < 22;
-};
+    // Martes (2): 5:00 PM (17:00) a 10:00 PM (22:00)
+    if (day === 2) {
+      const openTime = 17 * 60; // 17:00 = 1020 min
+      const closeTime = 22 * 60; // 22:00 = 1320 min
+      return currentTimeInMinutes >= openTime && currentTimeInMinutes < closeTime;
+    }
+
+    // Miércoles a Domingo (0, 3, 4, 5, 6): 1:00 PM (13:00) a 10:00 PM (22:00)
+    const openTime = 13 * 60; // 13:00 = 780 min
+    const closeTime = 22 * 60; // 22:00 = 1320 min
+    return currentTimeInMinutes >= openTime && currentTimeInMinutes < closeTime;
+  }, []);
 
 function App() {
   const [checkoutStep, setCheckoutStep] = useState(1);
@@ -2476,11 +2490,24 @@ const handleApplyCoupon = () => {
               fontSize: '0.85rem'
             }}
           >
-            <div className="d-flex justify-content-between align-items-center">
-              <span className="text-secondary">Lunes a Domingo:</span>
-              <span className="text-warning fw-semibold">1:00 PM – 10:00 PM</span>
+            {/* HORARIO DE ATENCIÓN DESGLOSADO */}
+            <div 
+              className="p-3 rounded-3 mb-3 text-start d-flex flex-column gap-2"
+              style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.08)' }}
+            >
+              <div className="d-flex justify-content-between align-items-center">
+                <span className="text-secondary small">Lunes:</span>
+                <span className="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25">Cerrado</span>
+              </div>
+              <div className="d-flex justify-content-between align-items-center">
+                <span className="text-secondary small">Martes:</span>
+                <span className="text-warning fw-bold small">5:00 PM – 10:00 PM</span>
+              </div>
+              <div className="d-flex justify-content-between align-items-center">
+                <span className="text-secondary small">Miércoles a Domingo:</span>
+                <span className="text-warning fw-bold small">1:00 PM – 10:00 PM</span>
+              </div>
             </div>
-          </div>
 
           <p className="fw-semibold text-light mb-1" style={{ fontSize: '0.92rem' }}>
             Estamos cerrados por ahora, pero puedes pre-ordenar tu pedido.
